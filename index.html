@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="NE High Street Heroes Awards 2026 — celebrating outstanding businesses and individuals across the North East. A First Connections Initiative."/>
+<meta name="theme-color" content="#0a0f1a"/>
+<title>NE High Street Heroes Awards 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & VARIABLES ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a0f1a;
+  --navy2:#0e1520;
+  --card:#141c2a;
+  --pink:#f472b6;
+  --orange:#f5a623;
+  --grad:linear-gradient(90deg,#f472b6,#f5a623);
+  --cream:#f5f0e8;
+  --muted:#8899aa;
+  --border:#1e2a3a;
+  --radius:16px;
+  --transition:.2s ease;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:#fff;overflow-x:hidden;line-height:1.6}
+img{max-width:100%;height:auto;display:block}
+a,button{cursor:pointer}
+button{font-family:inherit;border:none;background:none}
+
+/* ── PAGE SYSTEM ── */
+.page{display:none}
+.page.active{display:block}
+
+/* ── TYPOGRAPHY ── */
+.serif{font-family:'Playfair Display',serif}
+.tag{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pink);display:block;margin-bottom:.6rem}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.85rem 2rem;border-radius:50px;font-size:.95rem;font-weight:600;transition:opacity var(--transition),transform var(--transition);text-decoration:none;border:none}
+.btn:hover{opacity:.88;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--grad);color:#fff}
+.btn-secondary{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.3)}
+.btn-secondary:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.btn-full{width:100%;padding:1rem}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,15,26,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:70px}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;flex-shrink:0}
+.logo-box{width:44px;height:44px;border-radius:9px;background:var(--grad);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.logo-box span{font-family:'Inter',sans-serif;font-size:13px;font-weight:900;color:#fff;line-height:1.15}
+.logo-text{display:flex;flex-direction:column;gap:2px}
+.logo-text span{font-size:.7rem;font-weight:800;color:#fff;letter-spacing:.1em;text-transform:uppercase;line-height:1.2}
+.logo-line{height:1.5px;background:var(--grad);border-radius:2px}
+.logo-stars{display:flex;flex-direction:column;align-items:center;opacity:.9}
+nav ul{list-style:none;display:flex;gap:1.8rem}
+nav ul a{color:#bbc8d8;font-size:.88rem;font-weight:500;text-decoration:none;padding-bottom:3px;border-bottom:2px solid transparent;transition:color var(--transition),border-color var(--transition)}
+nav ul a:hover,nav ul a.active{color:#fff;border-bottom-color:var(--pink)}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:6px;background:none;border:none}
+.hamburger span{width:22px;height:2px;background:#fff;display:block;border-radius:2px;transition:.3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:var(--navy2);border-top:1px solid var(--border);padding:1.5rem;z-index:99;flex-direction:column;gap:.8rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:#bbc8d8;font-size:.95rem;font-weight:500;text-decoration:none;padding:.6rem 0;border-bottom:1px solid var(--border)}
+@media(max-width:768px){nav ul,.nav-cta{display:none!important}.hamburger{display:flex}}
+
+/* ── HERO ── */
+.hero{min-height:100vh;background:var(--navy2);padding-top:70px;display:flex;align-items:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 50%,rgba(244,114,182,.07),transparent 60%);pointer-events:none}
+.hero-inner{max-width:1400px;margin:0 auto;padding:4rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;width:100%}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);color:var(--pink);padding:.4rem 1rem;border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:.1em;margin-bottom:1.5rem}
+.hero-badge::before{content:'';width:7px;height:7px;background:var(--pink);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'Playfair Display',serif;font-size:4rem;line-height:1.1;margin-bottom:1.2rem}
+.hero h1 .c-pink{color:var(--pink)}
+.hero h1 .c-orange{color:var(--orange)}
+.hero-desc{color:#aabbcc;font-size:1rem;line-height:1.75;margin-bottom:2rem;max-width:520px}
+.hero-desc strong{color:#fff}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.hero-images{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:.8rem}
+.hero-img{border-radius:var(--radius);overflow:hidden;position:relative;background:var(--card)}
+.hero-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.hero-img:hover img{transform:scale(1.04)}
+.hero-img.tall{grid-row:span 2;min-height:340px}
+.hero-img.short{min-height:160px}
+.img-label{position:absolute;bottom:.6rem;left:.6rem;background:rgba(10,15,26,.82);backdrop-filter:blur(4px);color:#fff;font-size:.68rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-images{display:none}.hero h1{font-size:2.8rem}}
+
+/* ── STATS ── */
+.stats{background:var(--navy2);padding:2.5rem 2rem}
+.stats-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem 1.6rem}
+.stat-num{font-size:2.2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.2rem}
+.stat-label{font-size:.72rem;font-weight:600;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+@media(max-width:700px){.stats-inner{grid-template-columns:1fr 1fr}}
+
+/* ── MARQUEE ── */
+.marquee-wrap{background:var(--grad);padding:.65rem 0;overflow:hidden}
+.marquee-track{display:flex;width:max-content;animation:marquee 30s linear infinite}
+.marquee-track:hover{animation-play-state:paused}
+.marquee-item{white-space:nowrap;font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:0 2.5rem;color:#fff}
+.marquee-item::before{content:'✦ '}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ── ABOUT ── */
+.about{background:var(--cream);padding:6rem 2rem;color:var(--navy)}
+.about-inner{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-img-wrap{position:relative}
+.about-img-wrap img{width:100%;border-radius:20px;object-fit:cover;max-height:480px}
+.about-year-badge{position:absolute;bottom:1.5rem;right:-1rem;background:var(--navy);color:#fff;padding:.9rem 1.4rem;border-radius:var(--radius);font-family:'Playfair Display',serif;font-size:2rem;font-weight:700}
+.about-year-badge span{color:var(--orange)}
+.about h2{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;color:var(--navy);margin-bottom:1.2rem;line-height:1.15}
+.about p{font-size:.97rem;color:#4a5568;line-height:1.8;margin-bottom:.9rem}
+.about p strong{color:var(--navy)}
+.founders{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1.8rem}
+.founder-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:1.1rem 1.3rem}
+.founder-name{font-weight:700;color:var(--navy);font-size:.95rem}
+.founder-role{font-size:.78rem;color:var(--pink);font-weight:600;margin-top:.2rem}
+@media(max-width:900px){.about-inner{grid-template-columns:1fr}.about-year-badge{right:1rem}}
+
+/* ── MISSION ── */
+.mission{background:var(--navy2);padding:6rem 2rem;text-align:center}
+.mission-inner{max-width:860px;margin:0 auto}
+.mission h2{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;margin-bottom:1rem;line-height:1.15}
+.mission p{color:#aabbcc;font-size:1rem;line-height:1.75;margin-bottom:2.5rem}
+.mission-tags{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center}
+.mission-tag{background:var(--card);border:1px solid var(--border);padding:.5rem 1.1rem;border-radius:50px;font-size:.83rem;font-weight:500;color:#cdd8e8;transition:border-color var(--transition)}
+.mission-tag:hover{border-color:var(--pink)}
+
+/* ── GALLERY ── */
+.gallery{display:grid;grid-template-columns:repeat(5,1fr);height:260px}
+.gallery-item{position:relative;overflow:hidden;background:var(--card)}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.gallery-item:hover img{transform:scale(1.06)}
+.gallery-item:hover .img-label{opacity:1}
+
+/* ── SPONSORS ── */
+.sponsors{background:var(--cream);padding:5rem 2rem;text-align:center;color:var(--navy)}
+.sponsors-inner{max-width:1000px;margin:0 auto}
+.sponsors h2{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:800;color:var(--navy);margin-bottom:.6rem}
+.sponsors-sub{color:#4a5568;margin-bottom:3rem;font-size:.97rem}
+.sponsor-group-label{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#999;margin-bottom:1rem}
+.sponsor-row{display:flex;justify-content:center;gap:.9rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.sponsor-card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1rem 1.8rem;min-width:140px;display:flex;align-items:center;justify-content:center;transition:box-shadow var(--transition),transform var(--transition)}
+.sponsor-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1);transform:translateY(-2px)}
+.sponsor-card.sm{min-width:110px;padding:.8rem 1.1rem}
+.sponsor-card.dark{background:#111;border-color:#333}
+.sponsor-card.blue{background:#29b6e0;border-color:#29b6e0}
+.sponsor-card.cobalt{background:#3b5bfc;border-color:#3b5bfc}
+.sponsor-cta-box{background:#fde8e8;border-radius:var(--radius);padding:1.5rem 2rem;margin-top:.5rem}
+.sponsor-cta-box p{font-size:.93rem;color:#4a5568;margin-bottom:1rem}
+
+/* ── FAQ ── */
+.faq{background:var(--navy);padding:6rem 2rem;text-align:center}
+.faq-inner{max-width:780px;margin:0 auto}
+.faq h2{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;margin-bottom:2.5rem}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:.7rem;overflow:hidden;text-align:left}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;font-size:.92rem;font-weight:500;color:#cdd8e8;width:100%;text-align:left;background:none;border:none;gap:1rem}
+.faq-q .icon{color:var(--pink);font-size:1.1rem;transition:transform .3s;flex-shrink:0;font-style:normal}
+.faq-item.open .faq-q .icon{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 1.4rem;color:var(--muted);font-size:.88rem;line-height:1.7}
+.faq-item.open .faq-a{max-height:200px;padding:.2rem 1.4rem 1.1rem}
+
+/* ── CATEGORIES PAGE ── */
+.page-hero{background:var(--navy2);padding:8rem 2rem 4rem;text-align:center}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:800;margin-bottom:1rem}
+.page-hero p{color:#aabbcc;font-size:1rem;max-width:580px;margin:0 auto 2rem;line-height:1.7}
+.cats-grid{background:var(--navy);padding:4rem 2rem}
+.cats-grid-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:1.7rem;transition:border-color var(--transition),transform var(--transition)}
+.cat-card:hover{border-color:var(--pink);transform:translateY(-3px)}
+.cat-card:last-child{background:linear-gradient(135deg,rgba(244,114,182,.12),rgba(245,166,35,.08));border-color:rgba(244,114,182,.35)}
+.cat-num{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pink);margin-bottom:.7rem}
+.cat-emoji{font-size:1.7rem;margin-bottom:.7rem;display:block}
+.cat-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.cat-card p{font-size:.82rem;color:var(--muted);line-height:1.6}
+@media(max-width:1000px){.cats-grid-inner{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.cats-grid-inner{grid-template-columns:1fr}}
+.cats-cta{background:var(--navy2);padding:5rem 2rem;text-align:center}
+.cats-cta h2{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;margin-bottom:.8rem}
+.cats-cta p{color:#aabbcc;max-width:560px;margin:0 auto 2rem;line-height:1.7}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+/* ── VOTE PAGE ── */
+.vote-cats{background:var(--navy);padding:3rem 2rem}
+.vote-cats-inner{max-width:1100px;margin:0 auto}
+.vote-cats h2{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;margin-bottom:.4rem}
+.vote-cats>div>p{color:var(--muted);margin-bottom:1.4rem;font-size:.88rem}
+.vote-cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem}
+.vote-cat-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.9rem .7rem;display:flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:500;color:#cdd8e8;transition:border-color var(--transition),color var(--transition),background var(--transition)}
+.vote-cat-btn:hover,.vote-cat-btn.selected{border-color:var(--pink);color:#fff;background:rgba(244,114,182,.08)}
+@media(max-width:800px){.vote-cat-grid{grid-template-columns:repeat(2,1fr)}}
+.vote-main{background:var(--cream);padding:4rem 2rem}
+.vote-main-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.how-panel{background:var(--navy);border-radius:20px;padding:2.2rem}
+.how-panel h2{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;margin-bottom:.4rem}
+.how-panel>p{color:var(--muted);font-size:.86rem;margin-bottom:1.8rem}
+.how-step{display:flex;gap:.9rem;padding:1rem 0;border-bottom:1px solid var(--border)}
+.how-step:last-child{border:none}
+.step-num{width:34px;height:34px;background:var(--grad);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0}
+.step-text h4{font-weight:600;font-size:.9rem;margin-bottom:.25rem;color:#fff}
+.step-text p{font-size:.8rem;color:var(--muted);line-height:1.5}
+.form-panel{background:#fff;border-radius:20px;padding:2.2rem;color:var(--navy)}
+.form-panel h2{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;margin-bottom:.3rem;color:var(--navy)}
+.form-panel>p{color:#666;font-size:.85rem;margin-bottom:1.6rem}
+.form-group{margin-bottom:1.1rem}
+.form-group label{display:block;font-size:.82rem;font-weight:600;color:var(--navy);margin-bottom:.35rem}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:.75rem .95rem;border:1.5px solid #e2e8f0;border-radius:10px;font-size:.88rem;font-family:'Inter',sans-serif;color:var(--navy);background:#fafafa;transition:border-color var(--transition)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--pink);background:#fff}
+.form-group textarea{resize:vertical;min-height:100px}
+.form-success{display:none;background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:.9rem;text-align:center;color:#2e7d32;font-size:.88rem;font-weight:600;margin-top:.8rem}
+@media(max-width:900px){.vote-main-inner{grid-template-columns:1fr}}
+
+/* ── CONTACT PAGE ── */
+.contact-main{background:var(--cream);padding:4rem 2rem}
+.contact-main-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.contact-info{background:var(--navy);border-radius:20px;padding:2.2rem}
+.contact-info h2{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;margin-bottom:.7rem}
+.contact-info>p{color:var(--muted);font-size:.88rem;line-height:1.7;margin-bottom:1.6rem}
+.contact-detail{display:flex;align-items:flex-start;gap:.8rem;margin-bottom:1.1rem}
+.icon-box{width:34px;height:34px;background:rgba(244,114,182,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.detail-label{font-size:.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.detail-val{font-size:.9rem;font-weight:500;color:#fff;margin-top:.1rem}
+.detail-val a{color:var(--pink);text-decoration:none}
+.detail-val a:hover{text-decoration:underline}
+hr.divider{border:none;border-top:1px solid var(--border);margin:1.4rem 0}
+.quick-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
+.quick-links{display:flex;flex-direction:column;gap:.55rem}
+.quick-link{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.72rem 1.2rem;border-radius:50px;font-size:.86rem;font-weight:600;text-decoration:none;transition:opacity var(--transition)}
+.quick-link:hover{opacity:.85}
+.quick-link.primary{background:var(--grad);color:#fff}
+.quick-link.outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.22);transition:border-color var(--transition)}
+.quick-link.outline:hover{border-color:#fff;opacity:1}
+.contact-img-wrap{max-width:1080px;margin:2rem auto 0;border-radius:20px;overflow:hidden;height:270px}
+.contact-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.regions{background:var(--navy2);padding:3.5rem 2rem}
+.regions-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.region-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem}
+.region-card h3{font-size:.97rem;font-weight:700;margin-bottom:.4rem}
+.region-card p{font-size:.83rem;color:var(--muted);line-height:1.6}
+@media(max-width:900px){.contact-main-inner,.regions-inner{grid-template-columns:1fr}}
+
+/* ── FOOTER ── */
+footer{background:var(--navy2);border-top:1px solid var(--border);padding:3.5rem 2rem 1.8rem}
+.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;margin-bottom:2.5rem}
+.footer-brand p{font-size:.83rem;color:var(--muted);line-height:1.7;max-width:270px;margin-top:.9rem}
+.footer-col h4{font-size:.68rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
+.footer-col li{list-style:none;margin-bottom:.55rem}
+.footer-col a{color:#7a8fa0;font-size:.85rem;text-decoration:none;transition:color var(--transition)}
+.footer-col a:hover{color:#fff}
+.footer-col a.hl{color:var(--pink)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem}
+.footer-bottom p,.footer-bottom span{font-size:.78rem;color:var(--muted)}
+@media(max-width:800px){.footer-inner{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.footer-inner{grid-template-columns:1fr}}
+
+/* ── UTILITY ── */
+.pt-nav{padding-top:70px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);border:0}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav aria-label="Main navigation">
+  <div class="nav-inner">
+    <a class="logo" onclick="showPage('home')" aria-label="NE High Street Heroes Awards Home">
+      <div class="logo-box"><span>20</span><span>26</span></div>
+      <div class="logo-text">
+        <span>High Street</span>
+        <div class="logo-line"></div>
+        <span>Heroes NE</span>
+      </div>
+      <svg width="20" height="20" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M13 2L14 8L20 9L14 10L13 16L12 10L6 9L12 8Z" fill="white"/>
+        <path d="M19 1L19.5 3.5L22 4L19.5 4.5L19 7L18.5 4.5L16 4L18.5 3.5Z" fill="white" opacity=".7"/>
+        <path d="M5 15L5.4 17L7 17.4L5.4 17.8L5 20L4.6 17.8L3 17.4L4.6 17Z" fill="white" opacity=".5"/>
+      </svg>
+    </a>
+    <ul role="menubar">
+      <li role="none"><a role="menuitem" onclick="showPage('home')" id="nav-home">Home</a></li>
+      <li role="none"><a role="menuitem" onclick="showPage('categories')" id="nav-categories">Award Categories</a></li>
+      <li role="none"><a role="menuitem" onclick="showPage('vote')" id="nav-vote">Vote For Your Hero</a></li>
+      <li role="none"><a role="menuitem" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+    </ul>
+    <button class="btn btn-primary nav-cta" onclick="showPage('vote')">Nominate Now</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a onclick="nav('home')">Home</a>
+  <a onclick="nav('categories')">Award Categories</a>
+  <a onclick="nav('vote')">Vote For Your Hero</a>
+  <a onclick="nav('contact')">Contact</a>
+  <button class="btn btn-primary" onclick="nav('vote')" style="margin-top:.4rem">Nominate Now</button>
+</div>
+
+<!-- ══════════════════════════
+     HOME PAGE
+══════════════════════════ -->
+<main class="page active" id="page-home">
+
+  <section class="hero" aria-label="Hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">Voting Now Open for 2026</div>
+        <h1>Celebrate the<br>North East's<br><span class="c-pink">High Street<br></span><span class="c-orange">Heroes</span></h1>
+        <p class="hero-desc">Recognise the outstanding businesses and individuals revitalising our high streets — from <strong>Tees Valley</strong> to <strong>Northumberland</strong>. The Gala takes place in <strong>Darlington</strong>.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="showPage('vote')">Nominate Now</button>
+          <button class="btn btn-secondary" onclick="showPage('categories')">View Categories</button>
+        </div>
+      </div>
+      <div class="hero-images" aria-hidden="true">
+        <div class="hero-img tall"><img src="/hsh-awards-ne/images/img-angel-north.jpg" alt="Angel of the North at sunset" loading="eager"/><span class="img-label">Angel of the North</span></div>
+        <div class="hero-img short"><img src="/hsh-awards-ne/images/img-darlington-street.jpg" alt="Darlington High Street" loading="lazy"/><span class="img-label">Darlington</span></div>
+        <div class="hero-img short"><img src="/hsh-awards-ne/images/img-teesside-steel.jpg" alt="Teesside Steel" loading="lazy"/><span class="img-label">Teesside</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats" aria-label="Key statistics">
+    <div class="stats-inner">
+      <div class="stat-card"><div class="stat-num">10</div><div class="stat-label">Award Categories</div></div>
+      <div class="stat-card"><div class="stat-num">500+</div><div class="stat-label">Nominations Expected</div></div>
+      <div class="stat-card"><div class="stat-num">70+</div><div class="stat-label">Towns &amp; Cities</div></div>
+      <div class="stat-card"><div class="stat-num">1</div><div class="stat-label">Gala Night, Darlington</div></div>
+    </div>
+  </section>
+
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">First Connections Initiative</span>
+      <span class="marquee-item">Nominate Your Hero</span>
+      <span class="marquee-item">Darlington Gala Night</span>
+      <span class="marquee-item">10 Award Categories</span>
+      <span class="marquee-item">Tees Valley to Northumberland</span>
+      <span class="marquee-item">Free to Nominate</span>
+      <span class="marquee-item">First Connections Initiative</span>
+      <span class="marquee-item">Nominate Your Hero</span>
+      <span class="marquee-item">Darlington Gala Night</span>
+      <span class="marquee-item">10 Award Categories</span>
+      <span class="marquee-item">Tees Valley to Northumberland</span>
+      <span class="marquee-item">Free to Nominate</span>
+    </div>
+  </div>
+
+  <section class="about" aria-label="About First Connections">
+    <div class="about-inner">
+      <div class="about-img-wrap">
+        <img src="/hsh-awards-ne/images/img-team-photo.jpg" alt="First Connections team in Darlington" loading="lazy"/>
+        <div class="about-year-badge"><span>2026</span></div>
+      </div>
+      <div>
+        <span class="tag">About Us</span>
+        <h2>A First Connections Initiative</h2>
+        <p>The NE High Street Heroes Awards is brought to you by <strong>First Connections</strong> — a trading group spearheaded by two passionate North East business leaders, connecting, celebrating and amplifying business across the region.</p>
+        <p>From free networking events and community initiatives to shining a spotlight on the heroes of our high streets — First Connections is on a mission to make the North East extraordinary.</p>
+        <div class="founders">
+          <div class="founder-card"><div class="founder-name">Andrew Bartlett</div><div class="founder-role">Co-Founder</div></div>
+          <div class="founder-card"><div class="founder-name">Sam Binns</div><div class="founder-role">Co-Founder</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mission" aria-label="Our Mission">
+    <div class="mission-inner">
+      <span class="tag">Our Mission</span>
+      <h2>Empowering North East Communities Through Recognition</h2>
+      <p>We believe every high street hero deserves their moment. From independent retailers to community champions, we shine a light on those who make our region extraordinary.</p>
+      <div class="mission-tags">
+        <span class="mission-tag">🏆 Regional Recognition</span>
+        <span class="mission-tag">❤️ Community Pride</span>
+        <span class="mission-tag">📈 Economic Boost</span>
+        <span class="mission-tag">🤝 Stronger Partnerships</span>
+        <span class="mission-tag">📰 Positive PR</span>
+        <span class="mission-tag">⭐ Inspire Others</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="gallery" aria-label="North East gallery" role="img">
+    <div class="gallery-item"><img src="/hsh-awards-ne/images/img-angel-north.jpg" alt="Angel of the North" loading="lazy"/><span class="img-label">Angel of the North</span></div>
+    <div class="gallery-item"><img src="/hsh-awards-ne/images/img-durham-cathedral.jpg" alt="Durham Cathedral" loading="lazy"/><span class="img-label">Durham</span></div>
+    <div class="gallery-item"><img src="/hsh-awards-ne/images/img-teesside-steel.jpg" alt="Teesside Steelworks" loading="lazy"/><span class="img-label">Teesside Steel Works</span></div>
+    <div class="gallery-item"><img src="/hsh-awards-ne/images/img-locomotion.jpg" alt="Locomotion No.1, Darlington" loading="lazy"/><span class="img-label">Darlington</span></div>
+    <div class="gallery-item"><img src="/hsh-awards-ne/images/img-cafe-owner.jpg" alt="Northumberland high street" loading="lazy"/><span class="img-label">Northumberland</span></div>
+  </div>
+
+  <section class="sponsors" aria-label="Sponsors and Partners">
+    <div class="sponsors-inner">
+      <span class="tag">Our Sponsors &amp; Partners</span>
+      <h2>Proudly Supported By</h2>
+      <p class="sponsors-sub">The NE High Street Heroes Awards wouldn't be possible without the generous support of our sponsors and regional partners.</p>
+
+      <div class="sponsor-group-label">Title Sponsors</div>
+      <div class="sponsor-row">
+        <div class="sponsor-card"><img src="/hsh-awards-ne/images/logo-roam.png" alt="Roam" style="height:50px;width:auto;object-fit:contain"/></div>
+        <div class="sponsor-card"><img src="/hsh-awards-ne/images/logo-ironing-man.png" alt="The Ironing Man" style="height:50px;width:auto;object-fit:contain"/></div>
+      </div>
+
+      <div class="sponsor-group-label">Regional Partners</div>
+      <div class="sponsor-row">
+        <div class="sponsor-card sm"><img src="/hsh-awards-ne/images/logo-bic.png" alt="BIC" style="height:44px;width:auto;object-fit:contain"/></div>
+        <div class="sponsor-card sm"><img src="/hsh-awards-ne/images/logo-ne-hotels.png" alt="North East Hotels Association" style="height:44px;width:auto;object-fit:contain"/></div>
+        <div class="sponsor-card sm"><img src="/hsh-awards-ne/images/logo-stockton-bid.png" alt="Stockton BID" style="height:44px;width:auto;object-fit:contain"/></div>
+        <div class="sponsor-card sm"><img src="/hsh-awards-ne/images/logo-durham-bid.png" alt="Durham BID" style="height:44px;width:auto;object-fit:contain"/></div>
+        <div class="sponsor-card sm blue"><img src="/hsh-awards-ne/images/logo-ne1.png" alt="NE1" style="height:36px;width:auto;object-fit:contain"/></div>
+        <div class="sponsor-card sm cobalt"><img src="/hsh-awards-ne/images/logo-canny.png" alt="Canny Insights" style="height:36px;width:auto;object-fit:contain"/></div>
+        <div class="sponsor-card sm dark"><img src="/hsh-awards-ne/images/logo-surgotech.png" alt="Surgotech Solutions" style="height:40px;width:auto;object-fit:contain"/></div>
+      </div>
+      <div class="sponsor-cta-box">
+        <p>Interested in becoming a sponsor or regional partner?</p>
+        <button class="btn btn-primary" onclick="showPage('contact')">Partner With Us</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" aria-label="Frequently Asked Questions">
+    <div class="faq-inner">
+      <span class="tag">FAQ</span>
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">Who can be nominated for an award?<i class="icon" aria-hidden="true">+</i></button>
+        <div class="faq-a" role="region">Any business or individual operating on or contributing to a high street across the North East — from Tees Valley to Northumberland — can be nominated. Nominations are free and open to everyone.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">How are winners selected?<i class="icon" aria-hidden="true">+</i></button>
+        <div class="faq-a" role="region">A panel of regional experts reviews all nominations and shortlists the most outstanding entries across each category. Winners are then celebrated at the Gala Night in Darlington.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">When is the Gala Ceremony?<i class="icon" aria-hidden="true">+</i></button>
+        <div class="faq-a" role="region">The Gala Ceremony takes place in Darlington — the exact date is to be confirmed. Follow us and check back here for updates.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">Is there a cost to nominate?<i class="icon" aria-hidden="true">+</i></button>
+        <div class="faq-a" role="region">No — nominating is completely free. It takes less than two minutes and makes a real difference to North East businesses and individuals.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">How can I get involved or sponsor?<i class="icon" aria-hidden="true">+</i></button>
+        <div class="faq-a" role="region">We'd love to hear from you! Reach out via the Contact page or email us at <a href="mailto:hello@first-connections.co.uk" style="color:var(--pink)">hello@first-connections.co.uk</a> to discuss sponsorship and partnership opportunities.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer aria-label="Site footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="logo" onclick="showPage('home')" aria-label="Home">
+          <div class="logo-box"><span>20</span><span>26</span></div>
+          <div class="logo-text"><span>High Street</span><div class="logo-line"></div><span>Heroes NE</span></div>
+          <svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M13 2L14 8L20 9L14 10L13 16L12 10L6 9L12 8Z" fill="white"/><path d="M19 1L19.5 3.5L22 4L19.5 4.5L19 7L18.5 4.5L16 4L18.5 3.5Z" fill="white" opacity=".7"/></svg>
+        </a>
+        <p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p>
+      </div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('vote')">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="showPage('vote')">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+  </footer>
+</main>
+
+<!-- ══════════════════════════
+     CATEGORIES PAGE
+══════════════════════════ -->
+<main class="page" id="page-categories">
+  <div class="pt-nav"></div>
+  <section class="page-hero">
+    <span class="tag">2026 Awards</span>
+    <h1>Award Categories</h1>
+    <p>Ten prestigious categories celebrating the very best of North East high street life. Nominations are free and open to all.</p>
+    <button class="btn btn-primary" onclick="showPage('vote')">Nominate Now — It's Free</button>
+  </section>
+
+  <section class="cats-grid">
+    <div class="cats-grid-inner">
+      <article class="cat-card"><div class="cat-num">Category 01</div><span class="cat-emoji">🛍️</span><h3>Best Independent Retailer</h3><p>Celebrating shops that bring character, personality and community to our high streets — the businesses that make every town unique.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 02</div><span class="cat-emoji">🍽️</span><h3>Best Food &amp; Drink Experience</h3><p>Restaurants, cafes, pubs and bars elevating the local dining and drinking scene across the North East.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 03</div><span class="cat-emoji">💅</span><h3>Best Health &amp; Beauty</h3><p>Salons, spas, barbershops and wellness businesses making a real difference to people's lives every day.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 04</div><span class="cat-emoji">🌟</span><h3>Community Champion</h3><p>An individual going above and beyond for their local community — the unsung hero who makes everyone's life better.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 05</div><span class="cat-emoji">🚀</span><h3>Best New Business</h3><p>New ventures that have made an immediate, impressive and lasting impact on their local high street.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 06</div><span class="cat-emoji">♻️</span><h3>Best Sustainable Business</h3><p>Businesses leading the way in environmental responsibility and sustainable practices across the region.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 07</div><span class="cat-emoji">🎨</span><h3>Best Creative &amp; Arts</h3><p>Studios, galleries, makers and creative businesses enriching the cultural life of North East communities.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 08</div><span class="cat-emoji">🏋️</span><h3>Best Health &amp; Fitness</h3><p>Gyms, sports clubs, studios and health services championing active and healthy communities across the NE.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 09</div><span class="cat-emoji">💼</span><h3>Best Service Business</h3><p>Professional service providers — from accountants to solicitors — who make the high street work for everyone.</p></article>
+      <article class="cat-card"><div class="cat-num">Category 10</div><span class="cat-emoji">🥇</span><h3>High Street Hero of the Year</h3><p>The ultimate accolade — awarded to the very best of the North East. The one who embodies everything a High Street Hero should be.</p></article>
+    </div>
+  </section>
+
+  <section class="cats-cta">
+    <span class="tag">Ready?</span>
+    <h2>Make Your Nomination Today</h2>
+    <p>Nominations are completely free and take less than two minutes. Every nomination makes a real difference to North East businesses and individuals.</p>
+    <div class="cta-btns">
+      <button class="btn btn-primary" onclick="showPage('vote')">Nominate by Email</button>
+      <button class="btn btn-secondary" onclick="showPage('vote')">Learn How Voting Works</button>
+    </div>
+  </section>
+
+  <footer aria-label="Site footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="logo" onclick="showPage('home')"><div class="logo-box"><span>20</span><span>26</span></div><div class="logo-text"><span>High Street</span><div class="logo-line"></div><span>Heroes NE</span></div><svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M13 2L14 8L20 9L14 10L13 16L12 10L6 9L12 8Z" fill="white"/></svg></a>
+        <p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p>
+      </div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('vote')">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="showPage('vote')">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+  </footer>
+</main>
+
+<!-- ══════════════════════════
+     VOTE PAGE
+══════════════════════════ -->
+<main class="page" id="page-vote">
+  <div class="pt-nav"></div>
+  <section class="page-hero">
+    <span class="tag">Vote For Your Hero</span>
+    <h1>Cast Your Vote for 2026</h1>
+    <p>Voting is open to everyone across the North East. Show your support for the people and businesses who make your community extraordinary.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('voteForm').scrollIntoView({behavior:'smooth'})">Vote Now — It's Free</button>
+  </section>
+
+  <section class="vote-cats">
+    <div class="vote-cats-inner">
+      <h2>Choose Your Category</h2>
+      <div><p>Select the most fitting category for your nominee — or nominate across multiple categories.</p></div>
+      <div class="vote-cat-grid" id="catGrid">
+        <button class="vote-cat-btn" onclick="setCategory('Best Independent Retailer',this)">🛍️ Best Independent Retailer</button>
+        <button class="vote-cat-btn" onclick="setCategory('Best Food &amp; Drink Experience',this)">🍽️ Best Food &amp; Drink</button>
+        <button class="vote-cat-btn" onclick="setCategory('Best Health &amp; Beauty',this)">💅 Best Health &amp; Beauty</button>
+        <button class="vote-cat-btn" onclick="setCategory('Community Champion',this)">🌟 Community Champion</button>
+        <button class="vote-cat-btn" onclick="setCategory('Best New Business',this)">🚀 Best New Business</button>
+        <button class="vote-cat-btn" onclick="setCategory('Best Sustainable Business',this)">♻️ Best Sustainable Business</button>
+        <button class="vote-cat-btn" onclick="setCategory('Best Creative &amp; Arts',this)">🎨 Best Creative &amp; Arts</button>
+        <button class="vote-cat-btn" onclick="setCategory('Best Health &amp; Fitness',this)">🏋️ Best Health &amp; Fitness</button>
+        <button class="vote-cat-btn" onclick="setCategory('Best Service Business',this)">💼 Best Service Business</button>
+        <button class="vote-cat-btn" onclick="setCategory('High Street Hero of the Year',this)">🥇 Hero of the Year</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="vote-main">
+    <div class="vote-main-inner">
+      <div class="how-panel">
+        <h2>How Voting Works</h2>
+        <p>Our process is inclusive, transparent and community-driven — every vote counts.</p>
+        <div class="how-step"><div class="step-num">1</div><div class="step-text"><h4>Think of Your Hero</h4><p>Think of a local business or individual who deserves recognition for what they bring to the North East.</p></div></div>
+        <div class="how-step"><div class="step-num">2</div><div class="step-text"><h4>Pick a Category</h4><p>Choose the most fitting award category from our 10 categories — you can nominate across multiple.</p></div></div>
+        <div class="how-step"><div class="step-num">3</div><div class="step-text"><h4>Submit Your Vote</h4><p>Fill in the form or email us with their name, business and why they deserve to win.</p></div></div>
+        <div class="how-step"><div class="step-num">4</div><div class="step-text"><h4>Expert Shortlisting</h4><p>Our panel of regional experts shortlist the most outstanding nominees across all categories.</p></div></div>
+        <div class="how-step"><div class="step-num">5</div><div class="step-text"><h4>Gala Night, Darlington</h4><p>Winners are celebrated at our prestigious Gala Ceremony in Darlington — date to be confirmed.</p></div></div>
+      </div>
+      <div class="form-panel">
+        <h2>Submit Your Vote</h2>
+        <p>Fill in the details below and we'll count your vote. It's completely free and only takes a moment.</p>
+        <form id="voteForm" onsubmit="submitForm(event,'voteSuccess','voteForm')" novalidate>
+          <div class="form-group"><label for="v-name">Your Name</label><input id="v-name" type="text" placeholder="Your full name" required autocomplete="name"/></div>
+          <div class="form-group"><label for="v-email">Your Email</label><input id="v-email" type="email" placeholder="your@email.co.uk" required autocomplete="email"/></div>
+          <div class="form-group"><label for="v-nominee">Nominee Name / Business</label><input id="v-nominee" type="text" placeholder="Who are you nominating?" required/></div>
+          <div class="form-group">
+            <label for="v-category">Award Category</label>
+            <select id="v-category" required>
+              <option value="">Select a category…</option>
+              <option>Best Independent Retailer</option>
+              <option>Best Food &amp; Drink Experience</option>
+              <option>Best Health &amp; Beauty</option>
+              <option>Community Champion</option>
+              <option>Best New Business</option>
+              <option>Best Sustainable Business</option>
+              <option>Best Creative &amp; Arts</option>
+              <option>Best Health &amp; Fitness</option>
+              <option>Best Service Business</option>
+              <option>High Street Hero of the Year</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="v-reason">Why do they deserve to win?</label><textarea id="v-reason" placeholder="Tell us why this person or business is a true North East High Street Hero…" required></textarea></div>
+          <button type="submit" class="btn btn-primary btn-full">Submit My Vote ✦</button>
+          <div class="form-success" id="voteSuccess" role="alert">🎉 Thank you! Your vote has been submitted successfully.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer aria-label="Site footer">
+    <div class="footer-inner">
+      <div class="footer-brand"><a class="logo" onclick="showPage('home')"><div class="logo-box"><span>20</span><span>26</span></div><div class="logo-text"><span>High Street</span><div class="logo-line"></div><span>Heroes NE</span></div><svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M13 2L14 8L20 9L14 10L13 16L12 10L6 9L12 8Z" fill="white"/></svg></a><p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('vote')">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="showPage('vote')">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+  </footer>
+</main>
+
+<!-- ══════════════════════════
+     CONTACT PAGE
+══════════════════════════ -->
+<main class="page" id="page-contact">
+  <div class="pt-nav"></div>
+  <section class="page-hero">
+    <span class="tag">Get In Touch</span>
+    <h1>Contact Us</h1>
+    <p>Want to partner, nominate, or learn more? We'd love to hear from you.</p>
+  </section>
+
+  <section class="contact-main">
+    <div class="contact-main-inner">
+      <div class="contact-info">
+        <h2>Let's Talk</h2>
+        <p>Whether you're a business looking to get involved, a regional partner, a member of the press, or simply want to nominate your local hero — we're here for all of it.</p>
+        <div class="contact-detail"><div class="icon-box">📧</div><div><div class="detail-label">Email</div><div class="detail-val"><a href="mailto:hello@first-connections.co.uk">hello@first-connections.co.uk</a></div></div></div>
+        <div class="contact-detail"><div class="icon-box">📍</div><div><div class="detail-label">Gala Location</div><div class="detail-val">Darlington, County Durham</div></div></div>
+        <div class="contact-detail"><div class="icon-box">🗺️</div><div><div class="detail-label">Region Covered</div><div class="detail-val">Tees Valley to Northumberland — 70+ towns &amp; cities</div></div></div>
+        <div class="contact-detail"><div class="icon-box">👥</div><div><div class="detail-label">Organisers</div><div class="detail-val">First Connections — Andrew Bartlett &amp; Sam Binns</div></div></div>
+        <hr class="divider"/>
+        <div class="quick-label">Quick Links</div>
+        <div class="quick-links">
+          <a class="quick-link primary" href="mailto:hello@first-connections.co.uk">📧 Email Us</a>
+          <a class="quick-link outline" onclick="showPage('vote')">🏆 Submit a Nomination</a>
+          <a class="quick-link outline" onclick="showPage('categories')">🏅 View Award Categories</a>
+        </div>
+      </div>
+      <div class="form-panel">
+        <h2>Send a Message</h2>
+        <p>Fill in the form below and a member of our team will get back to you as soon as possible.</p>
+        <form id="contactForm" onsubmit="submitForm(event,'contactSuccess','contactForm')" novalidate>
+          <div class="form-group"><label for="c-name">Your Name</label><input id="c-name" type="text" placeholder="Full name" required autocomplete="name"/></div>
+          <div class="form-group"><label for="c-email">Email Address</label><input id="c-email" type="email" placeholder="your@email.co.uk" required autocomplete="email"/></div>
+          <div class="form-group"><label for="c-org">Organisation / Business <span style="font-weight:400;color:#999">(optional)</span></label><input id="c-org" type="text" placeholder="Your business name" autocomplete="organization"/></div>
+          <div class="form-group">
+            <label for="c-type">Enquiry Type</label>
+            <select id="c-type" required>
+              <option value="">Select…</option>
+              <option>Nominate a Business / Person</option>
+              <option>Sponsorship Enquiry</option>
+              <option>Media Enquiry</option>
+              <option>General Question</option>
+              <option>Partnership Opportunity</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="c-msg">Message</label><textarea id="c-msg" placeholder="Tell us what's on your mind…" required></textarea></div>
+          <button type="submit" class="btn btn-primary btn-full">Send Message ✦</button>
+          <div class="form-success" id="contactSuccess" role="alert">✅ Thank you! We'll be in touch shortly.</div>
+        </form>
+      </div>
+    </div>
+    <div class="contact-img-wrap">
+      <img src="/hsh-awards-ne/images/img-angel-north.jpg" alt="Angel of the North at sunset" loading="lazy"/>
+    </div>
+  </section>
+
+  <section class="regions">
+    <div class="regions-inner">
+      <div class="region-card"><h3>🏙️ Tees Valley</h3><p>Covering Darlington, Middlesbrough, Stockton-on-Tees, Hartlepool and Redcar &amp; Cleveland.</p></div>
+      <div class="region-card"><h3>🏰 County Durham &amp; Tyneside</h3><p>Durham City, Gateshead, Newcastle upon Tyne, Sunderland and the surrounding areas.</p></div>
+      <div class="region-card"><h3>🏘️ Northumberland</h3><p>Extending north to cover market towns and high streets throughout Northumberland.</p></div>
+    </div>
+  </section>
+
+  <footer aria-label="Site footer">
+    <div class="footer-inner">
+      <div class="footer-brand"><a class="logo" onclick="showPage('home')"><div class="logo-box"><span>20</span><span>26</span></div><div class="logo-text"><span>High Street</span><div class="logo-line"></div><span>Heroes NE</span></div><svg width="18" height="18" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M13 2L14 8L20 9L14 10L13 16L12 10L6 9L12 8Z" fill="white"/></svg></a><p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('vote')">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="showPage('vote')">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+  </footer>
+</main>
+
+<script>
+// ── PAGE NAVIGATION ──
+const pages=['home','categories','vote','contact'];
+function showPage(id){
+  pages.forEach(p=>{
+    const pg=document.getElementById('page-'+p);
+    const nav=document.getElementById('nav-'+p);
+    if(pg) pg.classList.toggle('active',p===id);
+    if(nav) nav.classList.toggle('active',p===id);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function nav(id){showPage(id);toggleMenu(false)}
+
+// ── MOBILE MENU ──
+function toggleMenu(force){
+  const menu=document.getElementById('mobileMenu');
+  const btn=document.getElementById('hamburger');
+  const open=force!==undefined?force:!menu.classList.contains('open');
+  menu.classList.toggle('open',open);
+  btn.classList.toggle('open',open);
+  btn.setAttribute('aria-expanded',open);
+  menu.setAttribute('aria-hidden',!open);
+}
+
+// ── FAQ ACCORDION ──
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const isOpen=item.classList.contains('open');
+  // close all
+  document.querySelectorAll('.faq-item.open').forEach(el=>{
+    el.classList.remove('open');
+    el.querySelector('.faq-q').setAttribute('aria-expanded','false');
+  });
+  if(!isOpen){
+    item.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+  }
+}
+
+// ── CATEGORY SELECTOR ──
+function setCategory(cat,btn){
+  document.querySelectorAll('.vote-cat-btn').forEach(b=>b.classList.remove('selected'));
+  if(btn) btn.classList.add('selected');
+  const sel=document.getElementById('v-category');
+  if(sel){
+    for(let o of sel.options){
+      if(o.value===cat||o.text===cat){sel.value=o.value;break}
+    }
+  }
+  document.getElementById('voteForm').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ── FORM SUBMISSION ──
+function submitForm(e,successId,formId){
+  e.preventDefault();
+  const form=document.getElementById(formId);
+  const success=document.getElementById(successId);
+  if(!form.checkValidity()){form.reportValidity();return}
+  success.style.display='block';
+  form.reset();
+  document.querySelectorAll('.vote-cat-btn').forEach(b=>b.classList.remove('selected'));
+  setTimeout(()=>{success.style.display='none'},6000);
+}
+
+// ── INIT ──
+document.getElementById('nav-home').classList.add('active');
+</script>
+</body>
+</html>
