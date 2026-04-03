@@ -769,7 +769,7 @@ async function addToBrevo(email, firstName, lastName, extraAttrs) {
     const payload = {
       email,
       attributes: { FIRSTNAME: firstName || '', LASTNAME: lastName || '', ...extraAttrs },
-      listIds: [2],
+      listIds: [9],
       updateEnabled: true
     };
     await fetch('https://api.brevo.com/v3/contacts', {
@@ -785,8 +785,8 @@ async function addToBrevo(email, firstName, lastName, extraAttrs) {
   }
 }
 
-/* Mailto form submission */
-function submitMailto(e, formId, successId) {
+/* Form submission — sends via Brevo transactional email + adds contact to CRM */
+async function submitMailto(e, formId, successId) {
   e.preventDefault();
   const form = document.getElementById(formId);
 
@@ -801,11 +801,12 @@ function submitMailto(e, formId, successId) {
 
   // Gather field values
   const fields = form.querySelectorAll('input:not([type=hidden]):not([type=submit]), select, textarea');
-  let body = '';
+  let htmlBody = '<table style="font-family:sans-serif;font-size:15px;border-collapse:collapse;width:100%">';
   let email = '', fullName = '', nominee = '', category = '', enquiryType = '';
   fields.forEach(field => {
     const label = field.closest('.form-group')?.querySelector('label')?.textContent?.trim() || field.id;
-    body += label + ': ' + field.value + '\n\n';
+    const val = field.value || '—';
+    htmlBody += `<tr><td style="padding:8px 12px;font-weight:700;background:#f5f5f5;border:1px solid #ddd;width:35%">${label}</td><td style="padding:8px 12px;border:1px solid #ddd">${val}</td></tr>`;
     const id = field.id;
     if(id==='v-email'||id==='c-email') email = field.value.trim();
     if(id==='v-name'||id==='c-name') fullName = field.value.trim();
@@ -813,33 +814,54 @@ function submitMailto(e, formId, successId) {
     if(id==='v-category') category = field.value.trim();
     if(id==='c-type') enquiryType = field.value.trim();
   });
+  htmlBody += '</table>';
 
-  // Parse first / last name
-  const nameParts = fullName.split(' ');
-  const firstName = nameParts[0] || '';
-  const lastName = nameParts.slice(1).join(' ') || '';
-
-  // Build extra CRM attributes depending on form
-  const extra = {};
-  if(nominee)     extra.NOMINEE      = nominee;
-  if(category)    extra.CATEGORY     = category;
-  if(enquiryType) extra.ENQUIRY_TYPE = enquiryType;
-  extra.SOURCE = 'HSH Awards Website';
-
-  // Add to Brevo CRM
-  if(email) addToBrevo(email, firstName, lastName, extra);
-
-  // Open mailto
   const subject = form.querySelector('[name="_subject"]')?.value || 'NE High Street Heroes 2026 Enquiry';
-  const mailto = 'mailto:awards@first-connections.co.uk'
-    + '?subject=' + encodeURIComponent(subject)
-    + '&body=' + encodeURIComponent(body);
-  window.location.href = mailto;
 
-  // Show success message
-  const successEl = document.getElementById(successId);
-  if(successEl){ successEl.style.display='block'; }
-  form.reset();
+  // Disable submit button
+  const submitBtn = form.querySelector('[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Sending…';
+  submitBtn.disabled = true;
+
+  try {
+    // 1. Send transactional email via Brevo
+    await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'api-key': _bk() },
+      body: JSON.stringify({
+        sender: { name: 'HSH Awards Website', email: 'awards@first-connections.co.uk' },
+        to: [{ email: 'awards@first-connections.co.uk', name: 'HSH Awards Team' }],
+        replyTo: { email: email || 'awards@first-connections.co.uk', name: fullName || 'Website Visitor' },
+        subject: subject,
+        htmlContent: `<h2 style="font-family:sans-serif;color:#333">New submission — NE High Street Heroes 2026</h2>${htmlBody}<p style="font-family:sans-serif;font-size:13px;color:#999;margin-top:16px">Submitted via ne-hsh-awards.co.uk</p>`
+      })
+    });
+
+    // 2. Add contact to Brevo CRM
+    const nameParts = fullName.split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+    const extra = { SOURCE: 'HSH Awards Website' };
+    if(nominee)     extra.NOMINEE      = nominee;
+    if(category)    extra.CATEGORY     = category;
+    if(enquiryType) extra.ENQUIRY_TYPE = enquiryType;
+    if(email) await addToBrevo(email, firstName, lastName, extra);
+
+    // Show success
+    const successEl = document.getElementById(successId);
+    if(successEl){ successEl.style.display='block'; }
+    form.reset();
+
+  } catch(err) {
+    console.error('Submission error:', err);
+    const errorId = successId.replace('Success','Error');
+    const errorEl = document.getElementById(errorId);
+    if(errorEl){ errorEl.style.display='block'; }
+  } finally {
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+  }
 }
 </script>
 </body>
