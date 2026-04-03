@@ -102,6 +102,7 @@ nav ul a:hover,nav ul a.active{color:#fff;border-bottom-color:var(--pink)}
 .hero-img.short{min-height:170px}
 .img-label{position:absolute;bottom:.7rem;left:.7rem;background:rgba(7,13,24,.8);backdrop-filter:blur(8px);color:#fff;font-size:.65rem;font-weight:700;padding:.3rem .7rem;border-radius:6px;letter-spacing:.08em;text-transform:uppercase;z-index:1;border:1px solid rgba(255,255,255,.1)}
 @media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-images{display:none}.hero h1{font-size:3rem}}
+@media(max-width:900px){.hero{background:linear-gradient(to bottom,rgba(7,13,24,.6) 0%,rgba(7,13,24,.85) 100%),url('images/img-angel-north.jpg') center 30% / cover no-repeat}.hero::before{background:radial-gradient(ellipse at 20% 50%,rgba(244,114,182,.18),transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(168,85,247,.12),transparent 50%)}}
 
 /* STATS */
 .stats{background:var(--navy);padding:2.5rem 2rem;position:relative}
@@ -317,6 +318,74 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .modal-box h2{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;margin-bottom:.4rem}
 .modal-box .modal-sub{color:#8fa8be;font-size:.9rem;margin-bottom:1.8rem}
 
+
+/* ABOUT PAGE */
+.about-page-hero{background:var(--navy2);padding:8rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
+.about-page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(244,114,182,.12),transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(245,166,35,.06),transparent 60%);pointer-events:none}
+.about-page-hero h1{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;margin-bottom:1rem;letter-spacing:-.02em;position:relative}
+.about-page-hero p{color:#8fa8be;font-size:1.05rem;max-width:620px;margin:0 auto 2.5rem;line-height:1.75;position:relative}
+
+/* PURPOSE SECTION */
+.about-purpose{background:var(--navy);padding:6rem 2rem;position:relative}
+.about-purpose::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(244,114,182,.05),transparent 60%);pointer-events:none}
+.about-purpose-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.about-purpose h2{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:800;margin-bottom:1.2rem;line-height:1.1;letter-spacing:-.02em}
+.about-purpose p{color:#8fa8be;font-size:1rem;line-height:1.85;margin-bottom:1.2rem}
+.purpose-list{list-style:none;display:flex;flex-direction:column;gap:.8rem;margin-top:1rem}
+.purpose-list li{display:flex;align-items:flex-start;gap:.9rem;color:#cdd8e8;font-size:.95rem;line-height:1.6}
+.purpose-list li::before{content:'✦';color:var(--pink);font-size:.8rem;margin-top:.2rem;flex-shrink:0}
+@media(max-width:900px){.about-purpose-inner{grid-template-columns:1fr;gap:3rem}}
+
+/* NARRATIVE SECTION */
+.about-narrative{background:var(--cream);padding:7rem 2rem;color:var(--navy);position:relative;overflow:hidden}
+.about-narrative::before{content:'';position:absolute;top:-80px;right:-80px;width:360px;height:360px;background:radial-gradient(circle,rgba(244,114,182,.07),transparent 70%);pointer-events:none}
+.about-narrative-inner{max-width:900px;margin:0 auto;text-align:center}
+.about-narrative h2{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;color:var(--navy);margin-bottom:1.4rem;line-height:1.1;letter-spacing:-.02em}
+.about-narrative p{font-size:1.05rem;color:#4a5568;line-height:1.85;margin-bottom:1.2rem;max-width:780px;margin-left:auto;margin-right:auto}
+.about-narrative p strong{color:var(--navy)}
+.narrative-quote{background:linear-gradient(135deg,rgba(244,114,182,.08),rgba(245,166,35,.05));border-left:4px solid var(--pink);border-radius:0 16px 16px 0;padding:1.8rem 2rem;margin:2.5rem auto;text-align:left;max-width:700px}
+.narrative-quote p{font-family:'Playfair Display',serif;font-size:1.15rem;font-style:italic;color:var(--navy);line-height:1.7;margin:0}
+
+/* WHO IT'S FOR */
+.about-who{background:var(--navy2);padding:7rem 2rem;text-align:center;position:relative;overflow:hidden}
+.about-who::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(168,85,247,.06),transparent 65%);pointer-events:none}
+.about-who-inner{max-width:1100px;margin:0 auto;position:relative}
+.about-who h2{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;margin-bottom:1rem;letter-spacing:-.02em}
+.about-who>div>p,.about-who-inner>p{color:#8fa8be;font-size:1rem;margin-bottom:3rem;line-height:1.75}
+.who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:4rem}
+.who-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:1.8rem;text-align:left;transition:all .3s;position:relative;overflow:hidden}
+.who-card::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s}
+.who-card:hover{border-color:rgba(244,114,182,.35);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.who-card:hover::before{opacity:.04}
+.who-card-icon{font-size:2rem;margin-bottom:.9rem;display:block}
+.who-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;margin-bottom:.5rem;position:relative}
+.who-card p{color:var(--muted);font-size:.88rem;line-height:1.7;position:relative}
+@media(max-width:900px){.who-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.who-grid{grid-template-columns:1fr}}
+
+/* PARTNER VALUE */
+.about-partners{background:var(--cream);padding:7rem 2rem;color:var(--navy);text-align:center}
+.about-partners-inner{max-width:1100px;margin:0 auto}
+.about-partners h2{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;color:var(--navy);margin-bottom:1rem;letter-spacing:-.02em}
+.about-partners>div>p,.about-partners-inner>p{color:#4a5568;font-size:1rem;margin-bottom:3rem;line-height:1.75}
+.partner-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:3rem}
+.partner-card{background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:1.8rem;text-align:left;box-shadow:0 4px 20px rgba(0,0,0,.06);transition:all .3s}
+.partner-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.12);transform:translateY(-3px);border-color:rgba(244,114,182,.3)}
+.partner-card-num{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin-bottom:.7rem}
+.partner-card h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.5rem}
+.partner-card p{font-size:.88rem;color:#4a5568;line-height:1.7}
+@media(max-width:900px){.partner-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.partner-grid{grid-template-columns:1fr}}
+
+/* STRATEGIC CTA */
+.about-strategic{background:var(--navy);padding:7rem 2rem;text-align:center;position:relative;overflow:hidden}
+.about-strategic::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(244,114,182,.08),transparent 60%),radial-gradient(ellipse at 50% 100%,rgba(245,166,35,.06),transparent 60%);pointer-events:none}
+.about-strategic-inner{max-width:780px;margin:0 auto;position:relative}
+.about-strategic h2{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:800;margin-bottom:1.2rem;line-height:1.1;letter-spacing:-.02em}
+.about-strategic p{color:#8fa8be;font-size:1.05rem;line-height:1.85;margin-bottom:2rem}
+.about-strategic p strong{color:#fff}
+.about-strategic .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
 </style>
 </head>
 <body>
@@ -331,6 +400,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <li><a onclick="showPage('home')" id="nav-home">Home</a></li>
       <li><a onclick="showPage('categories')" id="nav-categories">Award Categories</a></li>
       <li><a onclick="showPage('vote')" id="nav-vote">Vote For Your Hero</a></li>
+      <li><a onclick="showPage('about')" id="nav-about">About</a></li>
       <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
     </ul>
     <button class="btn btn-primary nav-cta" onclick="openNominateModal()">Nominate Now</button>
@@ -343,6 +413,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <a onclick="nav('home')">Home</a>
   <a onclick="nav('categories')">Award Categories</a>
   <a onclick="nav('vote')">Vote For Your Hero</a>
+  <a onclick="nav('about')">About</a>
   <a onclick="nav('contact')">Contact</a>
   <button class="btn btn-primary" onclick="openNominateModal()" style="margin-top:.4rem">Nominate Now</button>
 </div>
@@ -755,7 +826,7 @@ function closeModalOnOverlay(e){
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
 
 </script><script>
-const pages=['home','categories','vote','contact'];
+const pages=['home','categories','vote','about','contact'];
 function showPage(id){
   pages.forEach(p=>{
     document.getElementById('page-'+p).classList.toggle('active',p===id);
@@ -906,6 +977,119 @@ function closeModalOnOverlay(e){
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
 
 </script>
+
+
+<!-- ══ ABOUT ══ -->
+<main class="page" id="page-about">
+
+  <!-- Hero -->
+  <section class="about-page-hero">
+    <span class="tag">Our Story &amp; Purpose</span>
+    <h1>About the <em>Awards</em></h1>
+    <p>A regional recognition campaign celebrating the businesses, people, and organisations making a meaningful difference to North East high streets and town centres.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="openNominateModal()">Nominate Now</button>
+      <button class="btn btn-secondary" onclick="showPage('contact')">Become a Partner</button>
+    </div>
+  </section>
+
+  <!-- Purpose -->
+  <section class="about-purpose">
+    <div class="about-purpose-inner">
+      <div>
+        <span class="tag" style="color:var(--pink)">What We're Here For</span>
+        <h2>Purpose-Led<br>Recognition</h2>
+        <p>The North East High Street Heroes Awards is designed to shine a light on those creating vibrant, welcoming, and resilient local places — while encouraging stronger collaboration between businesses, communities, councils, BIDs, and regional partners.</p>
+        <p>These aren't just awards. They're a platform for positive change, community pride, and a stronger regional story.</p>
+      </div>
+      <div>
+        <span class="tag" style="color:var(--pink)">Core Purpose</span>
+        <ul class="purpose-list">
+          <li>Recognise local business excellence and community impact</li>
+          <li>Celebrate the people helping high streets thrive</li>
+          <li>Generate positive regional publicity and public engagement</li>
+          <li>Strengthen relationships with local businesses and stakeholders</li>
+          <li>Create a platform for sponsorship, partnership, and collaborative campaigns</li>
+          <li>Help reshape public perception of the high street as a place to play, work, visit, and invest in</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Changing the Narrative -->
+  <section class="about-narrative">
+    <div class="about-narrative-inner">
+      <span class="tag">Changing the Narrative</span>
+      <h2>A Different Kind of<br>High Street Story</h2>
+      <p>Too often, mainstream media coverage focuses on decline, closures, and negative headlines. That creates an incomplete — and often misleading — picture of what is really happening at a local level.</p>
+      <div class="narrative-quote">
+        <p>"The future of the high street is not defined by multinational brands alone, but by the independent businesses, local employers, hospitality venues, community champions, and place-makers who keep town centres active and relevant."</p>
+      </div>
+      <p>The High Street Heroes Awards is designed to <strong>challenge that narrative</strong> — spotlighting the energy, innovation, resilience, and community value that exists across local high streets every day.</p>
+    </div>
+  </section>
+
+  <!-- Who It's For -->
+  <section class="about-who">
+    <div class="about-who-inner">
+      <span class="tag">Who They're For</span>
+      <h2>Built for the <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Whole Community</span></h2>
+      <p style="color:#8fa8be;font-size:1rem;margin-bottom:3rem;line-height:1.75">The awards are open to everyone contributing to North East high street life — from sole traders to community groups.</p>
+      <div class="who-grid">
+        <div class="who-card"><span class="who-card-icon">🛍️</span><h3>Independent Retailers</h3><p>The shops and boutiques that give our high streets character, choice, and charm.</p></div>
+        <div class="who-card"><span class="who-card-icon">🍽️</span><h3>Hospitality Venues</h3><p>Cafés, restaurants, pubs and bars that create warmth, welcome, and community.</p></div>
+        <div class="who-card"><span class="who-card-icon">🏅</span><h3>Community Champions</h3><p>Individuals and organisations going above and beyond for their local area.</p></div>
+        <div class="who-card"><span class="who-card-icon">💡</span><h3>High Street Innovators</h3><p>Businesses using creativity and technology to reimagine what a high street can be.</p></div>
+        <div class="who-card"><span class="who-card-icon">🏢</span><h3>Service Businesses</h3><p>Local employers providing essential services and jobs in our town centres.</p></div>
+        <div class="who-card"><span class="who-card-icon">🤝</span><h3>Local Partners &amp; BIDs</h3><p>Councils, BIDs, and regional organisations investing in place and community.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why It Matters for Partners -->
+  <section class="about-partners">
+    <div class="about-partners-inner">
+      <span class="tag">Partner Value</span>
+      <h2 style="color:var(--navy)">Why Partner With Us?</h2>
+      <p style="color:#4a5568;font-size:1rem;margin-bottom:3rem;line-height:1.75">For organisations looking to make a meaningful impact, the awards offer a powerful platform to connect with communities, businesses, and stakeholders across the region.</p>
+      <div class="partner-grid">
+        <div class="partner-card"><div class="partner-card-num">Benefit 01</div><h3>Community Alignment</h3><p>Align your brand with a positive, community-first regional initiative that people genuinely care about.</p></div>
+        <div class="partner-card"><div class="partner-card-num">Benefit 02</div><h3>Regional Visibility</h3><p>Increase brand visibility through a trusted local campaign with PR, media, and engagement reach.</p></div>
+        <div class="partner-card"><div class="partner-card-num">Benefit 03</div><h3>Practical Support</h3><p>Support local businesses in a visible and practical way that builds real goodwill with communities.</p></div>
+        <div class="partner-card"><div class="partner-card-num">Benefit 04</div><h3>Stakeholder Goodwill</h3><p>Build stronger relationships with communities, councils, BIDs, and regional stakeholders.</p></div>
+        <div class="partner-card"><div class="partner-card-num">Benefit 05</div><h3>Scalable Platform</h3><p>Be part of a growing programme with long-term sponsorship, engagement, and partnership potential.</p></div>
+        <div class="partner-card"><div class="partner-card-num">Benefit 06</div><h3>Positive Storytelling</h3><p>Help champion a more balanced and optimistic story about the future of local high streets.</p></div>
+      </div>
+      <button class="btn btn-primary" onclick="showPage('contact')" style="background:var(--grad);color:#fff">Become a Partner</button>
+    </div>
+  </section>
+
+  <!-- Strategic Value CTA -->
+  <section class="about-strategic">
+    <div class="about-strategic-inner">
+      <span class="tag">Strategic Value</span>
+      <h2>More Than an<br>Awards Night</h2>
+      <p>Within the wider North East growth strategy, the awards act as a <strong>community engagement and partnership vehicle</strong>. They help create local momentum, open doors to new relationships, and provide a strong platform for media coverage, business outreach, and regional storytelling.</p>
+      <p>In short, the North East High Street Heroes Awards is a <strong>celebration of local impact</strong> — and a practical campaign for driving awareness, engagement, and partnership across the region, while helping redefine how high streets are seen by the public, partners, and the media.</p>
+      <div class="cta-btns">
+        <button class="btn btn-primary" onclick="openNominateModal()">Nominate a Hero</button>
+        <button class="btn btn-secondary" onclick="showPage('contact')">Get In Touch</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand"><a class="logo" onclick="showPage('home')"><img src="images/img-hsh-logo.png" alt="NE High Street Heroes Awards 2026" style="height:44px;width:auto;display:block"/></a><p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('vote')">Vote For Your Hero</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="openNominateModal()">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+  </footer>
+</main>
+
 
 <!-- NOMINATION MODAL -->
 <div class="modal-overlay" id="nominateModal" onclick="closeModalOnOverlay(event)">
