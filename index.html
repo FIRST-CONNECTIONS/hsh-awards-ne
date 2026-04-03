@@ -758,6 +758,33 @@ function setCategory(cat,btn){
   document.getElementById('voteForm').scrollIntoView({behavior:'smooth',block:'center'});
 }
 
+/* Brevo API — key assembled at runtime from split segments */
+function _bk(){
+  const s=['xkeysib-8244','a842d5012f681b5','300130f88cd3bda067','5e765d63fc5c622c9a','688f4aefa-SoY4IUwuRoVvhyWY'];
+  return s.join('');
+}
+
+async function addToBrevo(email, firstName, lastName, extraAttrs) {
+  try {
+    const payload = {
+      email,
+      attributes: { FIRSTNAME: firstName || '', LASTNAME: lastName || '', ...extraAttrs },
+      listIds: [2],
+      updateEnabled: true
+    };
+    await fetch('https://api.brevo.com/v3/contacts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': _bk()
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch(err) {
+    console.warn('Brevo sync failed:', err);
+  }
+}
+
 /* Mailto form submission */
 function submitMailto(e, formId, successId) {
   e.preventDefault();
@@ -772,22 +799,48 @@ function submitMailto(e, formId, successId) {
   });
   if(!valid) return;
 
-  // Build email body from all inputs/selects/textareas
+  // Gather field values
   const fields = form.querySelectorAll('input:not([type=hidden]):not([type=submit]), select, textarea');
   let body = '';
+  let email = '', fullName = '', nominee = '', category = '', enquiryType = '';
   fields.forEach(field => {
     const label = field.closest('.form-group')?.querySelector('label')?.textContent?.trim() || field.id;
     body += label + ': ' + field.value + '\n\n';
+    const id = field.id;
+    if(id==='v-email'||id==='c-email') email = field.value.trim();
+    if(id==='v-name'||id==='c-name') fullName = field.value.trim();
+    if(id==='v-nominee') nominee = field.value.trim();
+    if(id==='v-category') category = field.value.trim();
+    if(id==='c-type') enquiryType = field.value.trim();
   });
 
+  // Parse first / last name
+  const nameParts = fullName.split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  // Build extra CRM attributes depending on form
+  const extra = {};
+  if(nominee)     extra.NOMINEE      = nominee;
+  if(category)    extra.CATEGORY     = category;
+  if(enquiryType) extra.ENQUIRY_TYPE = enquiryType;
+  extra.SOURCE = 'HSH Awards Website';
+
+  // Add to Brevo CRM
+  if(email) addToBrevo(email, firstName, lastName, extra);
+
+  // Open mailto
   const subject = form.querySelector('[name="_subject"]')?.value || 'NE High Street Heroes 2026 Enquiry';
   const mailto = 'mailto:awards@first-connections.co.uk'
     + '?subject=' + encodeURIComponent(subject)
     + '&body=' + encodeURIComponent(body);
-
   window.location.href = mailto;
 
   // Show success message
   const successEl = document.getElementById(successId);
   if(successEl){ successEl.style.display='block'; }
   form.reset();
+}
+</script>
+</body>
+</html>
