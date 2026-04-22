@@ -1054,34 +1054,7 @@ function setCategory(cat,btn){
   document.getElementById('voteForm').scrollIntoView({behavior:'smooth',block:'center'});
 }
 
-/* Brevo API — key assembled at runtime from split segments */
-function _bk(){
-  const s=['xkeysib-8244','a842d5012f681b5','300130f88cd3bda067','5e765d63fc5c622c9a','688f4aefa-SoY4IUwuRoVvhyWY'];
-  return s.join('');
-}
-
-async function addToBrevo(email, firstName, lastName, extraAttrs) {
-  try {
-    const payload = {
-      email,
-      attributes: { FIRSTNAME: firstName || '', LASTNAME: lastName || '', ...extraAttrs },
-      listIds: [9],
-      updateEnabled: true
-    };
-    await fetch('https://api.brevo.com/v3/contacts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'api-key': _bk()
-      },
-      body: JSON.stringify(payload)
-    });
-  } catch(err) {
-    console.warn('Brevo sync failed:', err);
-  }
-}
-
-/* Form submission — sends via Brevo transactional email + adds contact to CRM */
+/* Form submission — routed via Netlify serverless function (key stored server-side) */
 async function submitMailto(e, formId, successId) {
   e.preventDefault();
   const form = document.getElementById(formId);
@@ -1113,6 +1086,13 @@ async function submitMailto(e, formId, successId) {
   htmlBody += '</table>';
 
   const subject = form.querySelector('[name="_subject"]')?.value || 'NE High Street Heroes 2026 Enquiry';
+  const nameParts = fullName.split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+  const extra = { SOURCE: 'HSH Awards Website' };
+  if(nominee)     extra.NOMINEE       = nominee;
+  if(category)    extra.CATEGORY      = category;
+  if(enquiryType) extra.ENQUIRY_TYPE  = enquiryType;
 
   // Disable submit button
   const submitBtn = form.querySelector('[type="submit"]');
@@ -1121,28 +1101,22 @@ async function submitMailto(e, formId, successId) {
   submitBtn.disabled = true;
 
   try {
-    // 1. Send transactional email via Brevo
-    await fetch('https://api.brevo.com/v3/smtp/email', {
+    // Call Netlify function — API key never leaves the server
+    const res = await fetch('/.netlify/functions/send-form', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'api-key': _bk() },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sender: { name: 'HSH Awards Website', email: 'awards@first-connections.co.uk' },
-        to: [{ email: 'awards@first-connections.co.uk', name: 'HSH Awards Team' }],
-        replyTo: { email: email || 'awards@first-connections.co.uk', name: fullName || 'Website Visitor' },
-        subject: subject,
-        htmlContent: `<h2 style="font-family:sans-serif;color:#333">New submission — NE High Street Heroes 2026</h2>${htmlBody}<p style="font-family:sans-serif;font-size:13px;color:#999;margin-top:16px">Submitted via ne-hsh-awards.co.uk</p>`
+        type: 'both',
+        email,
+        firstName,
+        lastName,
+        extraAttrs: extra,
+        emailSubject: subject,
+        emailHtml: `<h2 style="font-family:sans-serif;color:#333">New submission — NE High Street Heroes 2026</h2>${htmlBody}<p style="font-family:sans-serif;font-size:13px;color:#999;margin-top:16px">Submitted via ne-hsh-awards.co.uk</p>`
       })
     });
 
-    // 2. Add contact to Brevo CRM
-    const nameParts = fullName.split(' ');
-    const firstName = nameParts[0] || '';
-    const lastName = nameParts.slice(1).join(' ') || '';
-    const extra = { SOURCE: 'HSH Awards Website' };
-    if(nominee)     extra.NOMINEE      = nominee;
-    if(category)    extra.CATEGORY     = category;
-    if(enquiryType) extra.ENQUIRY_TYPE = enquiryType;
-    if(email) await addToBrevo(email, firstName, lastName, extra);
+    if(!res.ok) throw new Error('Function returned ' + res.status);
 
     // Show success
     const successEl = document.getElementById(successId);

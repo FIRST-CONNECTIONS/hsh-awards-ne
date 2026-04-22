@@ -1,0 +1,31 @@
+# netlify.toml
+# Netlify configuration for NE High Street Heroes Awards
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# Redirect all traffic to www (canonical domain)
+[[redirects]]
+  from = "https://ne-hsh-awards.co.uk/*"
+  to   = "https://www.ne-hsh-awards.co.uk/:splat"
+  status = 301
+  force  = true
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Cache static assets
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
