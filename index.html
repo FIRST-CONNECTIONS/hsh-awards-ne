@@ -556,6 +556,84 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .about-strategic p strong{color:#fff}
 .about-strategic .cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
 
+/* ── RESPONSIVE: TABLET (≤768px) ── */
+@media(max-width:768px){
+  /* Section padding compression */
+  .about,.mission,.faq,.sponsors,.about-purpose,.about-narrative,.about-who,.about-partners,.about-strategic{padding:4.5rem 1.25rem}
+  .page-hero,.about-page-hero{padding:6rem 1.25rem 3.5rem}
+  .cats-grid,.vote-cats,.vote-main,.contact-main,.regions,.cats-cta{padding:3rem 1.25rem}
+  .stats{padding:2rem 1.25rem}
+  footer{padding:3rem 1.25rem 1.5rem}
+  /* Heading scale */
+  .hero h1{font-size:2.6rem;line-height:1.1}
+  .page-hero h1,.about-page-hero h1{font-size:2.4rem}
+  .about h2,.mission h2,.faq h2,.cats-cta h2,.about-narrative h2,.about-who h2,.about-partners h2,.about-strategic h2,.sponsors h2{font-size:2rem}
+  .about-purpose h2{font-size:2rem}
+  /* Tablet panel padding */
+  .how-panel,.form-panel,.contact-info{padding:1.8rem}
+  .vote-main-inner,.contact-main-inner{gap:1.5rem}
+  /* Vote category grid tablet step */
+  .vote-cat-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ── RESPONSIVE: MOBILE (≤480px) ── */
+@media(max-width:480px){
+  /* Tighter padding */
+  .about,.mission,.faq,.sponsors,.about-purpose,.about-narrative,.about-who,.about-partners,.about-strategic{padding:3.5rem 1rem}
+  .page-hero,.about-page-hero{padding:5rem 1rem 3rem}
+  .cats-grid,.vote-cats,.vote-main,.contact-main,.regions,.cats-cta{padding:2.5rem 1rem}
+  .stats{padding:1.5rem 1rem}
+  footer{padding:2.5rem 1rem 1.25rem}
+  /* Headings */
+  .hero h1{font-size:2.1rem;line-height:1.12}
+  .page-hero h1,.about-page-hero h1{font-size:2rem}
+  .about h2,.mission h2,.faq h2,.cats-cta h2,.about-narrative h2,.about-who h2,.about-partners h2,.about-strategic h2,.sponsors h2,.about-purpose h2{font-size:1.7rem}
+  /* Hero buttons stack full-width */
+  .hero-btns{flex-direction:column;align-items:stretch}
+  .hero-btns .btn{width:100%}
+  .cta-btns .btn{width:100%}
+  .cta-btns{flex-direction:column;align-items:stretch}
+  /* Founders single column */
+  .founders{grid-template-columns:1fr}
+  /* Stats: keep 2-col but compress numbers */
+  .stat-card{padding:1.2rem 1rem}
+  .stat-num{font-size:2rem}
+  /* Vote cat grid full width */
+  .vote-cat-grid{grid-template-columns:1fr}
+  /* Forms / panels */
+  .how-panel,.form-panel,.contact-info{padding:1.4rem;border-radius:18px}
+  .form-group input,.form-group select,.form-group textarea{font-size:16px} /* prevents iOS zoom on focus */
+  /* Marquee tighter */
+  .marquee-item{padding:0 1.4rem;font-size:.68rem}
+  /* Gallery height */
+  .gallery{height:180px}
+  /* About year badge */
+  .about-year{font-size:1.5rem;padding:.7rem 1.1rem;bottom:1rem;right:1rem}
+  /* Narrative quote */
+  .narrative-quote{padding:1.2rem 1.2rem;margin:1.8rem auto}
+  .narrative-quote p{font-size:1.05rem}
+  /* Sponsor CTA box */
+  .sponsor-cta-box{padding:1.5rem 1.2rem}
+  /* Contact image */
+  .contact-img-wrap{height:200px;margin-top:1.5rem}
+  /* About-purpose gap */
+  .about-purpose-inner{gap:2rem}
+}
+
+/* ── MODAL: mobile padding + touch target ── */
+@media(max-width:600px){
+  .modal-overlay{padding:.75rem}
+  .modal-box{padding:1.5rem 1.25rem;border-radius:18px;max-height:92vh}
+  .modal-box h2{font-size:1.5rem}
+  .modal-box .modal-sub{font-size:.85rem;margin-bottom:1.2rem}
+}
+.modal-close{width:44px;height:44px;font-size:1.2rem}
+
+/* iOS form zoom prevention on all phone sizes */
+@media(max-width:768px){
+  .form-group input,.form-group select,.form-group textarea{font-size:16px}
+}
+
 </style>
 </head>
 <body>
