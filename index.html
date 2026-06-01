@@ -389,6 +389,37 @@ nav ul li a.active{color:#fff;border-bottom-color:var(--pink)}
 .cat-criteria ul li::before{content:'✓';position:absolute;left:0;color:var(--orange);font-weight:700;font-size:.75rem}
 @media(max-width:1000px){.cats-grid-inner{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.cats-grid-inner{grid-template-columns:1fr}}
+/* BRAND KIT */
+.bk-section{background:var(--navy);padding:3.5rem 2rem 5rem}
+.bk-section-inner{max-width:1280px;margin:0 auto}
+.bk-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.3rem 1.6rem;margin-bottom:1rem}
+.bk-toolbar p{color:#8fa8be;font-size:.9rem;max-width:560px;line-height:1.6}
+.bk-toolbar p strong{color:#fff}
+.bk-toolbar-btns{display:flex;gap:.6rem;flex-wrap:wrap}
+.bk-bulk{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.2rem;border-radius:50px;font-size:.8rem;font-weight:700;letter-spacing:.02em;transition:all .25s;border:1.5px solid rgba(255,255,255,.2);color:#fff}
+.bk-bulk:hover{border-color:var(--pink);background:rgba(244,114,182,.08)}
+.bk-group-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;margin:2.6rem 0 1.3rem;display:flex;align-items:center;gap:1rem}
+.bk-group-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.bk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+.bk-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .3s,transform .3s}
+.bk-card:hover{border-color:var(--border2);transform:translateY(-4px)}
+.bk-thumb{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bk-thumb.logo{background:var(--cream);padding:1.4rem}
+.bk-thumb.logo img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.bk-thumb.photo{background:var(--navy2)}
+.bk-thumb.photo img{width:100%;height:100%;object-fit:cover}
+.bk-body{padding:1rem 1.1rem 1.2rem;display:flex;flex-direction:column;gap:.55rem;flex:1}
+.bk-label{font-weight:700;font-size:.95rem;line-height:1.3}
+.bk-meta{font-size:.68rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.bk-btns{display:flex;gap:.5rem;margin-top:.6rem}
+.bk-dl{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.55rem .5rem;border-radius:10px;font-size:.78rem;font-weight:700;letter-spacing:.03em;transition:all .25s;cursor:pointer}
+.bk-dl-png{background:rgba(244,114,182,.1);color:var(--pink);border:1px solid var(--border2)}
+.bk-dl-png:hover{background:var(--grad);color:#fff}
+.bk-dl-pdf{background:rgba(245,166,35,.1);color:var(--orange);border:1px solid rgba(245,166,35,.28)}
+.bk-dl-pdf:hover{background:var(--orange);color:var(--navy)}
+.bk-dl[disabled]{opacity:.55;cursor:wait}
+@media(max-width:1000px){.bk-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.bk-grid{grid-template-columns:1fr}}
 .cats-cta{background:var(--navy2);padding:6rem 2rem;text-align:center;position:relative}
 .cats-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(245,166,35,.06),transparent 70%);pointer-events:none}
 .cats-cta h2{font-family:'Playfair Display',serif;font-size:3rem;font-weight:800;margin-bottom:.8rem;letter-spacing:-.02em}
@@ -649,6 +680,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <li><a onclick="showPage('categories')" id="nav-categories">Award Categories</a></li>
       <li><a onclick="showPage('vote')" id="nav-vote">Vote For Your Hero</a></li>
       <li><a onclick="showPage('about')" id="nav-about">About</a></li>
+      <li><a onclick="showPage('brand-kit')" id="nav-brand-kit">Brand Kit</a></li>
       <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
     </ul>
     <button class="btn btn-primary nav-cta" onclick="openNominateModal()">Nominate Now</button>
@@ -662,6 +694,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   <a onclick="nav('categories')" id="mob-categories">Award Categories</a>
   <a onclick="nav('vote')" id="mob-vote">Vote For Your Hero</a>
   <a onclick="nav('about')" id="mob-about">About</a>
+  <a onclick="nav('brand-kit')" id="mob-brand-kit">Brand Kit</a>
   <a onclick="nav('contact')" id="mob-contact">Contact</a>
   <div class="mob-divider"></div>
   <button class="btn btn-primary mob-cta" onclick="closeModal();openNominateModal();toggleMenu(false)">Nominate Now ✦</button>
@@ -1100,7 +1133,7 @@ function closeModalOnOverlay(e){
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
 
 </script><script>
-const pages=['home','categories','vote','about','contact'];
+const pages=['home','categories','vote','about','brand-kit','contact'];
 function showPage(id){
   pages.forEach(p=>{
     document.getElementById('page-'+p).classList.toggle('active',p===id);
@@ -1225,6 +1258,168 @@ function closeModalOnOverlay(e){
 }
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
 
+/* ═══ BRAND KIT ═══ */
+const brandKitGroups=[
+  {title:'Logos & Brand Marks', kind:'logo', items:[
+    {file:'img-hsh-logo.png',      label:'Primary Logo'},
+    {file:'img-hsh-logo-sq.png',   label:'Square Logo'},
+    {file:'hsh-awards-fav-icon.png', label:'App / Favicon Mark'}
+  ]},
+  {title:'Photography', kind:'photo', items:[
+    {file:'img-team-photo.jpg',       label:'Launch Team'},
+    {file:'img-gala-event.jpg',       label:'Awards Gala'},
+    {file:'img-angel-north.jpg',      label:'Angel of the North'},
+    {file:'img-darlington-street.jpg',label:'Darlington High Street'},
+    {file:'img-durham-cathedral.jpg', label:'Durham Cathedral'},
+    {file:'img-teesside-steel.jpg',   label:'Teesside Steel'},
+    {file:'img-locomotion.jpg',       label:'Locomotion'},
+    {file:'img-steam-train.jpg',      label:'Steam Train'},
+    {file:'img-cafe-owner.jpg',       label:'Café Owner'},
+    {file:'img-ne-illustration.jpg',  label:'North East Illustration'}
+  ]},
+  {title:'Partner & Sponsor Logos', kind:'logo', items:[
+    {file:'logo-ne1.png',         label:'NE1'},
+    {file:'logo-durham-bid.png',  label:'Durham BID'},
+    {file:'logo-stockton-bid.png',label:'Stockton BID'},
+    {file:'logo-bic.png',         label:'BIC'},
+    {file:'logo-ne-hotels.png',   label:'NE Hotels Association'},
+    {file:'lumo-trains.png',      label:'Lumo'},
+    {file:'logo-roam.png',        label:'Roam'},
+    {file:'logo-surgotech.png',   label:'Surgo Tech'},
+    {file:'logo-ironing-man.png', label:'The Ironing Man'}
+  ]}
+];
+
+function bkRender(){
+  const grid=document.getElementById('bk-grid');
+  if(!grid||grid.dataset.rendered) return;
+  let html='';
+  brandKitGroups.forEach(g=>{
+    html+='<h2 class="bk-group-title">'+g.title+'</h2><div class="bk-grid">';
+    g.items.forEach(it=>{
+      const base=it.file.replace(/\.[^.]+$/,'');
+      const ext=it.file.split('.').pop().toUpperCase();
+      html+=''+
+        '<div class="bk-card">'+
+          '<div class="bk-thumb '+g.kind+'"><img src="images/'+it.file+'" alt="'+it.label+'" loading="lazy"/></div>'+
+          '<div class="bk-body">'+
+            '<div class="bk-label">'+it.label+'</div>'+
+            '<div class="bk-meta">'+ext+' · '+it.file+'</div>'+
+            '<div class="bk-btns">'+
+              '<button class="bk-dl bk-dl-png" onclick="bkDownload(\''+it.file+'\',\''+base+'\',\'png\',this)">⬇ PNG</button>'+
+              '<button class="bk-dl bk-dl-pdf" onclick="bkDownload(\''+it.file+'\',\''+base+'\',\'pdf\',this)">⬇ PDF</button>'+
+            '</div>'+
+          '</div>'+
+        '</div>';
+    });
+    html+='</div>';
+  });
+  grid.innerHTML=html;
+  grid.dataset.rendered='1';
+}
+
+function bkLoadImage(file){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=()=>resolve(img);
+    img.onerror=()=>reject(new Error('Could not load '+file));
+    img.src='images/'+file;
+  });
+}
+
+function bkSaveBlob(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+
+async function bkExportPng(file,base){
+  const img=await bkLoadImage(file);
+  const c=document.createElement('canvas');
+  c.width=img.naturalWidth; c.height=img.naturalHeight;
+  c.getContext('2d').drawImage(img,0,0);
+  const blob=await new Promise(r=>c.toBlob(r,'image/png'));
+  bkSaveBlob(blob,base+'.png');
+}
+
+async function bkExportPdf(file,base){
+  const img=await bkLoadImage(file);
+  const w=img.naturalWidth, h=img.naturalHeight;
+  const c=document.createElement('canvas');
+  c.width=w; c.height=h;
+  const ctx=c.getContext('2d');
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,w,h); // flatten transparency for print
+  ctx.drawImage(img,0,0);
+  const dataUrl=c.toDataURL('image/jpeg',0.92);
+  const jpeg=bkBase64ToBytes(dataUrl.split(',')[1]);
+  bkSaveBlob(bkBuildPdf(jpeg,w,h),base+'.pdf');
+}
+
+function bkBase64ToBytes(b64){
+  const bin=atob(b64), len=bin.length, bytes=new Uint8Array(len);
+  for(let i=0;i<len;i++) bytes[i]=bin.charCodeAt(i);
+  return bytes;
+}
+
+/* Build a minimal single-image PDF (JPEG embedded via DCTDecode) — no dependencies */
+function bkBuildPdf(jpeg,w,h){
+  const enc=s=>{const a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i)&0xff;return a;};
+  const parts=[]; let len=0; const off=[];
+  const pushStr=s=>{const c=enc(s);parts.push(c);len+=c.length;};
+  const pushBytes=b=>{parts.push(b);len+=b.length;};
+  pushStr('%PDF-1.4\n');
+  pushBytes(new Uint8Array([0x25,0xE2,0xE3,0xCF,0xD3,0x0A]));
+  off[1]=len; pushStr('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  off[2]=len; pushStr('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+  off[3]=len; pushStr('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+w+' '+h+'] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n');
+  off[4]=len; pushStr('4 0 obj\n<< /Type /XObject /Subtype /Image /Width '+w+' /Height '+h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+jpeg.length+' >>\nstream\n');
+  pushBytes(jpeg); pushStr('\nendstream\nendobj\n');
+  const content='q\n'+w+' 0 0 '+h+' 0 0 cm\n/Im0 Do\nQ\n';
+  off[5]=len; pushStr('5 0 obj\n<< /Length '+content.length+' >>\nstream\n'+content+'endstream\nendobj\n');
+  const xrefStart=len;
+  let xref='xref\n0 6\n0000000000 65535 f \n';
+  for(let i=1;i<=5;i++) xref+=String(off[i]).padStart(10,'0')+' 00000 n \n';
+  pushStr(xref);
+  pushStr('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+xrefStart+'\n%%EOF\n');
+  const out=new Uint8Array(len); let pos=0;
+  parts.forEach(p=>{out.set(p,pos);pos+=p.length;});
+  return new Blob([out],{type:'application/pdf'});
+}
+
+async function bkDownload(file,base,fmt,btn){
+  if(btn){btn.disabled=true; var orig=btn.textContent; btn.textContent='…';}
+  try{
+    if(fmt==='png') await bkExportPng(file,base);
+    else await bkExportPdf(file,base);
+  }catch(err){
+    console.error(err);
+    alert('Sorry, that file could not be generated. Please try again.');
+  }finally{
+    if(btn){btn.disabled=false; btn.textContent=orig;}
+  }
+}
+
+async function bkDownloadAll(fmt,btn){
+  const all=brandKitGroups.flatMap(g=>g.items);
+  if(btn){btn.disabled=true; var orig=btn.textContent;}
+  try{
+    for(let i=0;i<all.length;i++){
+      const it=all[i], base=it.file.replace(/\.[^.]+$/,'');
+      if(btn) btn.textContent='Preparing '+(i+1)+'/'+all.length+'…';
+      try{ if(fmt==='png') await bkExportPng(it.file,base); else await bkExportPdf(it.file,base); }
+      catch(err){ console.error(err); }
+      await new Promise(r=>setTimeout(r,500));
+    }
+  }finally{
+    if(btn){btn.disabled=false; btn.textContent=orig;}
+  }
+}
+
+document.addEventListener('DOMContentLoaded',bkRender);
+
 </script>
 
 
@@ -1332,6 +1527,38 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal
     <div class="footer-inner">
       <div class="footer-brand"><a class="logo" onclick="showPage('home')"><img src="images/img-hsh-logo.png" alt="NE High Street Heroes Awards 2026" style="height:44px;width:auto;display:block"/></a><p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p></div>
       <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('vote')">Vote For Your Hero</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="openNominateModal()">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+  </footer>
+</main>
+
+<!-- ══ BRAND KIT ══ -->
+<main class="page" id="page-brand-kit">
+  <div class="pt-nav"></div>
+  <section class="page-hero">
+    <span class="tag">Press &amp; Media</span>
+    <h1>Brand Kit</h1>
+    <p>Download official NE High Street Heroes logos, photography, and partner marks. Every asset is available as a high-quality <strong>PNG</strong> or print-ready <strong>PDF</strong> — free for press, partners, and nominees to use.</p>
+    <button class="btn btn-primary" onclick="showPage('contact')">Need Something Else? Get In Touch</button>
+  </section>
+  <section class="bk-section">
+    <div class="bk-section-inner">
+      <div class="bk-toolbar">
+        <p>Click <strong>PNG</strong> for a web-ready image or <strong>PDF</strong> for a print-ready document. Files are generated right in your browser — nothing leaves your device.</p>
+        <div class="bk-toolbar-btns">
+          <button class="bk-bulk" onclick="bkDownloadAll('png',this)">⬇ Download All PNGs</button>
+          <button class="bk-bulk" onclick="bkDownloadAll('pdf',this)">⬇ Download All PDFs</button>
+        </div>
+      </div>
+      <div id="bk-grid"></div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand"><a class="logo" onclick="showPage('home')"><img src="images/img-hsh-logo.png" alt="NE High Street Heroes Awards 2026" style="height:44px;width:auto;display:block"/></a><p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('brand-kit')">Brand Kit</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
       <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="openNominateModal()">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
     </div>
