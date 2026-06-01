@@ -22,3 +22,33 @@
   for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Clean-URL routing for the single-page app.
+# Each page path is rewritten (status 200, no redirect) to index.html so that
+# /brand-kit, /about, etc. can be shared and deep-linked. The SPA reads the
+# path on load and shows the matching page. Existing files (images, sitemap,
+# functions) are served directly and take precedence over these rules.
+[[redirects]]
+  from = "/categories"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/vote"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/brand-kit"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/index.html"
+  status = 200
