@@ -408,6 +408,8 @@ nav ul li a.active{color:#fff;border-bottom-color:var(--pink)}
 .bk-thumb.logo img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 .bk-thumb.photo{background:var(--navy2)}
 .bk-thumb.photo img{width:100%;height:100%;object-fit:cover}
+.bk-thumb.art{background:var(--navy2);padding:.9rem}
+.bk-thumb.art img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:4px;box-shadow:0 6px 20px rgba(0,0,0,.35)}
 .bk-body{padding:1rem 1.1rem 1.2rem;display:flex;flex-direction:column;gap:.55rem;flex:1}
 .bk-label{font-weight:700;font-size:.95rem;line-height:1.3}
 .bk-meta{font-size:.68rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
@@ -1265,6 +1267,25 @@ const brandKitGroups=[
     {file:'img-hsh-logo-sq.png',   label:'Square Logo'},
     {file:'hsh-awards-fav-icon.png', label:'App / Favicon Mark'}
   ]},
+  {title:'Campaign Posters & Flyers', kind:'art', dir:'NEHSH-2026-Brand-Kit/', items:[
+    {file:'NEHSH-a4-poster.png',        label:'A4 Nomination Poster'},
+    {file:'NEHSH-a3-poster.png',        label:'A3 Nomination Poster'},
+    {file:'NEHSH-a3-poster-photo.png',  label:'A3 Poster (Photo)'},
+    {file:'NEHSH-sticker-nominate.png', label:'“Nominate Now” Flyer'}
+  ]},
+  {title:'Social & Web Graphics', kind:'art', dir:'NEHSH-2026-Brand-Kit/', items:[
+    {file:'NEHSH-web-hero.png',      label:'Web Hero Banner'},
+    {file:'NEHSH-roller-banner.png', label:'Roller / Pop-up Banner'},
+    {file:'NEHSH-social-square.png', label:'Social Post (Square)'},
+    {file:'NEHSH-social-story.png',  label:'Social Story (9:16)'}
+  ]},
+  {title:'Award Badges & Certificates', kind:'art', dir:'NEHSH-2026-Brand-Kit/', items:[
+    {file:'NEHSH-sticker-circle-nominate.png', label:'“Nominated” Badge'},
+    {file:'NEHSH-sticker-circle-finalist.png', label:'“Finalist” Badge'},
+    {file:'NEHSH-sticker-circle-winner.png',   label:'“Winner” Badge'},
+    {file:'NEHSH-sticker-nominee.png',         label:'Shortlisted Nominee Certificate'},
+    {file:'NEHSH-sticker-winner.png',          label:'Winner Certificate'}
+  ]},
   {title:'Photography', kind:'photo', items:[
     {file:'img-team-photo.jpg',       label:'Launch Team'},
     {file:'img-gala-event.jpg',       label:'Awards Gala'},
@@ -1295,19 +1316,21 @@ function bkRender(){
   if(!grid||grid.dataset.rendered) return;
   let html='';
   brandKitGroups.forEach(g=>{
+    const dir=g.dir||'images/';
     html+='<h2 class="bk-group-title">'+g.title+'</h2><div class="bk-grid">';
     g.items.forEach(it=>{
       const base=it.file.replace(/\.[^.]+$/,'');
       const ext=it.file.split('.').pop().toUpperCase();
+      const path=dir+it.file;
       html+=''+
         '<div class="bk-card">'+
-          '<div class="bk-thumb '+g.kind+'"><img src="images/'+it.file+'" alt="'+it.label+'" loading="lazy"/></div>'+
+          '<div class="bk-thumb '+g.kind+'"><img src="'+path+'" alt="'+it.label+'" loading="lazy"/></div>'+
           '<div class="bk-body">'+
             '<div class="bk-label">'+it.label+'</div>'+
             '<div class="bk-meta">'+ext+' · '+it.file+'</div>'+
             '<div class="bk-btns">'+
-              '<button class="bk-dl bk-dl-png" onclick="bkDownload(\''+it.file+'\',\''+base+'\',\'png\',this)">⬇ PNG</button>'+
-              '<button class="bk-dl bk-dl-pdf" onclick="bkDownload(\''+it.file+'\',\''+base+'\',\'pdf\',this)">⬇ PDF</button>'+
+              '<button class="bk-dl bk-dl-png" onclick="bkDownload(\''+path+'\',\''+base+'\',\'png\',this)">⬇ PNG</button>'+
+              '<button class="bk-dl bk-dl-pdf" onclick="bkDownload(\''+path+'\',\''+base+'\',\'pdf\',this)">⬇ PDF</button>'+
             '</div>'+
           '</div>'+
         '</div>';
@@ -1318,14 +1341,27 @@ function bkRender(){
   grid.dataset.rendered='1';
 }
 
-function bkLoadImage(file){
+function bkLoadImage(path){
   return new Promise((resolve,reject)=>{
     const img=new Image();
     img.crossOrigin='anonymous';
     img.onload=()=>resolve(img);
-    img.onerror=()=>reject(new Error('Could not load '+file));
-    img.src='images/'+file;
+    img.onerror=()=>reject(new Error('Could not load '+path));
+    img.src=path;
   });
+}
+
+/* Build a canvas sized to the image, downscaling if it exceeds safe browser limits
+   (some browsers — notably iOS Safari — cap canvas area, so huge assets like the
+   roller banner must be scaled before re-encoding). */
+function bkFitCanvas(img){
+  const MAX_SIDE=8192, MAX_AREA=24e6;
+  let w=img.naturalWidth, h=img.naturalHeight;
+  const scale=Math.min(1, MAX_SIDE/w, MAX_SIDE/h, Math.sqrt(MAX_AREA/(w*h)));
+  w=Math.max(1,Math.round(w*scale)); h=Math.max(1,Math.round(h*scale));
+  const c=document.createElement('canvas');
+  c.width=w; c.height=h;
+  return {c,w,h};
 }
 
 function bkSaveBlob(blob,filename){
@@ -1336,25 +1372,28 @@ function bkSaveBlob(blob,filename){
   setTimeout(()=>URL.revokeObjectURL(url),2000);
 }
 
-/* Render one asset to PNG bytes via canvas */
-async function bkPngBytes(file){
-  const img=await bkLoadImage(file);
-  const c=document.createElement('canvas');
-  c.width=img.naturalWidth; c.height=img.naturalHeight;
-  c.getContext('2d').drawImage(img,0,0);
+/* Render one asset to PNG bytes. Sources that are already PNG are served verbatim
+   for full fidelity (and to avoid canvas size limits); others are re-encoded. */
+async function bkPngBytes(path){
+  if(/\.png$/i.test(path)){
+    const resp=await fetch(path);
+    if(!resp.ok) throw new Error('Could not load '+path);
+    return new Uint8Array(await resp.arrayBuffer());
+  }
+  const img=await bkLoadImage(path);
+  const {c,w,h}=bkFitCanvas(img);
+  c.getContext('2d').drawImage(img,0,0,w,h);
   const blob=await new Promise(r=>c.toBlob(r,'image/png'));
   return new Uint8Array(await blob.arrayBuffer());
 }
 
 /* Render one asset to print-ready PDF bytes */
-async function bkPdfBytes(file){
-  const img=await bkLoadImage(file);
-  const w=img.naturalWidth, h=img.naturalHeight;
-  const c=document.createElement('canvas');
-  c.width=w; c.height=h;
+async function bkPdfBytes(path){
+  const img=await bkLoadImage(path);
+  const {c,w,h}=bkFitCanvas(img);
   const ctx=c.getContext('2d');
   ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,w,h); // flatten transparency for print
-  ctx.drawImage(img,0,0);
+  ctx.drawImage(img,0,0,w,h);
   const jpeg=bkBase64ToBytes(c.toDataURL('image/jpeg',0.92).split(',')[1]);
   return bkBuildPdf(jpeg,w,h);
 }
@@ -1429,11 +1468,11 @@ function bkBuildZip(files){
   return new Blob([out],{type:'application/zip'});
 }
 
-async function bkDownload(file,base,fmt,btn){
+async function bkDownload(path,base,fmt,btn){
   if(btn){btn.disabled=true; var orig=btn.textContent; btn.textContent='…';}
   try{
-    if(fmt==='png') bkSaveBlob(new Blob([await bkPngBytes(file)],{type:'image/png'}),base+'.png');
-    else bkSaveBlob(new Blob([await bkPdfBytes(file)],{type:'application/pdf'}),base+'.pdf');
+    if(fmt==='png') bkSaveBlob(new Blob([await bkPngBytes(path)],{type:'image/png'}),base+'.png');
+    else bkSaveBlob(new Blob([await bkPdfBytes(path)],{type:'application/pdf'}),base+'.pdf');
   }catch(err){
     console.error(err);
     alert('Sorry, that file could not be generated. Please try again.');
@@ -1443,7 +1482,7 @@ async function bkDownload(file,base,fmt,btn){
 }
 
 async function bkDownloadZip(fmt,btn){
-  const all=brandKitGroups.flatMap(g=>g.items);
+  const all=brandKitGroups.flatMap(g=>g.items.map(it=>({path:(g.dir||'images/')+it.file, file:it.file})));
   if(btn){btn.disabled=true; var orig=btn.textContent;}
   const files=[];
   try{
@@ -1451,7 +1490,7 @@ async function bkDownloadZip(fmt,btn){
       const it=all[i], base=it.file.replace(/\.[^.]+$/,'');
       if(btn) btn.textContent='Packaging '+(i+1)+'/'+all.length+'…';
       try{
-        const bytes=fmt==='png'?await bkPngBytes(it.file):await bkPdfBytes(it.file);
+        const bytes=fmt==='png'?await bkPngBytes(it.path):await bkPdfBytes(it.path);
         files.push({name:base+'.'+fmt, bytes});
       }catch(err){ console.error('Skipped '+it.file, err); }
     }
@@ -1584,7 +1623,7 @@ document.addEventListener('DOMContentLoaded',bkRender);
   <section class="page-hero">
     <span class="tag">Press &amp; Media</span>
     <h1>Brand Kit</h1>
-    <p>Download official NE High Street Heroes logos, photography, and partner marks. Every asset is available as a high-quality <strong>PNG</strong> or print-ready <strong>PDF</strong> — free for press, partners, and nominees to use.</p>
+    <p>Download official NE High Street Heroes logos, campaign posters, social graphics, award badges, photography, and partner marks. Every asset is available as a high-quality <strong>PNG</strong> or print-ready <strong>PDF</strong> — free for press, partners, and nominees to use.</p>
     <button class="btn btn-primary" onclick="showPage('contact')">Need Something Else? Get In Touch</button>
   </section>
   <section class="bk-section">
