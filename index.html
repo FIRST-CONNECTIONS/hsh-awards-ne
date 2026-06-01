@@ -1136,15 +1136,47 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal
 
 </script><script>
 const pages=['home','categories','vote','about','brand-kit','contact'];
-function showPage(id){
+/* Clean-URL routing: each page maps to a real path (/, /categories, /brand-kit …)
+   so pages can be deep-linked, shared and bookmarked. Netlify rewrites these paths
+   back to index.html (see netlify.toml), and we restore the right page on load. */
+const pageTitles={
+  'home':'NE High Street Heroes Awards 2026 | Celebrating North East High Streets',
+  'categories':'Award Categories | NE High Street Heroes Awards 2026',
+  'vote':'Vote For Your Hero | NE High Street Heroes Awards 2026',
+  'about':'About the Awards | NE High Street Heroes Awards 2026',
+  'brand-kit':'Brand Kit | NE High Street Heroes Awards 2026',
+  'contact':'Contact | NE High Street Heroes Awards 2026'
+};
+function pageToPath(id){return id==='home'?'/':'/'+id;}
+function pathToPage(path){
+  const seg=(path||'/').replace(/^\/+|\/+$/g,'').toLowerCase();
+  return pages.indexOf(seg)!==-1?seg:'home';
+}
+function showPage(id,updateHistory){
+  if(pages.indexOf(id)===-1)id='home';
   pages.forEach(p=>{
     document.getElementById('page-'+p).classList.toggle('active',p===id);
     const n=document.getElementById('nav-'+p);
     if(n)n.classList.toggle('active',p===id);
+    const mb=document.getElementById('mob-'+p);
+    if(mb)mb.classList.toggle('active',p===id);
   });
+  if(pageTitles[id])document.title=pageTitles[id];
+  if(updateHistory!==false){
+    const path=pageToPath(id);
+    if(location.pathname!==path)history.pushState({page:id},'',path);
+  }
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function nav(id){showPage(id);toggleMenu(false)}
+/* Restore page on first load (deep link / shared URL) and on back/forward */
+function bkInitRouting(){
+  showPage(pathToPage(location.pathname),false);
+  history.replaceState({page:pathToPage(location.pathname)},'',location.pathname+location.search+location.hash);
+}
+window.addEventListener('popstate',function(e){
+  showPage((e.state&&e.state.page)||pathToPage(location.pathname),false);
+});
 function toggleMenu(force){
   const m=document.getElementById('mobileMenu');
   const b=document.getElementById('hamburger');
@@ -1501,7 +1533,7 @@ async function bkDownloadZip(fmt,btn){
   }
 }
 
-document.addEventListener('DOMContentLoaded',bkRender);
+document.addEventListener('DOMContentLoaded',function(){bkRender();bkInitRouting();});
 
 </script>
 
