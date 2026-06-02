@@ -52,3 +52,9 @@
   from = "/contact"
   to = "/index.html"
   status = 200
+
+# Hidden sponsor page — deep-linkable but not in the nav or sitemap
+[[redirects]]
+  from = "/sponsor"
+  to = "/index.html"
+  status = 200
