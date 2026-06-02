@@ -1138,7 +1138,7 @@ function closeModalOnOverlay(e){
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
 
 </script><script>
-const pages=['home','categories','vote','about','brand-kit','contact'];
+const pages=['home','categories','vote','about','brand-kit','contact','sponsor'];
 /* Clean-URL routing: each page maps to a real path (/, /categories, /brand-kit …)
    so pages can be deep-linked, shared and bookmarked. Netlify rewrites these paths
    back to index.html (see netlify.toml), and we restore the right page on load. */
@@ -1148,7 +1148,8 @@ const pageTitles={
   'vote':'Vote For Your Hero | NE High Street Heroes Awards 2026',
   'about':'About the Awards | NE High Street Heroes Awards 2026',
   'brand-kit':'Brand Kit | NE High Street Heroes Awards 2026',
-  'contact':'Contact | NE High Street Heroes Awards 2026'
+  'contact':'Contact | NE High Street Heroes Awards 2026',
+  'sponsor':'Become a Category Sponsor | NE High Street Heroes Awards 2026'
 };
 function pageToPath(id){return id==='home'?'/':'/'+id;}
 function pathToPage(path){
@@ -1225,10 +1226,10 @@ async function submitMailto(e, formId, successId) {
     const val = field.value || '—';
     htmlBody += `<tr><td style="padding:8px 12px;font-weight:700;background:#f5f5f5;border:1px solid #ddd;width:35%">${label}</td><td style="padding:8px 12px;border:1px solid #ddd">${val}</td></tr>`;
     const id = field.id;
-    if(id==='v-email'||id==='c-email'||id==='n-email') email = field.value.trim();
-    if(id==='v-name'||id==='c-name'||id==='n-name') fullName = field.value.trim();
+    if(id==='v-email'||id==='c-email'||id==='n-email'||id==='s-email') email = field.value.trim();
+    if(id==='v-name'||id==='c-name'||id==='n-name'||id==='s-name') fullName = field.value.trim();
     if(id==='v-nominee'||id==='n-nominee') nominee = field.value.trim();
-    if(id==='v-category'||id==='n-category') category = field.value.trim();
+    if(id==='v-category'||id==='n-category'||id==='s-category') category = field.value.trim();
     if(id==='c-type') enquiryType = field.value.trim();
   });
   htmlBody += '</table>';
@@ -1280,6 +1281,60 @@ async function submitMailto(e, formId, successId) {
     submitBtn.textContent = originalText;
     submitBtn.disabled = false;
   }
+}
+
+/* Category sponsorship — redirect to Stripe Checkout (amount fixed server-side) */
+async function startSponsorCheckout(){
+  const need = ['s-business','s-name','s-email','s-category'];
+  let valid = true;
+  need.forEach(id=>{
+    const f = document.getElementById(id);
+    if(!f.value.trim()){valid=false;f.style.borderColor='#f472b6';}
+    else f.style.borderColor='';
+  });
+  if(!valid) return;
+
+  const btn = document.getElementById('sponsorPayBtn');
+  const original = btn.textContent;
+  btn.textContent = 'Redirecting to secure checkout…';
+  btn.disabled = true;
+  ['sponsorError','sponsorPaid','sponsorCancelled','sponsorSuccess'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.style.display='none';
+  });
+
+  try{
+    const res = await fetch('/.netlify/functions/create-checkout', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        category: document.getElementById('s-category').value.trim(),
+        email: document.getElementById('s-email').value.trim(),
+        business: document.getElementById('s-business').value.trim()
+      })
+    });
+    const data = await res.json();
+    if(!res.ok || !data.url) throw new Error(data.error || ('Checkout failed ('+res.status+')'));
+    window.location.href = data.url; // Stripe-hosted payment page
+  }catch(err){
+    console.error('Sponsor checkout error:', err);
+    const el = document.getElementById('sponsorError');
+    if(el){ el.textContent='❌ '+(err.message||'Something went wrong starting checkout.')+' You can also register your interest below and we’ll be in touch.'; el.style.display='block'; }
+    btn.textContent = original;
+    btn.disabled = false;
+  }
+}
+
+/* Show a banner when the visitor returns from Stripe (?paid=success|cancel) */
+function bkSponsorStatus(){
+  const params = new URLSearchParams(location.search);
+  const paid = params.get('paid');
+  if(!paid || pathToPage(location.pathname)!=='sponsor') return;
+  const id = paid==='success' ? 'sponsorPaid' : paid==='cancel' ? 'sponsorCancelled' : null;
+  if(id){
+    const el = document.getElementById(id);
+    if(el){ el.style.display='block'; el.scrollIntoView({behavior:'smooth',block:'center'}); }
+  }
+  history.replaceState({page:'sponsor'},'','/sponsor'); // tidy URL so refresh won't re-trigger
 }
 
 function openNominateModal(){
@@ -1536,7 +1591,7 @@ async function bkDownloadZip(fmt,btn){
   }
 }
 
-document.addEventListener('DOMContentLoaded',function(){bkRender();bkInitRouting();});
+document.addEventListener('DOMContentLoaded',function(){bkRender();bkInitRouting();bkSponsorStatus();});
 
 </script>
 
@@ -1677,6 +1732,104 @@ document.addEventListener('DOMContentLoaded',function(){bkRender();bkInitRouting
     <div class="footer-inner">
       <div class="footer-brand"><a class="logo" onclick="showPage('home')"><img src="images/img-hsh-logo.png" alt="NE High Street Heroes Awards 2026" style="height:44px;width:auto;display:block"/></a><p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p></div>
       <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('about')">About</a></li><li><a onclick="showPage('brand-kit')">Brand Kit</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="openNominateModal()">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+  </footer>
+</main>
+
+<!-- ══ SPONSOR (hidden — no nav link, not in sitemap) ══ -->
+<main class="page" id="page-sponsor">
+  <div class="pt-nav"></div>
+  <section class="page-hero">
+    <span class="tag">Partner With Us</span>
+    <h1>Become a <span class="c-pink">Category Sponsor</span></h1>
+    <p>Put your brand at the heart of the North East's biggest celebration of high street business. Sponsoring an award category is one of the most powerful ways to reach engaged local customers, decision-makers and community leaders across the region.</p>
+    <button class="btn btn-primary" onclick="document.getElementById('sponsorForm').scrollIntoView({behavior:'smooth'})">Sponsor a Category</button>
+  </section>
+
+  <!-- Payment status banners (shown after returning from Stripe) -->
+  <section style="max-width:760px;margin:0 auto;padding:0 1.5rem">
+    <div class="form-success" id="sponsorPaid" role="alert">🎉 Thank you! Your sponsorship payment was successful — our team will be in touch within 48 hours to confirm the details and get your branding live.</div>
+    <div class="form-error" id="sponsorCancelled" role="alert">Your payment was cancelled and you have not been charged. If you'd like to sponsor a category, you can try again below or register your interest and we'll get in touch.</div>
+  </section>
+
+  <section class="mission">
+    <div class="mission-inner">
+      <span class="tag">Why Sponsor</span>
+      <h2>Reach the People Who Power the High Street</h2>
+      <p>The NE High Street Heroes Awards 2026 culminates in a prestigious Gala on <strong>1st September 2026</strong> at <strong>The Hippodrome, Darlington</strong>, with hundreds of business owners, civic leaders and media in the room — and thousands more following the campaign online from Tees Valley to Northumberland.</p>
+      <div class="mission-tags">
+        <span class="mission-tag">🏆 Category Naming Rights</span>
+        <span class="mission-tag">🎤 On-Stage Presentation</span>
+        <span class="mission-tag">📣 Logo on Website &amp; Marketing</span>
+        <span class="mission-tag">📰 Regional Press Coverage</span>
+        <span class="mission-tag">🎟️ Gala Table for Your Team</span>
+        <span class="mission-tag">🤝 Community Goodwill</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="vote-main">
+    <div class="vote-main-inner">
+      <div class="how-panel">
+        <h2>What's Included</h2>
+        <p>Each category sponsorship is an exclusive, single-brand package — only one sponsor per category.</p>
+        <div class="how-step"><div class="step-num">1</div><div class="step-text"><h4>Exclusive Category Naming</h4><p>Your award becomes "The [Your Brand] Retailer of the Year" — across the stage, website, programme and press.</p></div></div>
+        <div class="how-step"><div class="step-num">2</div><div class="step-text"><h4>Present the Award On Stage</h4><p>A representative from your business presents the trophy to the winner in front of the whole room and the cameras.</p></div></div>
+        <div class="how-step"><div class="step-num">3</div><div class="step-text"><h4>Year-Round Brand Exposure</h4><p>Your logo featured on the awards website, social campaign, event signage and marketing collateral throughout 2026.</p></div></div>
+        <div class="how-step"><div class="step-num">4</div><div class="step-text"><h4>Gala Hospitality</h4><p>Reserved seats at the Gala Ceremony so you and your team can celebrate the North East's finest.</p></div></div>
+        <div style="margin-top:1.6rem;padding:1.4rem 1.6rem;background:linear-gradient(135deg,rgba(244,114,182,.10),rgba(251,146,60,.10));border:1.5px solid rgba(244,114,182,.3);border-radius:16px;text-align:center">
+          <div style="font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pink)">Category Sponsorship</div>
+          <div style="font-size:2.6rem;font-weight:800;line-height:1.1;margin:.3rem 0">£2,500</div>
+          <div style="font-size:.85rem;color:#999">per award category · exclusive to one sponsor</div>
+        </div>
+      </div>
+
+      <div class="form-panel">
+        <h2>Sponsor a Category</h2>
+        <p>Choose your category below. Pay securely online to lock it in instantly, or register your interest and our team will be in touch.</p>
+        <form id="sponsorForm" onsubmit="submitMailto(event,'sponsorForm','sponsorSuccess')" novalidate>
+          <div class="form-group"><label for="s-business">Business / Organisation</label><input id="s-business" type="text" placeholder="Your business name" required autocomplete="organization"/></div>
+          <div class="form-group"><label for="s-name">Contact Name</label><input id="s-name" type="text" placeholder="Your full name" required autocomplete="name"/></div>
+          <div class="form-group"><label for="s-email">Email Address</label><input id="s-email" type="email" placeholder="your@email.co.uk" required autocomplete="email"/></div>
+          <div class="form-group"><label for="s-phone">Phone <span style="font-weight:400;color:#999">(optional)</span></label><input id="s-phone" type="tel" placeholder="Contact number" autocomplete="tel"/></div>
+          <div class="form-group">
+            <label for="s-category">Category to Sponsor</label>
+            <select id="s-category" required>
+              <option value="">Select a category…</option>
+              <option>Retailer of the Year</option>
+              <option>Hospitality Hero</option>
+              <option>Community Champion</option>
+              <option>Digital Innovator</option>
+              <option>Sustainability Leader</option>
+              <option>Customer Experience Excellence</option>
+              <option>Rising Star</option>
+              <option>Employer of the Year</option>
+              <option>Independent Business of the Year</option>
+              <option>High Street of the Year</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="s-msg">Anything you'd like us to know? <span style="font-weight:400;color:#999">(optional)</span></label><textarea id="s-msg" placeholder="Questions, branding notes, or how you'd like to get involved…"></textarea></div>
+
+          <button type="button" class="btn btn-primary btn-full" id="sponsorPayBtn" onclick="startSponsorCheckout()">Pay &amp; Sponsor Now — £2,500 ✦</button>
+          <div style="text-align:center;font-size:.78rem;color:#999;margin:.7rem 0 .2rem">🔒 Secure payment by card via Stripe</div>
+          <div style="display:flex;align-items:center;gap:.8rem;margin:1rem 0;color:#999;font-size:.78rem"><span style="flex:1;height:1px;background:rgba(255,255,255,.12)"></span>OR<span style="flex:1;height:1px;background:rgba(255,255,255,.12)"></span></div>
+          <button type="submit" class="btn btn-full" style="background:transparent;color:var(--navy);border:1.5px solid rgba(10,15,40,.25)">Register My Interest</button>
+
+          <div class="form-success" id="sponsorSuccess" role="alert">🎉 Thank you! Your interest has been registered — our team will be in touch shortly.</div>
+          <div class="form-error" id="sponsorError" role="alert">❌ Something went wrong. Please email us directly at awards@first-connections.co.uk</div>
+          <input type="hidden" name="_subject" value="New Sponsorship Enquiry — NE High Street Heroes 2026"/>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand"><a class="logo" onclick="showPage('home')"><img src="images/img-hsh-logo.png" alt="NE High Street Heroes Awards 2026" style="height:44px;width:auto;display:block"/></a><p>Celebrating outstanding local businesses and individuals across the North East. A First Connections Initiative.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a onclick="showPage('home')">Home</a></li><li><a onclick="showPage('categories')">Award Categories</a></li><li><a onclick="showPage('vote')">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Contact</a></li></ul></div>
       <div class="footer-col"><h4>Take Part</h4><ul><li><a onclick="openNominateModal()">Nominate Now</a></li><li><a onclick="showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a onclick="showPage('contact')">Become a Sponsor</a></li><li><a onclick="showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a onclick="showPage('contact')">Send a Message</a></li><li><a onclick="showPage('categories')">All Categories</a></li></ul></div>
     </div>
