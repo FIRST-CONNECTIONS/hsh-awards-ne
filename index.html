@@ -1171,6 +1171,7 @@ function showPage(id,updateHistory){
     if(location.pathname!==path)history.pushState({page:id},'',path);
   }
   window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='sponsor')loadSponsorCategories(); // refresh available categories each visit
 }
 function nav(id){showPage(id);toggleMenu(false)}
 /* Restore page on first load (deep link / shared URL) and on back/forward */
@@ -1321,6 +1322,45 @@ async function startSponsorCheckout(){
     if(el){ el.textContent='❌ '+(err.message||'Something went wrong starting checkout.')+' You can also register your interest below and we’ll be in touch.'; el.style.display='block'; }
     btn.textContent = original;
     btn.disabled = false;
+    loadSponsorCategories(); // refresh in case the category was just taken (409)
+  }
+}
+
+const ALL_SPONSOR_CATEGORIES=['Retailer of the Year','Hospitality Hero','Community Champion','Digital Innovator','Sustainability Leader','Customer Experience Excellence','Rising Star','Employer of the Year','Independent Business of the Year','High Street of the Year'];
+/* Fetch which categories are still available and rebuild the dropdown so
+   sponsored categories disappear as future options. Fails open (shows all). */
+async function loadSponsorCategories(){
+  const sel = document.getElementById('s-category');
+  if(!sel) return;
+  const note = document.getElementById('s-cat-note');
+  const pay = document.getElementById('sponsorPayBtn');
+  if(note) note.textContent = 'Checking availability…';
+  let taken = [];
+  try{
+    const res = await fetch('/.netlify/functions/categories-status',{cache:'no-store'});
+    const data = await res.json();
+    taken = data.taken || [];
+  }catch(err){ console.error('categories-status', err); }
+  const takenSet = new Set(taken);
+  const prev = sel.value;
+  [...sel.options].forEach(o=>{ if(o.value!=='') o.remove(); });
+  let available = 0;
+  ALL_SPONSOR_CATEGORIES.forEach(c=>{
+    if(takenSet.has(c)) return;
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+    available++;
+  });
+  if(prev && !takenSet.has(prev)) sel.value = prev;
+  if(note){
+    note.textContent = available===0
+      ? 'All categories are currently sponsored — register your interest below and we’ll let you know if one opens up.'
+      : available+' of '+ALL_SPONSOR_CATEGORIES.length+' categories still available'+(taken.length?' ('+taken.length+' already sponsored).':'.');
+  }
+  if(pay){
+    if(available===0){ pay.disabled=true; pay.textContent='All categories sponsored'; }
+    else if(/All categories/.test(pay.textContent)){ pay.disabled=false; pay.textContent='Pay & Sponsor Now — £2,500 ✦'; }
   }
 }
 
@@ -1810,6 +1850,7 @@ document.addEventListener('DOMContentLoaded',function(){bkRender();bkInitRouting
               <option>Independent Business of the Year</option>
               <option>High Street of the Year</option>
             </select>
+            <div id="s-cat-note" style="font-size:.78rem;color:#888;margin-top:.5rem"></div>
           </div>
           <div class="form-group"><label for="s-msg">Anything you'd like us to know? <span style="font-weight:400;color:#999">(optional)</span></label><textarea id="s-msg" placeholder="Questions, branding notes, or how you'd like to get involved…"></textarea></div>
 
