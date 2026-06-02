@@ -71,6 +71,29 @@ async function getVatTaxRateId(key) {
   return null;
 }
 
+// Categories already paid for, read from completed Checkout Sessions. Used to
+// stop the same category being sponsored twice (server-side guard).
+async function getTakenCategories(key) {
+  const taken = new Set();
+  let url = 'https://api.stripe.com/v1/checkout/sessions?status=complete&limit=100';
+  let pages = 0;
+  while (url && pages < 5) {
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${key}` } });
+    const data = await res.json();
+    if (!res.ok) throw new Error((data.error && data.error.message) || 'Stripe list failed');
+    for (const s of (data.data || [])) {
+      if (s.payment_status === 'paid' && s.metadata && s.metadata.category) taken.add(s.metadata.category);
+    }
+    if (data.has_more && data.data.length) {
+      url = 'https://api.stripe.com/v1/checkout/sessions?status=complete&limit=100&starting_after=' + data.data[data.data.length - 1].id;
+      pages++;
+    } else {
+      url = null;
+    }
+  }
+  return taken;
+}
+
 exports.handler = async function (event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
@@ -98,6 +121,18 @@ exports.handler = async function (event) {
   const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
   if (!STRIPE_KEY) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: 'Payments are not configured yet.' }) };
+  }
+
+  // Guard against double-selling a category: if it has already been paid for,
+  // refuse checkout. (Fails open if Stripe can't be reached so a transient
+  // error doesn't block all sales.)
+  try {
+    const taken = await getTakenCategories(STRIPE_KEY);
+    if (taken.has(category)) {
+      return { statusCode: 409, headers, body: JSON.stringify({ error: `Sorry — "${category}" has just been sponsored and is no longer available. Please choose another category.` }) };
+    }
+  } catch (err) {
+    console.error('Availability check failed (continuing):', err);
   }
 
   // Build success / cancel URLs from the request origin where possible.
