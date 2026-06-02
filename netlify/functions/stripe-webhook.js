@@ -8,7 +8,7 @@
 //        URL:    https://ne-hsh-awards.co.uk/.netlify/functions/stripe-webhook
 //        Events: checkout.session.completed, checkout.session.async_payment_succeeded
 //   2. Copy the endpoint's "Signing secret" (whsec_…) into Netlify →
-//        Environment variables → STRIPE_WEBHOOK_SECRET
+//        Environment variables → STRIPE_WEBHOOK_SECRET_HSH
 //   (BREVO_API_KEY is already configured for the contact forms.)
 
 const crypto = require('crypto');
@@ -116,9 +116,9 @@ exports.handler = async function (event) {
     return { statusCode: 405, body: 'Method not allowed' };
   }
 
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  const secret = process.env.STRIPE_WEBHOOK_SECRET_HSH || process.env.STRIPE_WEBHOOK_SECRET;
   if (!secret) {
-    console.error('Missing STRIPE_WEBHOOK_SECRET');
+    console.error('Missing STRIPE_WEBHOOK_SECRET_HSH');
     return { statusCode: 500, body: 'Webhook not configured' };
   }
 
