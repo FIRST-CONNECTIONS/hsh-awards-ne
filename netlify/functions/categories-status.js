@@ -48,8 +48,10 @@ exports.handler = async function () {
 
   const key = process.env.STRIPE_SECRET_KEY;
   // Fail open: if payments aren't configured or Stripe is unreachable, show all
-  // categories rather than blocking sponsorship entirely.
-  if (!key) {
+  // categories rather than blocking sponsorship entirely. Also treat a malformed
+  // key (not an sk_/rk_ Stripe key) as unconfigured instead of calling Stripe.
+  if (!key || !/^(sk|rk)_(live|test)_/.test(key)) {
+    if (key) console.error('STRIPE_SECRET_KEY is set but is not a valid Stripe secret key (expected sk_/rk_ prefix).');
     return { statusCode: 200, headers, body: JSON.stringify({ taken: [], available: CATEGORIES }) };
   }
 
