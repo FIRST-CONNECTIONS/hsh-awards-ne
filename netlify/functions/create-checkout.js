@@ -119,8 +119,13 @@ exports.handler = async function (event) {
   }
 
   const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
-  if (!STRIPE_KEY) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Payments are not configured yet.' }) };
+  // A valid Stripe secret/restricted key starts with sk_ or rk_ (live or test).
+  // If it's missing or malformed (e.g. a key from another service was pasted in),
+  // fail with the friendly "not configured" message rather than letting Stripe
+  // reject it and leak the bad key value back to the visitor.
+  if (!STRIPE_KEY || !/^(sk|rk)_(live|test)_/.test(STRIPE_KEY)) {
+    if (STRIPE_KEY) console.error('STRIPE_SECRET_KEY is set but is not a valid Stripe secret key (expected sk_/rk_ prefix).');
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Payments are not configured yet. Please register your interest below and we’ll be in touch.' }) };
   }
 
   // Guard against double-selling a category: if it has already been paid for,
@@ -174,7 +179,13 @@ exports.handler = async function (event) {
 
     if (!res.ok) {
       console.error('Stripe error:', data);
-      const msg = (data && data.error && data.error.message) || 'Could not start checkout.';
+      // Never forward Stripe authentication errors to the browser — they echo
+      // part of the secret key. Show a generic message and keep details in logs.
+      const isAuthError = res.status === 401 ||
+        (data && data.error && (data.error.type === 'invalid_request_error') && /api key/i.test(data.error.message || ''));
+      const msg = isAuthError
+        ? 'Payments are temporarily unavailable. Please register your interest below and we’ll be in touch.'
+        : ((data && data.error && data.error.message) || 'Could not start checkout.');
       return { statusCode: 502, headers, body: JSON.stringify({ error: msg }) };
     }
 
