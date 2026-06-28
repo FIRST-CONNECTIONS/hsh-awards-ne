@@ -1360,7 +1360,7 @@ async function loadSponsorCategories(){
   }
   if(pay){
     if(available===0){ pay.disabled=true; pay.textContent='All categories sponsored'; }
-    else if(/All categories/.test(pay.textContent)){ pay.disabled=false; pay.textContent='Pay & Sponsor Now — £2,500 ✦'; }
+    else if(/All categories/.test(pay.textContent)){ pay.disabled=false; pay.textContent='Pay & Sponsor Now — £500 + VAT ✦'; }
   }
 }
 
@@ -1822,8 +1822,8 @@ document.addEventListener('DOMContentLoaded',function(){bkRender();bkInitRouting
         <div class="how-step"><div class="step-num">4</div><div class="step-text"><h4>Gala Hospitality</h4><p>Reserved seats at the Gala Ceremony so you and your team can celebrate the North East's finest.</p></div></div>
         <div style="margin-top:1.6rem;padding:1.4rem 1.6rem;background:linear-gradient(135deg,rgba(244,114,182,.10),rgba(251,146,60,.10));border:1.5px solid rgba(244,114,182,.3);border-radius:16px;text-align:center">
           <div style="font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pink)">Category Sponsorship</div>
-          <div style="font-size:2.6rem;font-weight:800;line-height:1.1;margin:.3rem 0">£2,500</div>
-          <div style="font-size:.85rem;color:#999">per award category · inclusive of VAT · exclusive to one sponsor</div>
+          <div style="font-size:2.6rem;font-weight:800;line-height:1.1;margin:.3rem 0">£500 <span style="font-size:1.1rem;font-weight:600;color:#999">+ VAT</span></div>
+          <div style="font-size:.85rem;color:#999">per award category · plus VAT · exclusive to one sponsor</div>
         </div>
       </div>
 
@@ -1854,7 +1854,7 @@ document.addEventListener('DOMContentLoaded',function(){bkRender();bkInitRouting
           </div>
           <div class="form-group"><label for="s-msg">Anything you'd like us to know? <span style="font-weight:400;color:#999">(optional)</span></label><textarea id="s-msg" placeholder="Questions, branding notes, or how you'd like to get involved…"></textarea></div>
 
-          <button type="button" class="btn btn-primary btn-full" id="sponsorPayBtn" onclick="startSponsorCheckout()">Pay &amp; Sponsor Now — £2,500 ✦</button>
+          <button type="button" class="btn btn-primary btn-full" id="sponsorPayBtn" onclick="startSponsorCheckout()">Pay &amp; Sponsor Now — £500 + VAT ✦</button>
           <div style="text-align:center;font-size:.78rem;color:#999;margin:.7rem 0 .2rem">🔒 Secure payment by card via Stripe</div>
           <div style="display:flex;align-items:center;gap:.8rem;margin:1rem 0;color:#999;font-size:.78rem"><span style="flex:1;height:1px;background:rgba(255,255,255,.12)"></span>OR<span style="flex:1;height:1px;background:rgba(255,255,255,.12)"></span></div>
           <button type="submit" class="btn btn-full" style="background:transparent;color:var(--navy);border:1.5px solid rgba(10,15,40,.25)">Register My Interest</button>
