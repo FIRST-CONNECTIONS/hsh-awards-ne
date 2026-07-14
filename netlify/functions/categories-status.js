@@ -17,6 +17,16 @@ const CATEGORIES = [
   'High Street of the Year',
 ];
 
+// Categories sponsored via off-Stripe arrangements (direct partnerships).
+// Always excluded from the /sponsor dropdown alongside anything paid via Stripe.
+const MANUALLY_SPONSORED = [
+  'Hospitality Hero',                  // NE Hotels Association
+  'Digital Innovator',                 // Surgotech Solutions
+  'Sustainability Leader',             // Lumo Trains
+  'Independent Business of the Year',  // The Ironing Man
+  'High Street of the Year',           // Roam Local
+];
+
 // List completed Checkout Sessions and collect the categories that have been paid for.
 async function getTakenCategories(key) {
   const taken = new Set();
@@ -47,20 +57,26 @@ exports.handler = async function () {
   };
 
   const key = process.env.STRIPE_SECRET_KEY;
-  // Fail open: if payments aren't configured or Stripe is unreachable, show all
-  // categories rather than blocking sponsorship entirely. Also treat a malformed
-  // key (not an sk_/rk_ Stripe key) as unconfigured instead of calling Stripe.
+  // Fail open: if payments aren't configured or Stripe is unreachable, still
+  // exclude the manually-arranged sponsors rather than blocking sponsorship
+  // entirely. Also treat a malformed key (not an sk_/rk_ Stripe key) as
+  // unconfigured instead of calling Stripe.
   if (!key || !/^(sk|rk)_(live|test)_/.test(key)) {
     if (key) console.error('STRIPE_SECRET_KEY is set but is not a valid Stripe secret key (expected sk_/rk_ prefix).');
-    return { statusCode: 200, headers, body: JSON.stringify({ taken: [], available: CATEGORIES }) };
+    const taken = [...MANUALLY_SPONSORED];
+    const available = CATEGORIES.filter(c => !taken.includes(c));
+    return { statusCode: 200, headers, body: JSON.stringify({ taken, available }) };
   }
 
   try {
-    const taken = await getTakenCategories(key);
+    const paid = await getTakenCategories(key);
+    const taken = [...new Set([...paid, ...MANUALLY_SPONSORED])];
     const available = CATEGORIES.filter(c => !taken.includes(c));
     return { statusCode: 200, headers, body: JSON.stringify({ taken, available }) };
   } catch (err) {
     console.error('categories-status error:', err);
-    return { statusCode: 200, headers, body: JSON.stringify({ taken: [], available: CATEGORIES, error: err.message }) };
+    const taken = [...MANUALLY_SPONSORED];
+    const available = CATEGORIES.filter(c => !taken.includes(c));
+    return { statusCode: 200, headers, body: JSON.stringify({ taken, available, error: err.message }) };
   }
 };
