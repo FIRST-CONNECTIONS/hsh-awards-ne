@@ -681,6 +681,21 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 /* Logo chip: dark backdrop for logos that don't read on white cards */
 .logo-chip-dark{background:#111;border-radius:10px;padding:.6rem 1rem;display:inline-flex;align-items:center;justify-content:center}
 
+/* Category-card "Sponsored by" badge — white logo plate so every mark reads
+   against the dark card, regardless of the logo's own colours. */
+.cat-sponsor-badge{display:inline-flex;align-items:center;gap:.55rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.35);border-radius:24px;padding:.3rem .4rem .3rem .85rem}
+.cat-sponsor-badge .csb-label{font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pink);white-space:nowrap}
+.cat-sponsor-badge .csb-plate{background:#fff;border-radius:14px;padding:.35rem .55rem;display:inline-flex;align-items:center;justify-content:center;min-height:26px}
+.cat-sponsor-badge .csb-plate img{height:18px;width:auto;display:block}
+/* Sustainability variant keeps the green accent, all other categories use pink. */
+.cat-sponsor-badge.csb-green{background:rgba(99,189,80,.12);border-color:rgba(99,189,80,.35)}
+.cat-sponsor-badge.csb-green .csb-label{color:#63bd50}
+/* Compact fallback on very narrow cards */
+@media(max-width:400px){
+  .cat-sponsor-badge .csb-label{display:none}
+  .cat-sponsor-badge{padding:.3rem .4rem}
+}
+
 /* Keyboard focus rings for interactive controls (previously invisible) */
 button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.faq-q:focus-visible,.modal-close:focus-visible,.hamburger:focus-visible{outline:2px solid var(--pink);outline-offset:2px;border-radius:8px}
 
@@ -914,9 +929,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <article class="cat-card cat-card--sponsored" style="border-color:rgba(244,114,182,.3);background:linear-gradient(160deg,rgba(244,114,182,.06) 0%,var(--card) 50%)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
           <div class="cat-num" style="margin-bottom:0">Category 02</div>
-          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);border-radius:20px;padding:.25rem .7rem">
-            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)">Sponsored by</span>
-            <img src="images/logo-ne-hotels.png" alt="NE Hotels Association" style="height:16px;width:auto;display:inline-block"/>
+          <div class="cat-sponsor-badge">
+            <span class="csb-label">Sponsored by</span>
+            <span class="csb-plate"><img src="images/logo-ne-hotels.png" alt="NE Hotels Association"/></span>
           </div>
         </div>
         <span class="cat-emoji">🍽️</span>
@@ -933,9 +948,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <article class="cat-card cat-card--sponsored" style="border-color:rgba(244,114,182,.3);background:linear-gradient(160deg,rgba(244,114,182,.06) 0%,var(--card) 50%)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
           <div class="cat-num" style="margin-bottom:0">Category 04</div>
-          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);border-radius:20px;padding:.25rem .7rem">
-            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)">Sponsored by</span>
-            <img src="images/logo-surgotech.png" alt="Surgotech Solutions" style="height:16px;width:auto;display:inline-block;background:#111;padding:2px 4px;border-radius:3px"/>
+          <div class="cat-sponsor-badge">
+            <span class="csb-label">Sponsored by</span>
+            <span class="csb-plate" style="background:#111"><img src="images/logo-surgotech.png" alt="Surgotech Solutions"/></span>
           </div>
         </div>
         <span class="cat-emoji">💻</span>
@@ -946,9 +961,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <article class="cat-card cat-card--sponsored" style="border-color:rgba(99,189,80,.3);background:linear-gradient(160deg,rgba(99,189,80,.06) 0%,var(--card) 50%)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
           <div class="cat-num" style="margin-bottom:0">Category 05</div>
-          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(99,189,80,.12);border:1px solid rgba(99,189,80,.3);border-radius:20px;padding:.25rem .7rem">
-            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#63bd50">Sponsored by</span>
-            <img src="images/lumo-trains.png" alt="Lumo Trains" style="height:16px;width:auto;display:inline-block"/>
+          <div class="cat-sponsor-badge csb-green">
+            <span class="csb-label">Sponsored by</span>
+            <span class="csb-plate"><img src="images/lumo-trains.png" alt="Lumo Trains"/></span>
           </div>
         </div>
         <span class="cat-emoji">🌿</span>
@@ -977,9 +992,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <article class="cat-card cat-card--sponsored" style="border-color:rgba(244,114,182,.3);background:linear-gradient(160deg,rgba(244,114,182,.06) 0%,var(--card) 50%)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
           <div class="cat-num" style="margin-bottom:0">Category 09</div>
-          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);border-radius:20px;padding:.25rem .7rem">
-            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)">Sponsored by</span>
-            <img src="images/logo-ironing-man.png" alt="The Ironing Man" style="height:16px;width:auto;display:inline-block"/>
+          <div class="cat-sponsor-badge">
+            <span class="csb-label">Sponsored by</span>
+            <span class="csb-plate"><img src="images/logo-ironing-man.png" alt="The Ironing Man"/></span>
           </div>
         </div>
         <span class="cat-emoji">🏪</span>
@@ -990,9 +1005,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <article class="cat-card cat-card--sponsored" style="border-color:rgba(244,114,182,.3);background:linear-gradient(160deg,rgba(244,114,182,.06) 0%,var(--card) 50%)">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
           <div class="cat-num" style="margin-bottom:0">Category 10</div>
-          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);border-radius:20px;padding:.25rem .7rem">
-            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)">Sponsored by</span>
-            <img src="images/logo-roam.png" alt="Roam Local" style="height:16px;width:auto;display:inline-block"/>
+          <div class="cat-sponsor-badge">
+            <span class="csb-label">Sponsored by</span>
+            <span class="csb-plate"><img src="images/logo-roam.png" alt="Roam Local"/></span>
           </div>
         </div>
         <span class="cat-emoji">🏆</span>
