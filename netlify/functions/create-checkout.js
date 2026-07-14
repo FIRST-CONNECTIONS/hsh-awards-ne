@@ -28,6 +28,17 @@ const CATEGORIES = [
   'High Street of the Year',
 ];
 
+// Categories already sponsored via off-Stripe direct partnerships. Kept in sync
+// with netlify/functions/categories-status.js. Attempting to pay for any of
+// these is refused before Stripe is called.
+const MANUALLY_SPONSORED = new Set([
+  'Hospitality Hero',                  // NE Hotels Association
+  'Digital Innovator',                 // Surgotech Solutions
+  'Sustainability Leader',             // Lumo Trains
+  'Independent Business of the Year',  // The Ironing Man
+  'High Street of the Year',           // Roam Local
+]);
+
 const FALLBACK_ORIGIN = 'https://ne-hsh-awards.co.uk';
 
 // Reuse a single exclusive VAT tax rate across invocations (cached per warm
@@ -117,6 +128,10 @@ exports.handler = async function (event) {
 
   if (!category || !CATEGORIES.includes(category)) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Please choose a valid award category.' }) };
+  }
+
+  if (MANUALLY_SPONSORED.has(category)) {
+    return { statusCode: 409, headers, body: JSON.stringify({ error: `Sorry — "${category}" has already been sponsored and is no longer available. Please choose another category.` }) };
   }
 
   const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
