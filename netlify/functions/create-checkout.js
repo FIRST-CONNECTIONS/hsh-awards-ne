@@ -9,35 +9,14 @@
 //  • We call Stripe's REST API directly with fetch (form-encoded) so the
 //    function has zero npm dependencies.
 
+const { CATEGORIES, MANUALLY_SPONSORED_SET } = require('../lib/sponsor-categories');
+
 const SPONSORSHIP_AMOUNT = 50000; // £500.00 in pence, EXCLUSIVE of VAT — edit here to change the price
 const CURRENCY = 'gbp';
 const VAT_PERCENTAGE = 20; // UK standard rate; applied as an EXCLUSIVE rate (added on top), so the total charged is £600
 
-// The ten award categories that may be sponsored. Used to validate input so
-// arbitrary product names can't be injected into Checkout.
-const CATEGORIES = [
-  'Retailer of the Year',
-  'Hospitality Hero',
-  'Community Champion',
-  'Digital Innovator',
-  'Sustainability Leader',
-  'Customer Experience Excellence',
-  'Rising Star',
-  'Employer of the Year',
-  'Independent Business of the Year',
-  'High Street of the Year',
-];
-
-// Categories already sponsored via off-Stripe direct partnerships. Kept in sync
-// with netlify/functions/categories-status.js. Attempting to pay for any of
-// these is refused before Stripe is called.
-const MANUALLY_SPONSORED = new Set([
-  'Hospitality Hero',                  // NE Hotels Association
-  'Digital Innovator',                 // Surgotech Solutions
-  'Sustainability Leader',             // Lumo Trains
-  'Independent Business of the Year',  // The Ironing Man
-  'High Street of the Year',           // Roam Local
-]);
+// O(1) membership check for input validation.
+const CATEGORIES_SET = new Set(CATEGORIES);
 
 const FALLBACK_ORIGIN = 'https://ne-hsh-awards.co.uk';
 
@@ -126,11 +105,11 @@ exports.handler = async function (event) {
 
   const { category, email, business } = body;
 
-  if (!category || !CATEGORIES.includes(category)) {
+  if (!category || !CATEGORIES_SET.has(category)) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Please choose a valid award category.' }) };
   }
 
-  if (MANUALLY_SPONSORED.has(category)) {
+  if (MANUALLY_SPONSORED_SET.has(category)) {
     return { statusCode: 409, headers, body: JSON.stringify({ error: `Sorry — "${category}" has already been sponsored and is no longer available. Please choose another category.` }) };
   }
 
