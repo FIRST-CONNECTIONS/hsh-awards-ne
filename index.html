@@ -686,22 +686,17 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .cat-sponsor-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;margin-bottom:.9rem}
 .cat-sponsor-header .cat-num{margin-bottom:0}
 
-/* "Sponsored by" badge — white logo plate so every mark reads against the
-   dark card, regardless of the logo's own colours. */
-.cat-sponsor-badge{display:inline-flex;align-items:center;gap:.6rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.35);border-radius:30px;padding:.35rem .5rem .35rem 1rem}
+/* "Sponsored by" badge — consistent text-only treatment across all
+   sponsored categories. Uses a white pill for the sponsor name so it
+   reads clearly against the dark card regardless of the sponsor's
+   own branding. */
+.cat-sponsor-badge{display:inline-flex;align-items:center;gap:.55rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.35);border-radius:30px;padding:.3rem .45rem .3rem .9rem}
 .cat-sponsor-badge .csb-label{font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pink);white-space:nowrap}
-.cat-sponsor-badge .csb-plate{background:#fff;border-radius:16px;padding:.4rem .7rem;display:inline-flex;align-items:center;justify-content:center;min-height:40px;min-width:60px}
-.cat-sponsor-badge .csb-plate img{height:28px;width:auto;max-width:120px;display:block;object-fit:contain}
+.cat-sponsor-badge .csb-name{background:#fff;color:var(--navy);border-radius:16px;padding:.4rem .8rem;font-size:.72rem;font-weight:800;letter-spacing:.02em;line-height:1.1;white-space:nowrap;display:inline-flex;align-items:center}
 /* Sustainability variant keeps the green accent, all other categories use pink. */
 .cat-sponsor-badge.csb-green{background:rgba(99,189,80,.12);border-color:rgba(99,189,80,.35)}
 .cat-sponsor-badge.csb-green .csb-label{color:#63bd50}
-/* Surgotech's PNG is 1600×900 with 60% empty padding and a white wordmark;
-   an <img> at height:28px shrinks the actual mark to ~12px. Use it as a
-   scaled background instead so we can enlarge and crop directly to the mark.
-   The <img> stays in the DOM (opacity 0) purely to carry alt text for AT. */
-.cat-sponsor-badge .csb-plate.csb-plate-surgotech{background:#111 url('images/logo-surgotech.png') no-repeat;background-size:auto 190%;background-position:-4px center;padding:0;width:44px;height:44px;min-width:0;min-height:0;overflow:hidden;border-radius:14px}
-.cat-sponsor-badge .csb-plate.csb-plate-surgotech img{opacity:0;width:100%;height:100%}
-/* Compact fallback on very narrow cards */
+/* Compact fallback on very narrow cards — drop the label, keep the sponsor name. */
 @media(max-width:400px){
   .cat-sponsor-badge .csb-label{display:none}
   .cat-sponsor-badge{padding:.3rem .35rem}
@@ -942,7 +937,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
           <div class="cat-num">Category 02</div>
           <div class="cat-sponsor-badge">
             <span class="csb-label">Sponsored by</span>
-            <span class="csb-plate"><img src="images/logo-ne-hotels.png" alt="NE Hotels Association"/></span>
+            <span class="csb-name">NE Hotels Association</span>
           </div>
         </div>
         <span class="cat-emoji">🍽️</span>
@@ -961,7 +956,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
           <div class="cat-num">Category 04</div>
           <div class="cat-sponsor-badge">
             <span class="csb-label">Sponsored by</span>
-            <span class="csb-plate csb-plate-surgotech"><img src="images/logo-surgotech.png" alt="Surgotech Solutions"/></span>
+            <span class="csb-name">Surgotech Solutions</span>
           </div>
         </div>
         <span class="cat-emoji">💻</span>
@@ -974,7 +969,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
           <div class="cat-num">Category 05</div>
           <div class="cat-sponsor-badge csb-green">
             <span class="csb-label">Sponsored by</span>
-            <span class="csb-plate"><img src="images/lumo-trains.png" alt="Lumo Trains"/></span>
+            <span class="csb-name">Lumo Trains</span>
           </div>
         </div>
         <span class="cat-emoji">🌿</span>
@@ -1005,7 +1000,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
           <div class="cat-num">Category 09</div>
           <div class="cat-sponsor-badge">
             <span class="csb-label">Sponsored by</span>
-            <span class="csb-plate"><img src="images/logo-ironing-man.png" alt="The Ironing Man"/></span>
+            <span class="csb-name">The Ironing Man</span>
           </div>
         </div>
         <span class="cat-emoji">🏪</span>
@@ -1018,7 +1013,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
           <div class="cat-num">Category 10</div>
           <div class="cat-sponsor-badge">
             <span class="csb-label">Sponsored by</span>
-            <span class="csb-plate"><img src="images/logo-roam.png" alt="Roam Local"/></span>
+            <span class="csb-name">Roam Local</span>
           </div>
         </div>
         <span class="cat-emoji">🏆</span>
