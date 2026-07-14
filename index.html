@@ -351,6 +351,14 @@ nav ul li a.active{color:#fff;border-bottom-color:var(--pink)}
 .sponsor-card img{display:block;max-width:100%;object-fit:contain}
 .sponsor-cta-box{background:linear-gradient(135deg,rgba(244,114,182,.08),rgba(245,166,35,.06));border:1px solid rgba(244,114,182,.2);border-radius:20px;padding:2rem 2.5rem;margin-top:1rem}
 .sponsor-cta-box p{font-size:.95rem;color:#4a5568;margin-bottom:1.2rem}
+/* Category sponsors grid (home page) */
+.cat-sponsors-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:2.5rem}
+.cat-sponsor-item{background:#fff;border:1px solid #e8edf2;border-radius:16px;padding:1.2rem 1.4rem;display:flex;flex-direction:column;align-items:center;gap:.8rem;min-width:180px;flex:1 1 180px;max-width:220px;box-shadow:0 2px 10px rgba(0,0,0,.06);transition:all .3s}
+.cat-sponsor-item:hover{box-shadow:0 8px 30px rgba(0,0,0,.12);transform:translateY(-3px);border-color:rgba(244,114,182,.3)}
+.cat-sponsor-item img{max-height:44px;width:auto;object-fit:contain;display:block}
+.cat-sponsor-item .cat-sponsor-divider{height:1px;width:100%;background:linear-gradient(90deg,transparent,rgba(244,114,182,.25),transparent)}
+.cat-sponsor-item .cat-sponsor-tag{font-size:.55rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);text-align:center}
+.cat-sponsor-item .cat-sponsor-name{font-size:.82rem;font-weight:700;color:var(--navy);text-align:center;line-height:1.3}
 
 /* FAQ */
 .faq{background:var(--navy);padding:7rem 2rem;text-align:center;position:relative}
@@ -801,38 +809,46 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
       <span class="tag">Our Sponsors &amp; Partners</span>
       <h2>Proudly Supported By</h2>
       <p class="sponsors-sub">The NE High Street Heroes Awards wouldn't be possible without the generous support of our sponsors and regional partners.</p>
-      <div class="sponsor-group-label">Title Sponsors</div>
-      <div class="sponsor-row">
-        <div class="sponsor-card"><img src="images/logo-roam.png" alt="Roam" style="height:50px;width:auto"/></div>
-        <div class="sponsor-card"><img src="images/logo-ironing-man.png" alt="The Ironing Man" style="height:50px;width:auto"/></div>
-      </div>
-      <div class="sponsor-group-label">Category Sponsor</div>
-      <div class="sponsor-row">
-        <div style="position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:0">
-          <!-- Label above -->
-          <div style="display:flex;align-items:center;gap:.4rem;background:#1a3d1a;border:1px solid #3a7a2a;border-radius:20px;padding:.3rem .9rem;margin-bottom:.6rem;box-shadow:0 2px 12px rgba(45,158,95,.25)">
-            <span style="font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7dda58">🌿 Sustainability Award Sponsor</span>
-          </div>
-          <!-- Card -->
-          <div style="background:#ffffff;border:2px solid #2d6b2d;border-radius:20px;padding:1.6rem 2.8rem;display:flex;flex-direction:column;align-items:center;gap:1rem;box-shadow:0 8px 32px rgba(0,0,0,.12),inset 0 1px 0 rgba(125,218,88,.12);min-width:220px">
-            <img src="images/lumo-trains.png" alt="Lumo Trains" style="height:52px;width:auto;display:block"/>
-            <div style="height:1px;width:100%;background:linear-gradient(90deg,transparent,rgba(125,218,88,.25),transparent)"></div>
-            <div style="display:flex;align-items:center;gap:.4rem">
-              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#7dda58;box-shadow:0 0 6px #7dda58"></span>
-              <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#5bb840">Category Partner</span>
-            </div>
-          </div>
+      <div class="sponsor-group-label">Category Sponsors</div>
+      <div class="cat-sponsors-grid">
+        <div class="cat-sponsor-item">
+          <img src="images/logo-ne-hotels.png" alt="NE Hotels Association"/>
+          <div class="cat-sponsor-divider"></div>
+          <span class="cat-sponsor-tag">Sponsors</span>
+          <span class="cat-sponsor-name">🍽️ Hospitality Hero</span>
+        </div>
+        <div class="cat-sponsor-item">
+          <img src="images/logo-roam.png" alt="Roam Local"/>
+          <div class="cat-sponsor-divider"></div>
+          <span class="cat-sponsor-tag">Sponsors</span>
+          <span class="cat-sponsor-name">🏆 High Street of the Year</span>
+        </div>
+        <div class="cat-sponsor-item">
+          <img src="images/logo-surgotech.png" alt="Surgotech Solutions"/>
+          <div class="cat-sponsor-divider"></div>
+          <span class="cat-sponsor-tag">Sponsors</span>
+          <span class="cat-sponsor-name">💻 Digital Innovator</span>
+        </div>
+        <div class="cat-sponsor-item">
+          <img src="images/lumo-trains.png" alt="Lumo Trains"/>
+          <div class="cat-sponsor-divider"></div>
+          <span class="cat-sponsor-tag">Sponsors</span>
+          <span class="cat-sponsor-name">🌿 Sustainability Leader</span>
+        </div>
+        <div class="cat-sponsor-item">
+          <img src="images/logo-ironing-man.png" alt="The Ironing Man"/>
+          <div class="cat-sponsor-divider"></div>
+          <span class="cat-sponsor-tag">Sponsors</span>
+          <span class="cat-sponsor-name">🏪 Independent Business of the Year</span>
         </div>
       </div>
       <div class="sponsor-group-label">Regional Partners</div>
       <div class="sponsor-row">
         <div class="sponsor-card sm"><img src="images/logo-bic.png" alt="BIC" style="height:44px;width:auto"/></div>
-        <div class="sponsor-card sm"><img src="images/logo-ne-hotels.png" alt="NE Hotels Association" style="height:44px;width:auto"/></div>
         <div class="sponsor-card sm"><img src="images/logo-stockton-bid.png" alt="Stockton BID" style="height:44px;width:auto"/></div>
         <div class="sponsor-card sm"><img src="images/logo-durham-bid.png" alt="Durham BID" style="height:44px;width:auto"/></div>
         <div class="sponsor-card sm blue"><img src="images/logo-ne1.png" alt="NE1" style="height:36px;width:auto"/></div>
         <div class="sponsor-card sm cobalt"><img src="images/logo-canny.png" alt="Canny Insights" style="height:36px;width:auto"/></div>
-        <div class="sponsor-card sm dark"><img src="images/logo-surgotech.png" alt="Surgotech Solutions" style="height:40px;width:auto"/></div>
         <div class="sponsor-card sm"><img src="images/Metrick Limited.png" alt="Metrick Limited" style="height:40px;width:auto"/></div>
       </div>
       <div class="sponsor-cta-box">
@@ -885,8 +901,15 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <p>Recognising independent and chain retailers who deliver exceptional products, service, and shopping experiences on our high streets.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Outstanding customer service</li><li>Community engagement</li><li>Innovation in retail</li></ul></div>
       </article>
-      <article class="cat-card">
-        <div class="cat-num">Category 02</div><span class="cat-emoji">🍽️</span>
+      <article class="cat-card cat-card--sponsored" style="border-color:rgba(244,114,182,.3);background:linear-gradient(160deg,rgba(244,114,182,.06) 0%,var(--card) 50%)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+          <div class="cat-num" style="margin-bottom:0">Category 02</div>
+          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);border-radius:20px;padding:.25rem .7rem">
+            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)">Sponsored by</span>
+            <img src="images/logo-ne-hotels.png" alt="NE Hotels Association" style="height:16px;width:auto;display:inline-block"/>
+          </div>
+        </div>
+        <span class="cat-emoji">🍽️</span>
         <h3>Hospitality Hero</h3>
         <p>Celebrating cafés, restaurants, and pubs that go above and beyond to create memorable experiences for visitors and locals alike.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Quality of food, drink &amp; service</li><li>Atmosphere and ambiance</li><li>Local sourcing and community spirit</li></ul></div>
@@ -897,8 +920,15 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <p>Honouring individuals or organisations making an extraordinary difference to their local community and high street.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Positive community impact</li><li>Voluntary contributions</li><li>Inspiring leadership</li></ul></div>
       </article>
-      <article class="cat-card">
-        <div class="cat-num">Category 04</div><span class="cat-emoji">💻</span>
+      <article class="cat-card cat-card--sponsored" style="border-color:rgba(244,114,182,.3);background:linear-gradient(160deg,rgba(244,114,182,.06) 0%,var(--card) 50%)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+          <div class="cat-num" style="margin-bottom:0">Category 04</div>
+          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);border-radius:20px;padding:.25rem .7rem">
+            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)">Sponsored by</span>
+            <img src="images/logo-surgotech.png" alt="Surgotech Solutions" style="height:16px;width:auto;display:inline-block;background:#111;padding:2px 4px;border-radius:3px"/>
+          </div>
+        </div>
+        <span class="cat-emoji">💻</span>
         <h3>Digital Innovator</h3>
         <p>Rewarding businesses using digital tools and technology to enhance their high street presence and customer experience.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Creative use of technology</li><li>Online-offline integration</li><li>Customer engagement innovation</li></ul></div>
@@ -934,14 +964,28 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
         <p>Honouring businesses that invest in their people through training, wellbeing, and creating a great place to work.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Staff development programmes</li><li>Employee wellbeing initiatives</li><li>Inclusive workplace culture</li></ul></div>
       </article>
-      <article class="cat-card">
-        <div class="cat-num">Category 09</div><span class="cat-emoji">🏪</span>
+      <article class="cat-card cat-card--sponsored" style="border-color:rgba(244,114,182,.3);background:linear-gradient(160deg,rgba(244,114,182,.06) 0%,var(--card) 50%)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+          <div class="cat-num" style="margin-bottom:0">Category 09</div>
+          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);border-radius:20px;padding:.25rem .7rem">
+            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)">Sponsored by</span>
+            <img src="images/logo-ironing-man.png" alt="The Ironing Man" style="height:16px;width:auto;display:inline-block"/>
+          </div>
+        </div>
+        <span class="cat-emoji">🏪</span>
         <h3>Independent Business of the Year</h3>
         <p>Celebrating the independent businesses that are the backbone of our high streets — the ones who bring character, choice, and heart to our towns.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Unique offering and identity</li><li>Customer loyalty and reputation</li><li>Contribution to high street vibrancy</li></ul></div>
       </article>
-      <article class="cat-card">
-        <div class="cat-num">Category 10</div><span class="cat-emoji">🏆</span>
+      <article class="cat-card cat-card--sponsored" style="border-color:rgba(244,114,182,.3);background:linear-gradient(160deg,rgba(244,114,182,.06) 0%,var(--card) 50%)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+          <div class="cat-num" style="margin-bottom:0">Category 10</div>
+          <div style="display:flex;align-items:center;gap:.4rem;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.3);border-radius:20px;padding:.25rem .7rem">
+            <span style="font-size:.55rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)">Sponsored by</span>
+            <img src="images/logo-roam.png" alt="Roam Local" style="height:16px;width:auto;display:inline-block"/>
+          </div>
+        </div>
+        <span class="cat-emoji">🏆</span>
         <h3>High Street of the Year</h3>
         <p>Recognising an entire high street that has shown outstanding community spirit, resilience, and collective effort to thrive.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Collaborative community initiatives</li><li>Diversity of businesses</li><li>Overall vibrancy and appeal</li></ul></div>
