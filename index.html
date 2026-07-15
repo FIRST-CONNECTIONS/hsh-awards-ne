@@ -294,7 +294,7 @@ nav ul li a.active{color:#fff;border-bottom-color:var(--pink)}
 .marquee-track{display:flex;width:max-content;animation:marquee 25s linear infinite}
 .marquee-track:hover{animation-play-state:paused}
 .marquee-item{white-space:nowrap;font-size:.72rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;padding:0 2.5rem;color:#fff;opacity:.95}
-.marquee-item::before{content:'✦ '}
+.marquee-item::before{content:'<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg> '}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
 /* ABOUT */
@@ -394,7 +394,7 @@ nav ul li a.active{color:#fff;border-bottom-color:var(--pink)}
 .cat-criteria-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin-bottom:.7rem}
 .cat-criteria ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
 .cat-criteria ul li{font-size:.8rem;color:#8fa8be;padding-left:1.3rem;position:relative;line-height:1.5}
-.cat-criteria ul li::before{content:'✓';position:absolute;left:0;color:var(--orange);font-weight:700;font-size:.75rem}
+.cat-criteria ul li::before{content:'<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-check"/></svg>';position:absolute;left:0;color:var(--orange);font-weight:700;font-size:.75rem}
 @media(max-width:1000px){.cats-grid-inner{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.cats-grid-inner{grid-template-columns:1fr}}
 /* BRAND KIT */
@@ -547,7 +547,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .about-purpose p{color:#8fa8be;font-size:1rem;line-height:1.85;margin-bottom:1.2rem}
 .purpose-list{list-style:none;display:flex;flex-direction:column;gap:.8rem;margin-top:1rem}
 .purpose-list li{display:flex;align-items:flex-start;gap:.9rem;color:#cdd8e8;font-size:.95rem;line-height:1.6}
-.purpose-list li::before{content:'✦';color:var(--pink);font-size:.8rem;margin-top:.2rem;flex-shrink:0}
+.purpose-list li::before{content:'<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg>';color:var(--pink);font-size:.8rem;margin-top:.2rem;flex-shrink:0}
 @media(max-width:900px){.about-purpose-inner{grid-template-columns:1fr;gap:3rem}}
 
 /* NARRATIVE SECTION */
@@ -710,9 +710,19 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   .cat-sponsor-item{max-width:none;flex-basis:100%}
 }
 
+
+/* Inline Lucide icon sprite — replaces the emoji library. Icons scale to
+   parent font-size (1em × 1em) and inherit currentColor via stroke. */
+.i{width:1em;height:1em;display:inline-block;vertical-align:-.125em;flex-shrink:0}
+.cat-emoji .i,.who-card-icon .i,.mission-tag .i,.icon-box .i{color:var(--pink)}
+/* On the mission tag pills the icon sits inline with text — nudge alignment */
+.mission-tag{display:inline-flex;align-items:center;gap:.4rem}
+.who-card-icon{color:var(--pink)}
+
 </style>
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978" /> <path d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978" /> <path d="M18 9h1.5a1 1 0 0 0 0-5H18" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6 9H4.5a1 1 0 0 1 0-5H6" /></symbol><symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></symbol><symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /> <path d="M20 2v4" /> <path d="M22 4h-4" /> <circle cx="4" cy="20" r="2" /></symbol><symbol id="i-circle-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></symbol><symbol id="i-circle-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m9 12 2 2 4-4" /></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol><symbol id="i-utensils" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /> <path d="M7 2v20" /> <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" /></symbol><symbol id="i-medal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" /> <path d="M11 12 5.12 2.2" /> <path d="m13 12 5.88-9.8" /> <path d="M8 7h8" /> <circle cx="12" cy="17" r="5" /> <path d="M12 18v-2h-.5" /></symbol><symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" /> <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" /></symbol><symbol id="i-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5" /> <path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244" /> <path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05" /></symbol><symbol id="i-shopping-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0" /> <path d="M3.103 6.034h17.794" /> <path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z" /></symbol><symbol id="i-newspaper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18h-5" /> <path d="M18 14h-8" /> <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2" /> <rect width="8" height="4" x="10" y="6" rx="1" /></symbol><symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></symbol><symbol id="i-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /> <rect width="20" height="14" x="2" y="6" rx="2" /></symbol><symbol id="i-laptop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z" /> <path d="M20.054 15.987H3.946" /></symbol><symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></symbol><symbol id="i-trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></symbol><symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></symbol><symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" /> <path d="M15 5.764v15" /> <path d="M9 3.236v15" /></symbol><symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></symbol><symbol id="i-lightbulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></symbol><symbol id="i-building-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h4" /> <path d="M10 8h4" /> <path d="M14 21v-3a2 2 0 0 0-4 0v3" /> <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" /> <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" /></symbol><symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10h.01" /> <path d="M12 14h.01" /> <path d="M12 6h.01" /> <path d="M16 10h.01" /> <path d="M16 14h.01" /> <path d="M16 6h.01" /> <path d="M8 10h.01" /> <path d="M8 14h.01" /> <path d="M8 6h.01" /> <path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" /> <rect x="4" y="2" width="16" height="20" rx="2" /></symbol><symbol id="i-castle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5V3" /> <path d="M14 5V3" /> <path d="M15 21v-3a3 3 0 0 0-6 0v3" /> <path d="M18 3v8" /> <path d="M18 5H6" /> <path d="M22 11H2" /> <path d="M22 9v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9" /> <path d="M6 3v8" /></symbol><symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></symbol><symbol id="i-handshake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3" /> <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" /> <path d="m21 3 1 11h-2" /> <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" /> <path d="M3 4h8" /></symbol><symbol id="i-party-popper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79" /> <path d="M4 3h.01" /> <path d="M22 8h.01" /> <path d="M15 2h.01" /> <path d="M22 20h.01" /> <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10" /> <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17" /> <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7" /> <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z" /></symbol><symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19v3" /> <path d="M19 10v2a7 7 0 0 1-14 0v-2" /> <rect x="9" y="2" width="6" height="13" rx="3" /></symbol><symbol id="i-megaphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" /> <path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14" /> <path d="M8 6v8" /></symbol><symbol id="i-ticket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /> <path d="M13 5v2" /> <path d="M13 17v2" /> <path d="M13 11v2" /></symbol><symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol><symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /></symbol></svg>
 
 <!-- NAV -->
 <nav>
@@ -742,7 +752,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   <a href="/brand-kit" onclick="event.preventDefault();nav('brand-kit')" id="mob-brand-kit">Brand Kit</a>
   <a href="/contact" onclick="event.preventDefault();nav('contact')" id="mob-contact">Contact</a>
   <div class="mob-divider"></div>
-  <button class="btn btn-primary mob-cta" onclick="toggleMenu(false);openNominateModal()">Nominate Now ✦</button>
+  <button class="btn btn-primary mob-cta" onclick="toggleMenu(false);openNominateModal()">Nominate Now <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg></button>
 </div>
 
 <!-- ══ HOME ══ -->
@@ -818,11 +828,11 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <h2>Empowering North East Communities Through Recognition</h2>
       <p>We believe every high street hero deserves their moment. From independent retailers to community champions, we shine a light on those who make our region extraordinary.</p>
       <div class="mission-tags">
-        <span class="mission-tag">🏆 Regional Recognition</span>
-        <span class="mission-tag">❤️ Community Pride</span>
-        <span class="mission-tag">📈 Economic Boost</span>
-        <span class="mission-tag">🤝 Stronger Partnerships</span>
-        <span class="mission-tag">📰 Positive PR</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-trophy"/></svg> Regional Recognition</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> Community Pride</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-trending-up"/></svg> Economic Boost</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-handshake"/></svg> Stronger Partnerships</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-newspaper"/></svg> Positive PR</span>
         <span class="mission-tag">⭐ Inspire Others</span>
       </div>
     </div>
@@ -847,31 +857,31 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
           <img src="images/logo-ne-hotels.png" alt="NE Hotels Association"/>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
-          <span class="cat-sponsor-name">🍽️ Hospitality Hero</span>
+          <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-utensils"/></svg> Hospitality Hero</span>
         </div>
         <div class="cat-sponsor-item">
           <img src="images/logo-roam.png" alt="Roam Local"/>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
-          <span class="cat-sponsor-name">🏆 High Street of the Year</span>
+          <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-trophy"/></svg> High Street of the Year</span>
         </div>
         <div class="cat-sponsor-item">
           <span class="logo-chip-dark"><img src="images/logo-surgotech.png" alt="Surgotech Solutions" style="max-height:36px;width:auto;display:block"/></span>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
-          <span class="cat-sponsor-name">💻 Digital Innovator</span>
+          <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-laptop"/></svg> Digital Innovator</span>
         </div>
         <div class="cat-sponsor-item">
           <img src="images/lumo-trains.png" alt="Lumo Trains"/>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
-          <span class="cat-sponsor-name">🌿 Sustainability Leader</span>
+          <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-leaf"/></svg> Sustainability Leader</span>
         </div>
         <div class="cat-sponsor-item">
           <img src="images/logo-ironing-man.png" alt="The Ironing Man"/>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
-          <span class="cat-sponsor-name">🏪 Independent Business of the Year</span>
+          <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-store"/></svg> Independent Business of the Year</span>
         </div>
       </div>
       <div class="sponsor-group-label">Regional Partners</div>
@@ -911,7 +921,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </main>
 
@@ -927,7 +937,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   <section class="cats-grid">
     <div class="cats-grid-inner">
       <article class="cat-card">
-        <div class="cat-num">Category 01</div><span class="cat-emoji">🛍️</span>
+        <div class="cat-num">Category 01</div><span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-shopping-bag"/></svg></span>
         <h3>Retailer of the Year</h3>
         <p>Recognising independent and chain retailers who deliver exceptional products, service, and shopping experiences on our high streets.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Outstanding customer service</li><li>Community engagement</li><li>Innovation in retail</li></ul></div>
@@ -940,13 +950,13 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
             <span class="csb-name">NE Hotels Association</span>
           </div>
         </div>
-        <span class="cat-emoji">🍽️</span>
+        <span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-utensils"/></svg></span>
         <h3>Hospitality Hero</h3>
         <p>Celebrating cafés, restaurants, and pubs that go above and beyond to create memorable experiences for visitors and locals alike.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Quality of food, drink &amp; service</li><li>Atmosphere and ambiance</li><li>Local sourcing and community spirit</li></ul></div>
       </article>
       <article class="cat-card">
-        <div class="cat-num">Category 03</div><span class="cat-emoji">🏅</span>
+        <div class="cat-num">Category 03</div><span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-medal"/></svg></span>
         <h3>Community Champion</h3>
         <p>Honouring individuals or organisations making an extraordinary difference to their local community and high street.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Positive community impact</li><li>Voluntary contributions</li><li>Inspiring leadership</li></ul></div>
@@ -959,7 +969,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
             <span class="csb-name">Surgotech Solutions</span>
           </div>
         </div>
-        <span class="cat-emoji">💻</span>
+        <span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-laptop"/></svg></span>
         <h3>Digital Innovator</h3>
         <p>Rewarding businesses using digital tools and technology to enhance their high street presence and customer experience.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Creative use of technology</li><li>Online-offline integration</li><li>Customer engagement innovation</li></ul></div>
@@ -972,7 +982,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
             <span class="csb-name">Lumo Trains</span>
           </div>
         </div>
-        <span class="cat-emoji">🌿</span>
+        <span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-leaf"/></svg></span>
         <h3>Sustainability Leader</h3>
         <p>Spotlighting businesses and individuals leading the way in sustainable practices on our high streets.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Environmental initiatives</li><li>Waste reduction efforts</li><li>Sustainable sourcing</li></ul></div>
@@ -984,13 +994,13 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Exceptional service standards</li><li>Customer feedback and reviews</li><li>Accessibility and inclusivity</li></ul></div>
       </article>
       <article class="cat-card">
-        <div class="cat-num">Category 07</div><span class="cat-emoji">🚀</span>
+        <div class="cat-num">Category 07</div><span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-rocket"/></svg></span>
         <h3>Rising Star</h3>
         <p>Recognising new businesses or emerging talent that have made an impressive impact on their local high street.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Business growth trajectory</li><li>Community contribution</li><li>Innovation and fresh ideas</li></ul></div>
       </article>
       <article class="cat-card">
-        <div class="cat-num">Category 08</div><span class="cat-emoji">👔</span>
+        <div class="cat-num">Category 08</div><span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
         <h3>Employer of the Year</h3>
         <p>Honouring businesses that invest in their people through training, wellbeing, and creating a great place to work.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Staff development programmes</li><li>Employee wellbeing initiatives</li><li>Inclusive workplace culture</li></ul></div>
@@ -1003,7 +1013,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
             <span class="csb-name">The Ironing Man</span>
           </div>
         </div>
-        <span class="cat-emoji">🏪</span>
+        <span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-store"/></svg></span>
         <h3>Independent Business of the Year</h3>
         <p>Celebrating the independent businesses that are the backbone of our high streets — the ones who bring character, choice, and heart to our towns.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Unique offering and identity</li><li>Customer loyalty and reputation</li><li>Contribution to high street vibrancy</li></ul></div>
@@ -1016,7 +1026,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
             <span class="csb-name">Roam Local</span>
           </div>
         </div>
-        <span class="cat-emoji">🏆</span>
+        <span class="cat-emoji"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-trophy"/></svg></span>
         <h3>High Street of the Year</h3>
         <p>Recognising an entire high street that has shown outstanding community spirit, resilience, and collective effort to thrive.</p>
         <div class="cat-criteria"><div class="cat-criteria-label">Key Criteria</div><ul><li>Collaborative community initiatives</li><li>Diversity of businesses</li><li>Overall vibrancy and appeal</li></ul></div>
@@ -1039,7 +1049,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1057,16 +1067,16 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <h2>Choose Your Category</h2>
       <div><p>Select the most fitting category for your nominee — or nominate across multiple categories.</p></div>
       <div class="vote-cat-grid">
-        <button class="vote-cat-btn" onclick="setCategory('Retailer of the Year',this)">🛍️ Retailer of the Year</button>
-        <button class="vote-cat-btn" onclick="setCategory('Hospitality Hero',this)">🍽️ Hospitality Hero</button>
-        <button class="vote-cat-btn" onclick="setCategory('Community Champion',this)">🏅 Community Champion</button>
-        <button class="vote-cat-btn" onclick="setCategory('Digital Innovator',this)">💻 Digital Innovator</button>
-        <button class="vote-cat-btn" onclick="setCategory('Sustainability Leader',this)">🌿 Sustainability Leader</button>
+        <button class="vote-cat-btn" onclick="setCategory('Retailer of the Year',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-shopping-bag"/></svg> Retailer of the Year</button>
+        <button class="vote-cat-btn" onclick="setCategory('Hospitality Hero',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-utensils"/></svg> Hospitality Hero</button>
+        <button class="vote-cat-btn" onclick="setCategory('Community Champion',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-medal"/></svg> Community Champion</button>
+        <button class="vote-cat-btn" onclick="setCategory('Digital Innovator',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-laptop"/></svg> Digital Innovator</button>
+        <button class="vote-cat-btn" onclick="setCategory('Sustainability Leader',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-leaf"/></svg> Sustainability Leader</button>
         <button class="vote-cat-btn" onclick="setCategory('Customer Experience Excellence',this)">⭐ Customer Experience</button>
-        <button class="vote-cat-btn" onclick="setCategory('Rising Star',this)">🚀 Rising Star</button>
-        <button class="vote-cat-btn" onclick="setCategory('Employer of the Year',this)">👔 Employer of the Year</button>
-        <button class="vote-cat-btn" onclick="setCategory('Independent Business of the Year',this)">🏪 Independent Business</button>
-        <button class="vote-cat-btn" onclick="setCategory('High Street of the Year',this)">🏆 High Street of the Year</button>
+        <button class="vote-cat-btn" onclick="setCategory('Rising Star',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-rocket"/></svg> Rising Star</button>
+        <button class="vote-cat-btn" onclick="setCategory('Employer of the Year',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-briefcase"/></svg> Employer of the Year</button>
+        <button class="vote-cat-btn" onclick="setCategory('Independent Business of the Year',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-store"/></svg> Independent Business</button>
+        <button class="vote-cat-btn" onclick="setCategory('High Street of the Year',this)"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-trophy"/></svg> High Street of the Year</button>
       </div>
     </div>
   </section>
@@ -1105,9 +1115,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
             </select>
           </div>
           <div class="form-group"><label for="v-reason">Why do they deserve to win?</label><textarea id="v-reason" placeholder="Tell us why this person or business is a true North East High Street Hero…" required></textarea></div>
-          <button type="submit" class="btn btn-primary btn-full">Submit My Vote ✦</button>
-          <div class="form-success" id="voteSuccess" role="alert">🎉 Thank you! Your vote has been submitted successfully.</div>
-          <div class="form-error" id="voteError" role="alert">❌ Something went wrong. Please email us directly at <a href="mailto:awards@first-connections.co.uk">awards@first-connections.co.uk</a></div>
+          <button type="submit" class="btn btn-primary btn-full">Submit My Vote <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg></button>
+          <div class="form-success" id="voteSuccess" role="alert"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-party-popper"/></svg> Thank you! Your vote has been submitted successfully.</div>
+          <div class="form-error" id="voteError" role="alert"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-circle-x"/></svg> Something went wrong. Please email us directly at <a href="mailto:awards@first-connections.co.uk">awards@first-connections.co.uk</a></div>
           <input type="hidden" name="_subject" value="New Vote / Nomination — NE High Street Heroes 2026"/>
           <input type="hidden" name="_replyto" id="v-reply"/>
         </form>
@@ -1121,7 +1131,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1138,16 +1148,16 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="contact-info">
         <h2>Let's Talk</h2>
         <p>Whether you're a business looking to get involved, a regional partner, a member of the press, or simply want to nominate your local hero — we're here for all of it.</p>
-        <div class="contact-detail"><div class="icon-box">📧</div><div><div class="detail-label">Email</div><div class="detail-val"><a href="mailto:awards@first-connections.co.uk">awards@first-connections.co.uk</a></div></div></div>
-        <div class="contact-detail"><div class="icon-box">📍</div><div><div class="detail-label">Gala Location</div><div class="detail-val">The Hippodrome, Darlington · 1st September 2026</div></div></div>
-        <div class="contact-detail"><div class="icon-box">🗺️</div><div><div class="detail-label">Region Covered</div><div class="detail-val">Tees Valley to Northumberland — 70+ towns &amp; cities</div></div></div>
-        <div class="contact-detail"><div class="icon-box">👥</div><div><div class="detail-label">Organisers</div><div class="detail-val">First Connections — Andrew Bartlett &amp; Sam Binns</div></div></div>
+        <div class="contact-detail"><div class="icon-box"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-mail"/></svg></div><div><div class="detail-label">Email</div><div class="detail-val"><a href="mailto:awards@first-connections.co.uk">awards@first-connections.co.uk</a></div></div></div>
+        <div class="contact-detail"><div class="icon-box"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-map-pin"/></svg></div><div><div class="detail-label">Gala Location</div><div class="detail-val">The Hippodrome, Darlington · 1st September 2026</div></div></div>
+        <div class="contact-detail"><div class="icon-box"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-map"/></svg></div><div><div class="detail-label">Region Covered</div><div class="detail-val">Tees Valley to Northumberland — 70+ towns &amp; cities</div></div></div>
+        <div class="contact-detail"><div class="icon-box"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-users"/></svg></div><div><div class="detail-label">Organisers</div><div class="detail-val">First Connections — Andrew Bartlett &amp; Sam Binns</div></div></div>
         <hr class="divider"/>
         <div class="quick-label">Quick Links</div>
         <div class="quick-links">
-          <a class="quick-link primary" href="mailto:awards@first-connections.co.uk">📧 Email Us</a>
-          <a class="quick-link outline" href="#nominate" onclick="event.preventDefault();openNominateModal()">🏆 Submit a Nomination</a>
-          <a class="quick-link outline" href="/categories" onclick="event.preventDefault();showPage('categories')">🏅 View Award Categories</a>
+          <a class="quick-link primary" href="mailto:awards@first-connections.co.uk"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-mail"/></svg> Email Us</a>
+          <a class="quick-link outline" href="#nominate" onclick="event.preventDefault();openNominateModal()"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-trophy"/></svg> Submit a Nomination</a>
+          <a class="quick-link outline" href="/categories" onclick="event.preventDefault();showPage('categories')"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-medal"/></svg> View Award Categories</a>
         </div>
       </div>
       <div class="form-panel">
@@ -1169,9 +1179,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
             </select>
           </div>
           <div class="form-group"><label for="c-msg">Message</label><textarea id="c-msg" placeholder="Tell us what's on your mind…" required></textarea></div>
-          <button type="submit" class="btn btn-primary btn-full">Send Message ✦</button>
-          <div class="form-success" id="contactSuccess" role="alert">✅ Thank you! We'll be in touch shortly.</div>
-          <div class="form-error" id="contactError" role="alert">❌ Something went wrong. Please email us directly at <a href="mailto:awards@first-connections.co.uk">awards@first-connections.co.uk</a></div>
+          <button type="submit" class="btn btn-primary btn-full">Send Message <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg></button>
+          <div class="form-success" id="contactSuccess" role="alert"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-circle-check"/></svg> Thank you! We'll be in touch shortly.</div>
+          <div class="form-error" id="contactError" role="alert"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-circle-x"/></svg> Something went wrong. Please email us directly at <a href="mailto:awards@first-connections.co.uk">awards@first-connections.co.uk</a></div>
           <input type="hidden" name="_subject" value="New Enquiry — NE High Street Heroes 2026"/>
           <input type="hidden" name="_replyto" id="c-reply"/>
         </form>
@@ -1183,9 +1193,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   </section>
   <section class="regions">
     <div class="regions-inner">
-      <div class="region-card"><h3>🏙️ Tees Valley</h3><p>Covering Darlington, Middlesbrough, Stockton-on-Tees, Hartlepool and Redcar &amp; Cleveland.</p></div>
-      <div class="region-card"><h3>🏰 County Durham &amp; Tyneside</h3><p>Durham City, Gateshead, Newcastle upon Tyne, Sunderland and the surrounding areas.</p></div>
-      <div class="region-card"><h3>🏘️ Northumberland</h3><p>Extending north to cover market towns and high streets throughout Northumberland.</p></div>
+      <div class="region-card"><h3><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-building-2"/></svg> Tees Valley</h3><p>Covering Darlington, Middlesbrough, Stockton-on-Tees, Hartlepool and Redcar &amp; Cleveland.</p></div>
+      <div class="region-card"><h3><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-castle"/></svg> County Durham &amp; Tyneside</h3><p>Durham City, Gateshead, Newcastle upon Tyne, Sunderland and the surrounding areas.</p></div>
+      <div class="region-card"><h3><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-house"/></svg> Northumberland</h3><p>Extending north to cover market towns and high streets throughout Northumberland.</p></div>
     </div>
   </section>
   <footer>
@@ -1195,7 +1205,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1386,7 +1396,7 @@ async function startSponsorCheckout(){
   }catch(err){
     console.error('Sponsor checkout error:', err);
     const el = document.getElementById('sponsorError');
-    if(el){ el.textContent='❌ '+(err.message||'Something went wrong starting checkout.')+' You can also register your interest below and we’ll be in touch.'; el.style.display='block'; }
+    if(el){ el.textContent='<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-circle-x"/></svg> '+(err.message||'Something went wrong starting checkout.')+' You can also register your interest below and we’ll be in touch.'; el.style.display='block'; }
     btn.textContent = original;
     btn.disabled = false;
     loadSponsorCategories(); // refresh in case the category was just taken (409)
@@ -1427,7 +1437,7 @@ async function loadSponsorCategories(){
   }
   if(pay){
     if(available===0){ pay.disabled=true; pay.textContent='All categories sponsored'; }
-    else if(/All categories/.test(pay.textContent)){ pay.disabled=false; pay.textContent='Pay & Sponsor Now — £500 + VAT ✦'; }
+    else if(/All categories/.test(pay.textContent)){ pay.disabled=false; pay.textContent='Pay & Sponsor Now — £500 + VAT <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg>'; }
   }
 }
 
@@ -1783,12 +1793,12 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
       <h2>Built for the <span style="background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Whole Community</span></h2>
       <p style="color:#8fa8be;font-size:1rem;margin-bottom:3rem;line-height:1.75">The awards are open to everyone contributing to North East high street life — from sole traders to community groups.</p>
       <div class="who-grid">
-        <div class="who-card"><span class="who-card-icon">🛍️</span><h3>Independent Retailers</h3><p>The shops and boutiques that give our high streets character, choice, and charm.</p></div>
-        <div class="who-card"><span class="who-card-icon">🍽️</span><h3>Hospitality Venues</h3><p>Cafés, restaurants, pubs and bars that create warmth, welcome, and community.</p></div>
-        <div class="who-card"><span class="who-card-icon">🏅</span><h3>Community Champions</h3><p>Individuals and organisations going above and beyond for their local area.</p></div>
-        <div class="who-card"><span class="who-card-icon">💡</span><h3>High Street Innovators</h3><p>Businesses using creativity and technology to reimagine what a high street can be.</p></div>
-        <div class="who-card"><span class="who-card-icon">🏢</span><h3>Service Businesses</h3><p>Local employers providing essential services and jobs in our town centres.</p></div>
-        <div class="who-card"><span class="who-card-icon">🤝</span><h3>Local Partners &amp; BIDs</h3><p>Councils, BIDs, and regional organisations investing in place and community.</p></div>
+        <div class="who-card"><span class="who-card-icon"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-shopping-bag"/></svg></span><h3>Independent Retailers</h3><p>The shops and boutiques that give our high streets character, choice, and charm.</p></div>
+        <div class="who-card"><span class="who-card-icon"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-utensils"/></svg></span><h3>Hospitality Venues</h3><p>Cafés, restaurants, pubs and bars that create warmth, welcome, and community.</p></div>
+        <div class="who-card"><span class="who-card-icon"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-medal"/></svg></span><h3>Community Champions</h3><p>Individuals and organisations going above and beyond for their local area.</p></div>
+        <div class="who-card"><span class="who-card-icon"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-lightbulb"/></svg></span><h3>High Street Innovators</h3><p>Businesses using creativity and technology to reimagine what a high street can be.</p></div>
+        <div class="who-card"><span class="who-card-icon"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-building"/></svg></span><h3>Service Businesses</h3><p>Local employers providing essential services and jobs in our town centres.</p></div>
+        <div class="who-card"><span class="who-card-icon"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-handshake"/></svg></span><h3>Local Partners &amp; BIDs</h3><p>Councils, BIDs, and regional organisations investing in place and community.</p></div>
       </div>
     </div>
   </section>
@@ -1833,7 +1843,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1865,7 +1875,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1881,7 +1891,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
 
   <!-- Payment status banners (shown after returning from Stripe) -->
   <section style="max-width:760px;margin:0 auto;padding:0 1.5rem">
-    <div class="form-success" id="sponsorPaid" role="alert">🎉 Thank you! Your sponsorship payment was successful — a confirmation email is on its way, and our team will be in touch within 48 hours to confirm the details and get your branding live.</div>
+    <div class="form-success" id="sponsorPaid" role="alert"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-party-popper"/></svg> Thank you! Your sponsorship payment was successful — a confirmation email is on its way, and our team will be in touch within 48 hours to confirm the details and get your branding live.</div>
     <div class="form-error" id="sponsorCancelled" role="alert">Your payment was cancelled and you have not been charged. If you'd like to sponsor a category, you can try again below or register your interest and we'll get in touch.</div>
   </section>
 
@@ -1891,12 +1901,12 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
       <h2>Reach the People Who Power the High Street</h2>
       <p>The NE High Street Heroes Awards 2026 culminates in a prestigious Gala on <strong>1st September 2026</strong> at <strong>The Hippodrome, Darlington</strong>, with hundreds of business owners, civic leaders and media in the room — and thousands more following the campaign online from Tees Valley to Northumberland.</p>
       <div class="mission-tags">
-        <span class="mission-tag">🏆 Category Naming Rights</span>
-        <span class="mission-tag">🎤 On-Stage Presentation</span>
-        <span class="mission-tag">📣 Logo on Website &amp; Marketing</span>
-        <span class="mission-tag">📰 Regional Press Coverage</span>
-        <span class="mission-tag">🎟️ Gala Table for Your Team</span>
-        <span class="mission-tag">🤝 Community Goodwill</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-trophy"/></svg> Category Naming Rights</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-mic"/></svg> On-Stage Presentation</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-megaphone"/></svg> Logo on Website &amp; Marketing</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-newspaper"/></svg> Regional Press Coverage</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-ticket"/></svg> Gala Table for Your Team</span>
+        <span class="mission-tag"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-handshake"/></svg> Community Goodwill</span>
       </div>
     </div>
   </section>
@@ -1944,13 +1954,13 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
           </div>
           <div class="form-group"><label for="s-msg">Anything you'd like us to know? <span style="font-weight:400;color:#999">(optional)</span></label><textarea id="s-msg" placeholder="Questions, branding notes, or how you'd like to get involved…"></textarea></div>
 
-          <button type="button" class="btn btn-primary btn-full" id="sponsorPayBtn" onclick="startSponsorCheckout()">Pay &amp; Sponsor Now — £500 + VAT ✦</button>
-          <div style="text-align:center;font-size:.78rem;color:#999;margin:.7rem 0 .2rem">🔒 Secure payment by card via Stripe</div>
+          <button type="button" class="btn btn-primary btn-full" id="sponsorPayBtn" onclick="startSponsorCheckout()">Pay &amp; Sponsor Now — £500 + VAT <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg></button>
+          <div style="text-align:center;font-size:.78rem;color:#999;margin:.7rem 0 .2rem"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-lock"/></svg> Secure payment by card via Stripe</div>
           <div style="display:flex;align-items:center;gap:.8rem;margin:1rem 0;color:#999;font-size:.78rem"><span style="flex:1;height:1px;background:rgba(10,15,40,.15)"></span>OR<span style="flex:1;height:1px;background:rgba(10,15,40,.15)"></span></div>
           <button type="submit" class="btn btn-full" style="background:transparent;color:var(--navy);border:1.5px solid rgba(10,15,40,.25)">Register My Interest</button>
 
-          <div class="form-success" id="sponsorSuccess" role="alert">🎉 Thank you! Your interest has been registered — our team will be in touch shortly.</div>
-          <div class="form-error" id="sponsorError" role="alert">❌ Something went wrong. Please email us directly at awards@first-connections.co.uk</div>
+          <div class="form-success" id="sponsorSuccess" role="alert"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-party-popper"/></svg> Thank you! Your interest has been registered — our team will be in touch shortly.</div>
+          <div class="form-error" id="sponsorError" role="alert"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-circle-x"/></svg> Something went wrong. Please email us directly at awards@first-connections.co.uk</div>
           <input type="hidden" name="_subject" value="New Sponsorship Enquiry — NE High Street Heroes 2026"/>
         </form>
       </div>
@@ -1964,7 +1974,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with ❤️ for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1972,7 +1982,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
 <!-- NOMINATION MODAL -->
 <div class="modal-overlay" id="nominateModal" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true" aria-labelledby="nominateModalTitle" aria-hidden="true">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <button class="modal-close" onclick="closeModal()" aria-label="Close"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-x"/></svg></button>
     <span class="tag">Free to Nominate</span>
     <h2 id="nominateModalTitle">Nominate Your Hero</h2>
     <p class="modal-sub">Tell us about an outstanding business or individual on the North East high street. Takes less than two minutes.</p>
@@ -1997,9 +2007,9 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
         </select>
       </div>
       <div class="form-group"><label for="n-reason">Why do they deserve to win?</label><textarea id="n-reason" placeholder="Tell us why this person or business is a true North East High Street Hero…" required></textarea></div>
-      <button type="submit" class="btn btn-primary btn-full">Submit Nomination ✦</button>
-      <div class="form-success" id="nominateSuccess" role="alert" style="display:none">🎉 Thank you! Your nomination has been submitted successfully.</div>
-      <div class="form-error" id="nominateError" role="alert" style="display:none">❌ Something went wrong. Please email us at awards@first-connections.co.uk</div>
+      <button type="submit" class="btn btn-primary btn-full">Submit Nomination <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg></button>
+      <div class="form-success" id="nominateSuccess" role="alert" style="display:none"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-party-popper"/></svg> Thank you! Your nomination has been submitted successfully.</div>
+      <div class="form-error" id="nominateError" role="alert" style="display:none"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-circle-x"/></svg> Something went wrong. Please email us at awards@first-connections.co.uk</div>
       <input type="hidden" name="_subject" value="New Nomination — NE High Street Heroes 2026"/>
     </form>
   </div>
