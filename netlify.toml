@@ -23,6 +23,18 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Cache HTML pages with revalidation
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+# Cache the SPA root
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
 # Clean-URL routing for the single-page app.
 # Each page path is rewritten (status 200, no redirect) to index.html so that
 # /brand-kit, /about, etc. can be shared and deep-linked. The SPA reads the
@@ -51,6 +63,11 @@
 [[redirects]]
   from = "/contact"
   to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/privacy-policy.html"
   status = 200
 
 # Hidden sponsor page — deep-linkable but not in the nav or sitemap

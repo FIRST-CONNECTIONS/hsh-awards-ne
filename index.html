@@ -7,7 +7,7 @@
 
 <!-- ── Primary SEO ── -->
 <title>NE High Street Heroes Awards 2026 | Celebrating North East High Streets</title>
-<meta name="description" content="The NE High Street Heroes Awards 2026 celebrates outstanding businesses, community champions, and individuals revitalising high streets across the North East — from Tees Valley to Northumberland. Free to nominate. Gala Night on 1st September 2026 at the Hippodrome, Darlington."/>
+<meta name="description" content="Celebrating outstanding businesses and individuals revitalising high streets across the North East. Free to nominate. Gala Night 1st Sept 2026, Hippodrome, Darlington."/>
 <meta name="keywords" content="North East High Street Awards, high street heroes, NE awards 2026, Darlington awards, Tees Valley business awards, North East business recognition, community awards North East, independent business awards, First Connections, high street champions"/>
 <meta name="author" content="First Connections — Andrew Bartlett &amp; Sam Binns"/>
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
@@ -126,9 +126,11 @@
 </script>
 
 
+<link rel="preload" as="image" href="images/img-angel-north.jpg" fetchpriority="high"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -377,7 +379,7 @@ nav ul li a.active{color:#fff;border-bottom-color:var(--pink)}
 /* CATEGORIES */
 .page-hero{background:var(--navy2);padding:8rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
 .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(244,114,182,.1),transparent 60%);pointer-events:none}
-.page-hero h1{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;margin-bottom:1rem;letter-spacing:-.02em;position:relative}
+.page-hero h1,.page-hero h2{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;margin-bottom:1rem;letter-spacing:-.02em;position:relative}
 .page-hero p{color:#8fa8be;font-size:1.05rem;max-width:580px;margin:0 auto 2.5rem;line-height:1.75;position:relative}
 .cats-grid{background:var(--navy);padding:4rem 2rem}
 .cats-grid-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
@@ -536,7 +538,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 /* ABOUT PAGE */
 .about-page-hero{background:var(--navy2);padding:8rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
 .about-page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(244,114,182,.12),transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(245,166,35,.06),transparent 60%);pointer-events:none}
-.about-page-hero h1{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;margin-bottom:1rem;letter-spacing:-.02em;position:relative}
+.about-page-hero h1,.about-page-hero h2{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;margin-bottom:1rem;letter-spacing:-.02em;position:relative}
 .about-page-hero p{color:#8fa8be;font-size:1.05rem;max-width:620px;margin:0 auto 2.5rem;line-height:1.75;position:relative}
 
 /* PURPOSE SECTION */
@@ -610,7 +612,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   footer{padding:3rem 1.25rem 1.5rem}
   /* Heading scale */
   .hero h1{font-size:2.6rem;line-height:1.1}
-  .page-hero h1,.about-page-hero h1{font-size:2.4rem}
+  .page-hero h1,.page-hero h2,.about-page-hero h1,.about-page-hero h2{font-size:2.4rem}
   .about h2,.mission h2,.faq h2,.cats-cta h2,.about-narrative h2,.about-who h2,.about-partners h2,.about-strategic h2,.sponsors h2{font-size:2rem}
   .about-purpose h2{font-size:2rem}
   /* Tablet panel padding */
@@ -630,7 +632,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   footer{padding:2.5rem 1rem 1.25rem}
   /* Headings */
   .hero h1{font-size:2.1rem;line-height:1.12}
-  .page-hero h1,.about-page-hero h1{font-size:2rem}
+  .page-hero h1,.page-hero h2,.about-page-hero h1,.about-page-hero h2{font-size:2rem}
   .about h2,.mission h2,.faq h2,.cats-cta h2,.about-narrative h2,.about-who h2,.about-partners h2,.about-strategic h2,.sponsors h2,.about-purpose h2{font-size:1.7rem}
   /* Hero buttons stack full-width */
   .hero-btns{flex-direction:column;align-items:stretch}
@@ -770,9 +772,9 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
         </div>
       </div>
       <div class="hero-images">
-        <div class="hero-img tall"><img src="images/img-angel-north.jpg" alt="Angel of the North at sunset" loading="eager"/><span class="img-label">Angel of the North</span></div>
-        <div class="hero-img short"><img src="images/img-darlington-street.jpg" alt="Darlington High Street" loading="lazy"/><span class="img-label">Darlington</span></div>
-        <div class="hero-img short"><img src="images/img-teesside-steel.jpg" alt="Teesside Steel" loading="lazy"/><span class="img-label">Teesside</span></div>
+        <div class="hero-img tall"><img src="images/img-angel-north.jpg" alt="Angel of the North at sunset" width="1184" height="864" loading="eager" fetchpriority="high"/><span class="img-label">Angel of the North</span></div>
+        <div class="hero-img short"><img src="images/img-darlington-street.jpg" alt="Darlington High Street" width="1600" height="900" loading="eager"/><span class="img-label">Darlington</span></div>
+        <div class="hero-img short"><img src="images/img-teesside-steel.jpg" alt="Teesside Steel" width="1600" height="900" loading="lazy"/><span class="img-label">Teesside</span></div>
       </div>
     </div>
   </section>
@@ -806,7 +808,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   <section class="about">
     <div class="about-inner">
       <div class="about-img-wrap">
-        <img src="images/img-team-photo.jpg" alt="First Connections team in Darlington" loading="lazy"/>
+        <img src="images/img-team-photo.jpg" alt="First Connections team in Darlington" width="1600" height="900" loading="lazy"/>
         <div class="about-year"><span>2026</span></div>
       </div>
       <div>
@@ -839,11 +841,11 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   </section>
 
   <div class="gallery" aria-label="North East gallery">
-    <div class="gallery-item"><img src="images/img-angel-north.jpg" alt="Angel of the North" loading="lazy"/><span class="img-label">Angel of the North</span></div>
-    <div class="gallery-item"><img src="images/img-durham-cathedral.jpg" alt="Durham Cathedral" loading="lazy"/><span class="img-label">Durham</span></div>
-    <div class="gallery-item"><img src="images/img-teesside-steel.jpg" alt="Teesside Steelworks" loading="lazy"/><span class="img-label">Teesside Steel Works</span></div>
-    <div class="gallery-item"><img src="images/img-locomotion.jpg" alt="Locomotion No.1 Darlington" loading="lazy"/><span class="img-label">Darlington</span></div>
-    <div class="gallery-item"><img src="images/img-cafe-owner.jpg" alt="Northumberland" loading="lazy"/><span class="img-label">Northumberland</span></div>
+    <div class="gallery-item"><img src="images/img-angel-north.jpg" alt="Angel of the North" width="1184" height="864" loading="lazy"/><span class="img-label">Angel of the North</span></div>
+    <div class="gallery-item"><img src="images/img-durham-cathedral.jpg" alt="Durham Cathedral" width="1024" height="512" loading="lazy"/><span class="img-label">Durham</span></div>
+    <div class="gallery-item"><img src="images/img-teesside-steel.jpg" alt="Teesside Steelworks" width="1600" height="900" loading="lazy"/><span class="img-label">Teesside Steel Works</span></div>
+    <div class="gallery-item"><img src="images/img-locomotion.jpg" alt="Locomotion No.1 Darlington" width="1184" height="864" loading="lazy"/><span class="img-label">Darlington</span></div>
+    <div class="gallery-item"><img src="images/img-cafe-owner.jpg" alt="Café owner in Northumberland" width="1600" height="900" loading="lazy"/><span class="img-label">Northumberland</span></div>
   </div>
 
   <section class="sponsors">
@@ -854,31 +856,31 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="sponsor-group-label">Category Sponsors</div>
       <div class="cat-sponsors-grid">
         <div class="cat-sponsor-item">
-          <img src="images/logo-ne-hotels.png" alt="NE Hotels Association"/>
+          <img src="images/logo-ne-hotels.png" alt="NE Hotels Association" width="225" height="148" loading="lazy"/>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
           <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-utensils"/></svg> Hospitality Hero</span>
         </div>
         <div class="cat-sponsor-item">
-          <img src="images/logo-roam.png" alt="Roam Local"/>
+          <img src="images/logo-roam.png" alt="Roam Local" width="2058" height="694" loading="lazy"/>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
           <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-trophy"/></svg> High Street of the Year</span>
         </div>
         <div class="cat-sponsor-item">
-          <span class="logo-chip-dark"><img src="images/logo-surgotech.png" alt="Surgotech Solutions" style="max-height:36px;width:auto;display:block"/></span>
+          <span class="logo-chip-dark"><img src="images/logo-surgotech.png" alt="Surgotech Solutions" style="max-height:36px;width:auto;display:block" loading="lazy"/></span>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
           <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-laptop"/></svg> Digital Innovator</span>
         </div>
         <div class="cat-sponsor-item">
-          <img src="images/lumo-trains.png" alt="Lumo Trains"/>
+          <img src="images/lumo-trains.png" alt="Lumo" width="744" height="372" loading="lazy"/>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
           <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-leaf"/></svg> Sustainability Leader</span>
         </div>
         <div class="cat-sponsor-item">
-          <img src="images/logo-ironing-man.png" alt="The Ironing Man"/>
+          <img src="images/logo-ironing-man.png" alt="The Ironing Man" width="940" height="788" loading="lazy"/>
           <div class="cat-sponsor-divider"></div>
           <span class="cat-sponsor-tag">Sponsors</span>
           <span class="cat-sponsor-name"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-store"/></svg> Independent Business of the Year</span>
@@ -886,11 +888,11 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       </div>
       <div class="sponsor-group-label">Regional Partners</div>
       <div class="sponsor-row">
-        <div class="sponsor-card sm"><img src="images/logo-bic.png" alt="BIC" style="height:44px;width:auto"/></div>
-        <div class="sponsor-card sm"><img src="images/logo-stockton-bid.png" alt="Stockton BID" style="height:44px;width:auto"/></div>
-        <div class="sponsor-card sm"><img src="images/logo-durham-bid.png" alt="Durham BID" style="height:44px;width:auto"/></div>
-        <div class="sponsor-card sm blue"><img src="images/logo-ne1.png" alt="NE1" style="height:36px;width:auto"/></div>
-        <div class="sponsor-card sm"><img src="images/Metrick Limited.png" alt="Metrick Limited" style="height:40px;width:auto"/></div>
+        <div class="sponsor-card sm"><img src="images/logo-bic.png" alt="BIC" style="height:44px;width:auto" loading="lazy"/></div>
+        <div class="sponsor-card sm"><img src="images/logo-stockton-bid.png" alt="Stockton BID" style="height:44px;width:auto" loading="lazy"/></div>
+        <div class="sponsor-card sm"><img src="images/logo-durham-bid.png" alt="Durham BID" style="height:44px;width:auto" loading="lazy"/></div>
+        <div class="sponsor-card sm blue"><img src="images/logo-ne1.png" alt="NE1" style="height:36px;width:auto" loading="lazy"/></div>
+        <div class="sponsor-card sm"><img src="images/Metrick Limited.png" alt="Metrick" style="height:40px;width:auto" loading="lazy"/></div>
       </div>
       <div class="sponsor-cta-box">
         <p>Interested in becoming a sponsor or regional partner?</p>
@@ -921,7 +923,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved. <a href="/privacy-policy" style="color:var(--muted);text-decoration:underline">Privacy Policy</a></p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </main>
 
@@ -930,7 +932,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   <div class="pt-nav"></div>
   <section class="page-hero">
     <span class="tag">2026 Awards</span>
-    <h1>Award Categories</h1>
+    <h2>Award Categories</h2>
     <p>Ten prestigious categories celebrating the very best of North East high street life. Nominations are free and open to all.</p>
     <button class="btn btn-primary" onclick="openNominateModal()">Nominate Now — It's Free</button>
   </section>
@@ -1049,7 +1051,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved. <a href="/privacy-policy" style="color:var(--muted);text-decoration:underline">Privacy Policy</a></p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1058,7 +1060,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   <div class="pt-nav"></div>
   <section class="page-hero">
     <span class="tag">Vote For Your Hero</span>
-    <h1>Cast Your Vote for 2026</h1>
+    <h2>Cast Your Vote for 2026</h2>
     <p>Voting is open to everyone across the North East. Show your support for the people and businesses who make your community extraordinary.</p>
     <button class="btn btn-primary" onclick="document.getElementById('voteForm').scrollIntoView({behavior:'smooth'})">Vote Now — It's Free</button>
   </section>
@@ -1131,7 +1133,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved. <a href="/privacy-policy" style="color:var(--muted);text-decoration:underline">Privacy Policy</a></p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1140,7 +1142,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
   <div class="pt-nav"></div>
   <section class="page-hero">
     <span class="tag">Get In Touch</span>
-    <h1>Contact Us</h1>
+    <h2>Contact Us</h2>
     <p>Want to partner, nominate, or learn more? We'd love to hear from you.</p>
   </section>
   <section class="contact-main">
@@ -1188,7 +1190,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       </div>
     </div>
     <div class="contact-img-wrap">
-      <img src="images/img-angel-north.jpg" alt="Angel of the North at sunset" loading="lazy"/>
+      <img src="images/img-angel-north.jpg" alt="Angel of the North at sunset" width="1184" height="864" loading="lazy"/>
     </div>
   </section>
   <section class="regions">
@@ -1205,7 +1207,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved. <a href="/privacy-policy" style="color:var(--muted);text-decoration:underline">Privacy Policy</a></p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1223,6 +1225,15 @@ const pageTitles={
   'contact':'Contact | NE High Street Heroes Awards 2026',
   'sponsor':'Become a Category Sponsor | NE High Street Heroes Awards 2026'
 };
+const pageDescriptions={
+  'home':'Celebrating outstanding businesses and individuals revitalising high streets across the North East. Free to nominate. Gala Night 1st Sept 2026, Hippodrome, Darlington.',
+  'categories':'Explore all 10 award categories for the NE High Street Heroes Awards 2026, from Retailer of the Year to High Street of the Year. Free to nominate.',
+  'vote':'Cast your vote for the NE High Street Heroes Awards 2026. Support your favourite North East business or individual across 10 categories.',
+  'about':'Learn about the NE High Street Heroes Awards, a First Connections initiative celebrating the best of North East high streets in 2026.',
+  'brand-kit':'Download official brand assets for the NE High Street Heroes Awards 2026 — logos, posters, social graphics and more.',
+  'contact':'Get in touch with the NE High Street Heroes Awards team for sponsorship, media enquiries, or general questions.',
+  'sponsor':'Become a category sponsor for the NE High Street Heroes Awards 2026. Support North East high streets and gain regional brand exposure.'
+};
 function pageToPath(id){return id==='home'?'/':'/'+id;}
 function pathToPage(path){
   const seg=(path||'/').replace(/^\/+|\/+$/g,'').toLowerCase();
@@ -1238,6 +1249,8 @@ function showPage(id,updateHistory){
     if(mb)mb.classList.toggle('active',p===id);
   });
   if(pageTitles[id])document.title=pageTitles[id];
+  const metaDesc=document.querySelector('meta[name="description"]');
+  if(metaDesc&&pageDescriptions[id])metaDesc.setAttribute('content',pageDescriptions[id]);
   if(updateHistory!==false){
     const path=pageToPath(id);
     if(location.pathname!==path)history.pushState({page:id},'',path);
@@ -1465,6 +1478,7 @@ function openNominateModal(){
   modalPreviousFocus=document.activeElement;
   modal.classList.add('open');
   modal.setAttribute('aria-hidden','false');
+  modal.removeAttribute('inert');
   document.body.style.overflow='hidden';
   const firstInput=modal.querySelector('input,select,textarea,button.modal-close');
   if(firstInput) setTimeout(()=>firstInput.focus(),50);
@@ -1474,6 +1488,7 @@ function closeModal(){
   if(!modal.classList.contains('open')) return;
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden','true');
+  modal.setAttribute('inert','');
   document.body.style.overflow='';
   if(modalPreviousFocus && typeof modalPreviousFocus.focus==='function') modalPreviousFocus.focus();
   modalPreviousFocus=null;
@@ -1747,7 +1762,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
   <!-- Hero -->
   <section class="about-page-hero">
     <span class="tag">Our Story &amp; Purpose</span>
-    <h1>About the <em>Awards</em></h1>
+    <h2>About the <em>Awards</em></h2>
     <p>A regional recognition campaign celebrating the businesses, people, and organisations making a meaningful difference to North East high streets and town centres.</p>
     <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
       <button class="btn btn-primary" onclick="openNominateModal()">Nominate Now</button>
@@ -1848,7 +1863,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved. <a href="/privacy-policy" style="color:var(--muted);text-decoration:underline">Privacy Policy</a></p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1857,7 +1872,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
   <div class="pt-nav"></div>
   <section class="page-hero">
     <span class="tag">Press &amp; Media</span>
-    <h1>Brand Kit</h1>
+    <h2>Brand Kit</h2>
     <p>Download official NE High Street Heroes logos, campaign posters, social graphics, award badges, photography, and partner marks. Every asset is available as a high-quality <strong>PNG</strong> or print-ready <strong>PDF</strong> — free for press, partners, and nominees to use.</p>
     <button class="btn btn-primary" onclick="showPage('contact')">Need Something Else? Get In Touch</button>
   </section>
@@ -1880,7 +1895,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved. <a href="/privacy-policy" style="color:var(--muted);text-decoration:underline">Privacy Policy</a></p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
@@ -1889,7 +1904,7 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
   <div class="pt-nav"></div>
   <section class="page-hero">
     <span class="tag">Partner With Us</span>
-    <h1>Become a <span class="c-pink">Category Sponsor</span></h1>
+    <h2>Become a <span class="c-pink">Category Sponsor</span></h2>
     <p>Put your brand at the heart of the North East's biggest celebration of high street business. Sponsoring an award category is one of the most powerful ways to reach engaged local customers, decision-makers and community leaders across the region.</p>
     <button class="btn btn-primary" onclick="document.getElementById('sponsorForm').scrollIntoView({behavior:'smooth'})">Sponsor a Category</button>
   </section>
@@ -1979,13 +1994,13 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
       <div class="footer-col"><h4>Take Part</h4><ul><li><a href="#nominate" onclick="event.preventDefault();openNominateModal()">Nominate Now</a></li><li><a href="/vote" onclick="event.preventDefault();showPage('vote')" class="hl">Vote For Your Hero</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Become a Sponsor</a></li><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Media Enquiries</a></li></ul></div>
       <div class="footer-col"><h4>Contact</h4><ul><li><a href="/contact" onclick="event.preventDefault();showPage('contact')">Send a Message</a></li><li><a href="/categories" onclick="event.preventDefault();showPage('categories')">All Categories</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved.</p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
+    <div class="footer-bottom"><p>© 2026 NE High Street Heroes Awards. A First Connections Initiative. All rights reserved. <a href="/privacy-policy" style="color:var(--muted);text-decoration:underline">Privacy Policy</a></p><span>Built with <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-heart"/></svg> for the North East</span></div>
   </footer>
 </section>
 
 
 <!-- NOMINATION MODAL -->
-<div class="modal-overlay" id="nominateModal" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true" aria-labelledby="nominateModalTitle" aria-hidden="true">
+<div class="modal-overlay" id="nominateModal" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true" aria-labelledby="nominateModalTitle" aria-hidden="true" inert>
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal()" aria-label="Close"><svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-x"/></svg></button>
     <span class="tag">Free to Nominate</span>
