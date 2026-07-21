@@ -294,7 +294,7 @@ nav ul li a.active{color:#fff;border-bottom-color:var(--pink)}
 .marquee-track{display:flex;width:max-content;animation:marquee 25s linear infinite}
 .marquee-track:hover{animation-play-state:paused}
 .marquee-item{white-space:nowrap;font-size:.72rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;padding:0 2.5rem;color:#fff;opacity:.95}
-.marquee-item::before{content:'<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg> '}
+.marquee-item::before{content:'';display:inline-block;width:.75em;height:.75em;margin-right:.5em;vertical-align:-.05em;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z'/><path d='M20 2v4'/><path d='M22 4h-4'/><circle cx='4' cy='20' r='2'/></svg>");background-repeat:no-repeat;background-size:contain}
 @keyframes marquee{to{transform:translateX(-50%)}}
 
 /* ABOUT */
@@ -394,7 +394,7 @@ nav ul li a.active{color:#fff;border-bottom-color:var(--pink)}
 .cat-criteria-label{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin-bottom:.7rem}
 .cat-criteria ul{list-style:none;display:flex;flex-direction:column;gap:.4rem}
 .cat-criteria ul li{font-size:.8rem;color:#8fa8be;padding-left:1.3rem;position:relative;line-height:1.5}
-.cat-criteria ul li::before{content:'<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-check"/></svg>';position:absolute;left:0;color:var(--orange);font-weight:700;font-size:.75rem}
+.cat-criteria ul li::before{content:'';position:absolute;left:0;top:.4em;width:.9em;height:.9em;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5a623' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>");background-repeat:no-repeat;background-size:contain}
 @media(max-width:1000px){.cats-grid-inner{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.cats-grid-inner{grid-template-columns:1fr}}
 /* BRAND KIT */
@@ -547,7 +547,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .about-purpose p{color:#8fa8be;font-size:1rem;line-height:1.85;margin-bottom:1.2rem}
 .purpose-list{list-style:none;display:flex;flex-direction:column;gap:.8rem;margin-top:1rem}
 .purpose-list li{display:flex;align-items:flex-start;gap:.9rem;color:#cdd8e8;font-size:.95rem;line-height:1.6}
-.purpose-list li::before{content:'<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg>';color:var(--pink);font-size:.8rem;margin-top:.2rem;flex-shrink:0}
+.purpose-list li::before{content:'';display:inline-block;width:.9em;height:.9em;margin-top:.35em;flex-shrink:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f472b6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z'/><path d='M20 2v4'/><path d='M22 4h-4'/><circle cx='4' cy='20' r='2'/></svg>");background-repeat:no-repeat;background-size:contain}
 @media(max-width:900px){.about-purpose-inner{grid-template-columns:1fr;gap:3rem}}
 
 /* NARRATIVE SECTION */
@@ -1321,9 +1321,10 @@ async function submitMailto(e, formId, successId) {
   if(category)    extra.CATEGORY      = category;
   if(enquiryType) extra.ENQUIRY_TYPE  = enquiryType;
 
-  // Disable submit button
+  // Disable submit button — capture innerHTML so the icon sprite <svg> is
+  // preserved when we restore the label after the request settles.
   const submitBtn = form.querySelector('[type="submit"]');
-  const originalText = submitBtn.textContent;
+  const originalHtml = submitBtn.innerHTML;
   submitBtn.textContent = 'Sending…';
   submitBtn.disabled = true;
 
@@ -1356,7 +1357,7 @@ async function submitMailto(e, formId, successId) {
     const errorEl = document.getElementById(errorId);
     if(errorEl){ errorEl.style.display='block'; }
   } finally {
-    submitBtn.textContent = originalText;
+    submitBtn.innerHTML = originalHtml;
     submitBtn.disabled = false;
   }
 }
@@ -1373,7 +1374,7 @@ async function startSponsorCheckout(){
   if(!valid) return;
 
   const btn = document.getElementById('sponsorPayBtn');
-  const original = btn.textContent;
+  const originalHtml = btn.innerHTML;
   btn.textContent = 'Redirecting to secure checkout…';
   btn.disabled = true;
   ['sponsorError','sponsorPaid','sponsorCancelled','sponsorSuccess'].forEach(id=>{
@@ -1396,8 +1397,12 @@ async function startSponsorCheckout(){
   }catch(err){
     console.error('Sponsor checkout error:', err);
     const el = document.getElementById('sponsorError');
-    if(el){ el.textContent='<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-circle-x"/></svg> '+(err.message||'Something went wrong starting checkout.')+' You can also register your interest below and we’ll be in touch.'; el.style.display='block'; }
-    btn.textContent = original;
+    if(el){
+      const safeMsg=(err.message||'Something went wrong starting checkout.').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      el.innerHTML='<svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-circle-x"/></svg> '+safeMsg+' You can also register your interest below and we’ll be in touch.';
+      el.style.display='block';
+    }
+    btn.innerHTML = originalHtml;
     btn.disabled = false;
     loadSponsorCategories(); // refresh in case the category was just taken (409)
   }
@@ -1437,7 +1442,7 @@ async function loadSponsorCategories(){
   }
   if(pay){
     if(available===0){ pay.disabled=true; pay.textContent='All categories sponsored'; }
-    else if(/All categories/.test(pay.textContent)){ pay.disabled=false; pay.textContent='Pay & Sponsor Now — £500 + VAT <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg>'; }
+    else if(/All categories/.test(pay.textContent)){ pay.disabled=false; pay.innerHTML='Pay &amp; Sponsor Now — £500 + VAT <svg class="i" width="1em" height="1em" aria-hidden="true"><use href="#i-sparkles"/></svg>'; }
   }
 }
 
