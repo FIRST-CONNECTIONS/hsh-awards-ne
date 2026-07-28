@@ -1,0 +1,12 @@
+# Prerendered route pages — generated from index.html by prerender.js at build
+# time. Edit index.html (and its pageTitles/pageDescriptions maps) instead.
+/categories.html
+/vote.html
+/about.html
+/brand-kit.html
+/contact.html
+/sponsor.html
+
+node_modules/
+.netlify/
+.DS_Store

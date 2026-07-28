@@ -11,7 +11,7 @@ exports.handler = async function (event) {
 
   // CORS headers — restrict to your domain in production
   const headers = {
-    'Access-Control-Allow-Origin': 'https://www.ne-hsh-awards.co.uk',
+    'Access-Control-Allow-Origin': 'https://ne-hsh-awards.co.uk',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json',
   };
@@ -23,7 +23,14 @@ exports.handler = async function (event) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const { type, email, firstName, lastName, extraAttrs, emailSubject, emailHtml } = body;
+  const { type, email, firstName, lastName, extraAttrs, emailSubject, emailHtml, honeypot } = body;
+
+  // Spam honeypot. Report success rather than an error so a bot gets no signal
+  // that it was caught and doesn't retry with the field left blank.
+  if (typeof honeypot === 'string' && honeypot.trim() !== '') {
+    console.warn('send-form: discarded submission that filled the honeypot');
+    return { statusCode: 200, headers, body: JSON.stringify({ success: true, results: {} }) };
+  }
 
   const BREVO_KEY = process.env.BREVO_API_KEY;
   if (!BREVO_KEY) {
