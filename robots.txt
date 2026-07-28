@@ -1,5 +1,5 @@
 # robots.txt — NE High Street Heroes Awards
-# https://www.ne-hsh-awards.co.uk
+# https://ne-hsh-awards.co.uk
 
 # ── Standard search engines ──────────────────────────────────────────
 User-agent: Googlebot
@@ -51,4 +51,4 @@ Disallow: /sponsor
 Crawl-delay: 2
 
 # ── Sitemap ──────────────────────────────────────────────────────────
-Sitemap: https://www.ne-hsh-awards.co.uk/sitemap.xml
+Sitemap: https://ne-hsh-awards.co.uk/sitemap.xml
