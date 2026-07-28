@@ -11,29 +11,117 @@
     <meta name="robots" content="index, follow" />
     <link
       rel="canonical"
-      href="https://www.ne-hsh-awards.co.uk/privacy-policy"
+      href="https://ne-hsh-awards.co.uk/privacy-policy"
     />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="NE High Street Heroes Awards" />
+    <meta
+      property="og:title"
+      content="Privacy Policy | NE High Street Heroes Awards 2026"
+    />
+    <meta
+      property="og:description"
+      content="How the NE High Street Heroes Awards collects, uses, stores and protects the personal data you submit through nomination, voting and contact forms."
+    />
+    <meta
+      property="og:url"
+      content="https://ne-hsh-awards.co.uk/privacy-policy"
+    />
+    <meta
+      property="og:image"
+      content="https://ne-hsh-awards.co.uk/images/img-angel-north.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Privacy Policy | NE High Street Heroes Awards 2026"
+    />
+    <meta
+      name="twitter:description"
+      content="How the NE High Street Heroes Awards collects, uses, stores and protects your personal data."
+    />
+    <meta
+      name="twitter:image"
+      content="https://ne-hsh-awards.co.uk/images/img-angel-north.jpg"
+    />
+
     <link rel="icon" type="image/png" href="images/hsh-awards-fav-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media = 'all'"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/dm-sans-latin.woff2"
+      crossorigin
     />
-    <noscript
-      ><link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    /></noscript>
     <style>
+      /* Self-hosted variable fonts — see /fonts */
+      @font-face {
+        font-family: "DM Sans";
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: swap;
+        src: url(/fonts/dm-sans-latin.woff2) format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+          U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: swap;
+        src: url(/fonts/dm-sans-latin-ext.woff2) format("woff2");
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+          U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+          U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+          U+A720-A7FF;
+      }
+      @font-face {
+        font-family: "Playfair Display";
+        font-style: normal;
+        font-weight: 700 900;
+        font-display: swap;
+        src: url(/fonts/playfair-display-latin.woff2) format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+          U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Playfair Display";
+        font-style: normal;
+        font-weight: 700 900;
+        font-display: swap;
+        src: url(/fonts/playfair-display-latin-ext.woff2) format("woff2");
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+          U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+          U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+          U+A720-A7FF;
+      }
+
       *,
       *::before,
       *::after {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+      }
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--pink);
+        color: #070d18;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0 0 8px 0;
+        font-weight: 700;
+        z-index: 100;
+      }
+      .skip-link:focus {
+        left: 0;
       }
       :root {
         --navy: #070d18;
@@ -94,7 +182,8 @@
     </style>
   </head>
   <body>
-    <div class="wrap">
+    <a href="#content" class="skip-link">Skip to main content</a>
+    <main class="wrap" id="content">
       <a href="/" class="back">← Back to NE High Street Heroes Awards</a>
       <h1>Privacy Policy</h1>
       <p class="last-updated">Last updated: July 2026</p>
@@ -104,7 +193,7 @@
         ("<strong>we</strong>", "<strong>us</strong>", "<strong>our</strong>"),
         operated by First Connections, collects, uses and protects personal data
         submitted through
-        <a href="https://www.ne-hsh-awards.co.uk">ne-hsh-awards.co.uk</a>.
+        <a href="https://ne-hsh-awards.co.uk">ne-hsh-awards.co.uk</a>.
       </p>
 
       <h2>1. Data We Collect</h2>
@@ -130,8 +219,10 @@
         </li>
       </ul>
       <p>
-        We do not use cookies, analytics scripts, or any third-party tracking on
-        this website beyond Google Fonts (a webfont delivery service).
+        This site sets no cookies and runs no analytics or third-party tracking
+        scripts. Typefaces are served from our own domain rather than an
+        external font provider, so loading a page does not disclose your visit
+        to anyone else.
       </p>
 
       <h2>2. How We Use Your Data</h2>
@@ -139,29 +230,79 @@
         <li>To process nominations and votes for the 2026 awards.</li>
         <li>To respond to your enquiries.</li>
         <li>To contact you about the awards programme if you have opted in.</li>
+        <li>
+          To take payment where you have purchased a sponsorship package or
+          event tickets.
+        </li>
       </ul>
       <p>
-        We will not sell, rent, or share your personal data with third parties
-        for marketing purposes.
+        We will not sell, rent, or share what you submit with third parties for
+        marketing purposes.
       </p>
 
-      <h2>3. Data Retention</h2>
+      <h2>3. Our Lawful Basis</h2>
       <p>
-        Personal data submitted through forms is retained for the duration of
-        the awards programme (until December 2026) and then securely deleted,
-        unless you have consented to further contact.
+        Under UK GDPR we rely on <strong>legitimate interests</strong> to run
+        the nomination and voting process and to reply when you write to us;
+        on <strong>consent</strong> where you have opted in to hear from us
+        again, which you may withdraw at any time; and on
+        <strong>performance of a contract</strong> where you have bought a
+        sponsorship package or a ticket.
       </p>
 
-      <h2>4. Your Rights</h2>
+      <h2>4. Who Processes It On Our Behalf</h2>
+      <p>
+        We use a small number of sub-processors to operate this site. Each acts
+        only on our instructions and under a data-processing agreement:
+      </p>
+      <ul>
+        <li>
+          <strong>Netlify</strong> — website hosting and form delivery
+          (United States, under Standard Contractual Clauses).
+        </li>
+        <li>
+          <strong>Brevo</strong> — transactional email and mailing list
+          management (European Union).
+        </li>
+        <li>
+          <strong>Stripe</strong> — payment processing for sponsorship packages
+          and tickets. Card details go directly to Stripe and are never seen or
+          stored by us.
+        </li>
+      </ul>
+      <p>
+        We will update this list before adding any new sub-processor.
+      </p>
+
+      <h2>5. Retention</h2>
+      <p>
+        Everything submitted through the forms is kept for the duration of the
+        awards programme (until December 2026) and then securely deleted, unless
+        you have consented to further contact. Payment records are held for six
+        years to meet UK accounting requirements.
+      </p>
+
+      <h2>6. Your Rights</h2>
       <p>
         Under UK GDPR you have the right to access, correct, or request deletion
-        of your personal data. To exercise these rights, contact us at
+        of anything we hold about you, to object to or restrict our processing,
+        and to receive a portable copy. To exercise these rights, contact us at
         <a href="mailto:awards@first-connections.co.uk"
           >awards@first-connections.co.uk</a
-        >.
+        >. We will respond within one month.
       </p>
 
-      <h2>5. Contact</h2>
+      <h2>7. Complaints</h2>
+      <p>
+        If you are unhappy with how we have handled your information you may
+        complain to the Information Commissioner's Office at
+        <a href="https://ico.org.uk/make-a-complaint/"
+          >ico.org.uk/make-a-complaint</a
+        >, or by calling 0303 123 1113. We would appreciate the chance to put
+        things right first.
+      </p>
+
+      <h2>8. Contact</h2>
       <p>
         Data controller: First Connections<br />
         Email:
@@ -169,6 +310,6 @@
           >awards@first-connections.co.uk</a
         >
       </p>
-    </div>
+    </main>
   </body>
 </html>
