@@ -732,7 +732,6 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
 .who-card-icon{color:var(--pink)}
 
 /* Off-screen rather than display:none — some bots skip explicitly hidden fields */
-.hp-wrap{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden}
 
 /* The brand pink is only 2.3:1 on the cream/white panels. Scoped by section
    rather than by class because .tag is used on light and dark alike. */
@@ -1118,7 +1117,6 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
         <h2>Submit Your Vote</h2>
         <p>Fill in the details below and we'll count your vote. Completely free and only takes a moment.</p>
         <form id="voteForm" onsubmit="submitMailto(event,'voteForm','voteSuccess')" novalidate>
-          <div class="hp-wrap"><label for="hp-voteForm">Leave this field blank</label><input type="text" class="hp-field" id="hp-voteForm" name="website" tabindex="-1" autocomplete="off"/></div>
           <div class="form-group"><label for="v-name">Your Name</label><input id="v-name" type="text" placeholder="Your full name" required autocomplete="name"/></div>
           <div class="form-group"><label for="v-email">Your Email</label><input id="v-email" type="email" placeholder="your@email.co.uk" required autocomplete="email"/></div>
           <div class="form-group"><label for="v-nominee">Nominee Name / Business</label><input id="v-nominee" type="text" placeholder="Who are you nominating?" required/></div>
@@ -1188,7 +1186,6 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
         <h2>Send a Message</h2>
         <p>Fill in the form below and a member of our team will get back to you as soon as possible.</p>
         <form id="contactForm" onsubmit="submitMailto(event,'contactForm','contactSuccess')" novalidate>
-          <div class="hp-wrap"><label for="hp-contactForm">Leave this field blank</label><input type="text" class="hp-field" id="hp-contactForm" name="website" tabindex="-1" autocomplete="off"/></div>
           <div class="form-group"><label for="c-name">Your Name</label><input id="c-name" type="text" placeholder="Full name" required autocomplete="name"/></div>
           <div class="form-group"><label for="c-email">Email Address</label><input id="c-email" type="email" placeholder="your@email.co.uk" required autocomplete="email"/></div>
           <div class="form-group"><label for="c-org">Organisation / Business <span style="font-weight:400;color:#999">(optional)</span></label><input id="c-org" type="text" placeholder="Your business name" autocomplete="organization"/></div>
@@ -1336,7 +1333,7 @@ async function submitMailto(e, formId, successId) {
   if(!valid) return;
 
   // Gather field values
-  const fields = form.querySelectorAll('input:not([type=hidden]):not([type=submit]):not(.hp-field), select, textarea');
+  const fields = form.querySelectorAll('input:not([type=hidden]):not([type=submit]), select, textarea');
   let htmlBody = '<table style="font-family:sans-serif;font-size:15px;border-collapse:collapse;width:100%">';
   let email = '', fullName = '', nominee = '', category = '', enquiryType = '';
   fields.forEach(field => {
@@ -1375,7 +1372,6 @@ async function submitMailto(e, formId, successId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         type: 'both',
-        honeypot: form.querySelector('.hp-field')?.value || '',
         email,
         firstName,
         lastName,
@@ -1977,7 +1973,6 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
         <h2>Sponsor a Category</h2>
         <p>Choose your category below. Pay securely online to lock it in instantly, or register your interest and our team will be in touch.</p>
         <form id="sponsorForm" onsubmit="submitMailto(event,'sponsorForm','sponsorSuccess')" novalidate>
-          <div class="hp-wrap"><label for="hp-sponsorForm">Leave this field blank</label><input type="text" class="hp-field" id="hp-sponsorForm" name="website" tabindex="-1" autocomplete="off"/></div>
           <div class="form-group"><label for="s-business">Business / Organisation</label><input id="s-business" type="text" placeholder="Your business name" required autocomplete="organization"/></div>
           <div class="form-group"><label for="s-name">Contact Name</label><input id="s-name" type="text" placeholder="Your full name" required autocomplete="name"/></div>
           <div class="form-group"><label for="s-email">Email Address</label><input id="s-email" type="email" placeholder="your@email.co.uk" required autocomplete="email"/></div>
@@ -2034,7 +2029,6 @@ document.addEventListener('DOMContentLoaded',function(){bkInitRouting();bkSponso
     <h2 id="nominateModalTitle">Nominate Your Hero</h2>
     <p class="modal-sub">Tell us about an outstanding business or individual on the North East high street. Takes less than two minutes.</p>
     <form id="nominateForm" onsubmit="submitMailto(event,'nominateForm','nominateSuccess')" novalidate>
-          <div class="hp-wrap"><label for="hp-nominateForm">Leave this field blank</label><input type="text" class="hp-field" id="hp-nominateForm" name="website" tabindex="-1" autocomplete="off"/></div>
       <div class="form-group"><label for="n-name">Your Name</label><input id="n-name" type="text" placeholder="Your full name" required autocomplete="name"/></div>
       <div class="form-group"><label for="n-email">Your Email</label><input id="n-email" type="email" placeholder="your@email.co.uk" required autocomplete="email"/></div>
       <div class="form-group"><label for="n-nominee">Nominee Name / Business</label><input id="n-nominee" type="text" placeholder="Who are you nominating?" required/></div>
