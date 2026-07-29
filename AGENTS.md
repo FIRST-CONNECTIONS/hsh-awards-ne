@@ -42,6 +42,20 @@ No framework, no package.json, no test suite.
   check the Netlify function logs — the actual Brevo error message will be
   there. The function fails loud on purpose; the previous silent-success
   behaviour hid real problems (unverified sender, expired API key, etc.).
+- **When Brevo returns 2xx but nothing shows up in the awards inbox**, the
+  failure is at delivery time (spam, DMARC quarantine, self-send drop), not
+  send time. Hit `/.netlify/functions/brevo-diag?token=<BREVO_DIAG_TOKEN>`
+  from a browser — it asks Brevo directly which senders are verified, which
+  domains have DKIM/SPF, and what happened to recent sends
+  (`delivered`/`bounced`/`spam`/`blocked`). The endpoint refuses to respond
+  unless `BREVO_DIAG_TOKEN` is set in Netlify env vars.
+- **Sender identity** for outbound mail is `SENDER_EMAIL` + `SENDER_NAME`
+  env vars, falling back to `awards@first-connections.co.uk` /
+  `HSH Awards Website`. Point `SENDER_EMAIL` at whichever address is
+  verified as a sender in Brevo *and* whose domain is DKIM/SPF authenticated
+  there — typically a distinct address (e.g. `no-reply@ne-hsh-awards.co.uk`)
+  rather than the awards inbox itself, because From = To trips anti-spoofing
+  filters at Google Workspace and Microsoft 365.
 - **Colour contrast**: the brand pink only reaches 2.3:1 on the cream and white
   panels, so those sections use `--pink-ink`. Keep the bright `--pink` for dark
   sections only.
