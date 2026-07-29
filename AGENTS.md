@@ -36,9 +36,12 @@ No framework, no package.json, no test suite.
   Google Fonts link back without updating the policy in `netlify.toml`.
 - **Both families are variable fonts**, so one `@font-face` per style covers the
   whole weight range — there is no per-weight file.
-- **Forms carry a honeypot** (`.hp-field`, name `website`). It is excluded from
-  the field sweep in `submitMailto()` and checked in
-  `netlify/functions/send-form.js`.
+- **Form submissions** POST to `netlify/functions/send-form`, which forwards
+  to Brevo. The function returns non-2xx on any Brevo failure and logs the
+  full response body via `console.error`, so if nominations stop arriving,
+  check the Netlify function logs — the actual Brevo error message will be
+  there. The function fails loud on purpose; the previous silent-success
+  behaviour hid real problems (unverified sender, expired API key, etc.).
 - **Colour contrast**: the brand pink only reaches 2.3:1 on the cream and white
   panels, so those sections use `--pink-ink`. Keep the bright `--pink` for dark
   sections only.

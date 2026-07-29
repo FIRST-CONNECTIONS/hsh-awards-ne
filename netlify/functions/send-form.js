@@ -1,15 +1,53 @@
 // netlify/functions/send-form.js
-// Serverless function — Brevo API key is stored as a Netlify environment variable
-// Set BREVO_API_KEY in Netlify → Site Settings → Environment Variables
+// Serverless function — Brevo API key is stored as a Netlify environment
+// variable. Set BREVO_API_KEY in Netlify → Site Settings → Environment Variables.
+//
+// This function is the ONLY path visitor form submissions travel through.
+// If it silently reports success while Brevo has rejected the send, users
+// get "Thank you!" but the awards inbox stays empty — which is exactly what
+// was happening before this rewrite. Every failure now:
+//   • reads Brevo's JSON error body (Brevo returns useful messages)
+//   • console.error's the details so they surface in Netlify function logs
+//   • returns a non-2xx response so the client shows the error banner
+//     rather than a false success
+
+const AWARDS_INBOX = 'awards@first-connections.co.uk';
+const BREVO_LIST_ID = 9;
+
+// Strip HTML from a string so user-supplied values can be safely inlined into
+// the plaintext email fallback.
+function stripTags(s) {
+  return String(s == null ? '' : s).replace(/<[^>]*>/g, '').trim();
+}
+
+// Convert the HTML table body into a plain-text alternative. Brevo (and every
+// deliverability score) prefers emails that provide both HTML and text parts.
+function htmlTableToText(html) {
+  if (!html) return '';
+  const rows = [...html.matchAll(/<tr[\s\S]*?<\/tr>/gi)].map(m => m[0]);
+  const lines = [];
+  for (const row of rows) {
+    const cells = [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map(m => stripTags(m[1]));
+    if (cells.length === 2) lines.push(`${cells[0]}: ${cells[1]}`);
+    else if (cells.length) lines.push(cells.join(' — '));
+  }
+  return lines.join('\n');
+}
+
+// Ask Brevo for its response body — parse JSON when possible so the log line
+// carries the structured { code, message } Brevo returns on error.
+async function readBrevoBody(res) {
+  const text = await res.text().catch(() => '');
+  if (!text) return null;
+  try { return JSON.parse(text); } catch { return text; }
+}
 
 exports.handler = async function (event) {
 
-  // Only allow POST
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
-  // CORS headers — restrict to your domain in production
   const headers = {
     'Access-Control-Allow-Origin': 'https://ne-hsh-awards.co.uk',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -27,31 +65,66 @@ exports.handler = async function (event) {
 
   const BREVO_KEY = process.env.BREVO_API_KEY;
   if (!BREVO_KEY) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'API key not configured' }) };
+    console.error('send-form: BREVO_API_KEY environment variable is not set');
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Email service is not configured. Please email awards@first-connections.co.uk directly.' }) };
   }
 
-  try {
-    const results = {};
+  // ── 1. Send transactional email — this is the primary path ─────────────
+  // If this fails we bail with a non-2xx so the visitor sees the error banner.
+  if (type === 'email' || type === 'both') {
+    const senderName = `${firstName || ''} ${lastName || ''}`.trim() || 'Website Visitor';
+    const replyToEmail = (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ? email : AWARDS_INBOX;
 
-    // ── 1. Send transactional email ──────────────────────────────────
-    if (type === 'email' || type === 'both') {
-      const emailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+    let emailRes;
+    try {
+      emailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'api-key': BREVO_KEY },
         body: JSON.stringify({
-          sender: { name: 'HSH Awards Website', email: 'awards@first-connections.co.uk' },
-          to: [{ email: 'awards@first-connections.co.uk', name: 'HSH Awards Team' }],
-          replyTo: { email: email || 'awards@first-connections.co.uk', name: `${firstName || ''} ${lastName || ''}`.trim() || 'Website Visitor' },
+          sender: { name: 'HSH Awards Website', email: AWARDS_INBOX },
+          to: [{ email: AWARDS_INBOX, name: 'HSH Awards Team' }],
+          replyTo: { email: replyToEmail, name: senderName },
           subject: emailSubject || 'New Submission — NE High Street Heroes 2026',
           htmlContent: emailHtml,
+          textContent: htmlTableToText(emailHtml) || 'A new submission was received via ne-hsh-awards.co.uk.',
         }),
       });
-
-      results.email = emailRes.ok ? 'sent' : `failed (${emailRes.status})`;
+    } catch (err) {
+      console.error('send-form: network error calling Brevo email API:', err);
+      return { statusCode: 502, headers, body: JSON.stringify({ error: 'Could not reach the email service. Please try again in a moment, or email awards@first-connections.co.uk.' }) };
     }
 
-    // ── 2. Add / update contact in Brevo CRM ─────────────────────────
-    if ((type === 'contact' || type === 'both') && email) {
+    if (!emailRes.ok) {
+      const errBody = await readBrevoBody(emailRes);
+      // Log everything the operator needs to diagnose — sender not verified,
+      // key revoked, attribute mismatch, whatever Brevo tells us.
+      console.error('send-form: Brevo email API rejected the send', {
+        status: emailRes.status,
+        brevo: errBody,
+        subject: emailSubject,
+        senderEmail: AWARDS_INBOX,
+        replyToEmail,
+      });
+      // Prefer Brevo's own message when it's short enough to show a human.
+      const brevoMsg = (errBody && typeof errBody === 'object' && errBody.message) ? errBody.message : null;
+      return {
+        statusCode: 502,
+        headers,
+        body: JSON.stringify({
+          error: 'The email could not be sent. Please email awards@first-connections.co.uk directly and we\'ll pick it up right away.',
+          brevoStatus: emailRes.status,
+          brevoMessage: brevoMsg,
+        }),
+      };
+    }
+  }
+
+  // ── 2. Best-effort: add / update the sender in the Brevo CRM ───────────
+  // A CRM sync failure must NOT hide the fact that the email got through, so
+  // this is a non-fatal step: we log but return success. The nomination has
+  // already reached the awards inbox by the time we get here.
+  if ((type === 'contact' || type === 'both') && email) {
+    try {
       const contactRes = await fetch('https://api.brevo.com/v3/contacts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'api-key': BREVO_KEY },
@@ -60,20 +133,25 @@ exports.handler = async function (event) {
           attributes: {
             FIRSTNAME: firstName || '',
             LASTNAME: lastName || '',
-            ...extraAttrs,
+            ...(extraAttrs || {}),
           },
-          listIds: [9],
+          listIds: [BREVO_LIST_ID],
           updateEnabled: true,
         }),
       });
-
-      results.contact = contactRes.ok ? 'added' : `failed (${contactRes.status})`;
+      if (!contactRes.ok) {
+        const errBody = await readBrevoBody(contactRes);
+        console.error('send-form: Brevo contact-add failed (non-fatal)', {
+          status: contactRes.status,
+          brevo: errBody,
+          email,
+          listId: BREVO_LIST_ID,
+        });
+      }
+    } catch (err) {
+      console.error('send-form: network error calling Brevo contacts API (non-fatal):', err);
     }
-
-    return { statusCode: 200, headers, body: JSON.stringify({ success: true, results }) };
-
-  } catch (err) {
-    console.error('Brevo function error:', err);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
   }
+
+  return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
 };
