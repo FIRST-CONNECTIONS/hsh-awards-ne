@@ -21,6 +21,10 @@
   --danger:#dc2626;
 }
 *{box-sizing:border-box}
+/* The HTML `hidden` attribute must always win — otherwise a class rule
+   like `.login { display: grid }` beats it on specificity ties and the
+   element keeps rendering when JS toggles `.hidden = true`. */
+[hidden]{display:none!important}
 html,body{margin:0;padding:0;background:var(--navy);color:#fff;font-family:system-ui,-apple-system,'DM Sans','Segoe UI',sans-serif;line-height:1.55}
 a{color:var(--pink)}
 button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
