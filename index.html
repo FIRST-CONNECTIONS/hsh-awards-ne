@@ -1332,14 +1332,17 @@ async function submitMailto(e, formId, successId) {
   });
   if(!valid) return;
 
-  // Gather field values
+  // Gather field values. User-supplied strings are HTML-escaped before being
+  // interpolated into the email body so a nominee's name that happens to look
+  // like markup can't inject anything into our inbox rendering.
+  const escapeHtml = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fields = form.querySelectorAll('input:not([type=hidden]):not([type=submit]), select, textarea');
   let htmlBody = '<table style="font-family:sans-serif;font-size:15px;border-collapse:collapse;width:100%">';
   let email = '', fullName = '', nominee = '', category = '', enquiryType = '';
   fields.forEach(field => {
     const label = field.closest('.form-group')?.querySelector('label')?.textContent?.trim() || field.id;
     const val = field.value || '—';
-    htmlBody += `<tr><td style="padding:8px 12px;font-weight:700;background:#f5f5f5;border:1px solid #ddd;width:35%">${label}</td><td style="padding:8px 12px;border:1px solid #ddd">${val}</td></tr>`;
+    htmlBody += `<tr><td style="padding:8px 12px;font-weight:700;background:#f5f5f5;border:1px solid #ddd;width:35%">${escapeHtml(label)}</td><td style="padding:8px 12px;border:1px solid #ddd;white-space:pre-wrap">${escapeHtml(val)}</td></tr>`;
     const id = field.id;
     if(id==='v-email'||id==='c-email'||id==='n-email'||id==='s-email') email = field.value.trim();
     if(id==='v-name'||id==='c-name'||id==='n-name'||id==='s-name') fullName = field.value.trim();
@@ -1381,7 +1384,13 @@ async function submitMailto(e, formId, successId) {
       })
     });
 
-    if(!res.ok) throw new Error('Function returned ' + res.status);
+    if(!res.ok){
+      // Prefer the server's error text so misconfigurations surface (Brevo
+      // rejection, missing API key) instead of the previous generic banner.
+      const detail = await res.json().catch(()=>({}));
+      const msg = detail.brevoMessage || detail.error || ('Function returned '+res.status);
+      throw new Error(msg);
+    }
 
     // Show success
     const successEl = document.getElementById(successId);
