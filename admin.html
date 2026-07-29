@@ -8,22 +8,21 @@
 <title>Admin · NE High Street Heroes Awards</title>
 <style>
 /* ══════════════════════════════════════════════════════════════════════
- *  Admin dashboard shell
+ *  Admin dashboard v2
  *  ────────────────────────────────────────────────────────────────────
- *  Two "screens" (auth / app) with only one active at a time, and inside
- *  the app shell any number of swappable "views" driven by the URL hash
- *  (#/overview, #/nominations …). Add another view by:
- *    1. dropping a <section class="view" id="view-foo"> in the shell
- *    2. adding a <button class="nav-item" data-view="foo"> to the sidebar
- *    3. handling renderFoo() in the router (see the switch below)
+ *  Two screens (auth / app). Class-based visibility only — never fights
+ *  the [hidden] attribute. Inside the app shell, views are swapped by
+ *  URL hash (#/overview, #/nominations, #/categories …).
+ *
+ *  Adding a new view later:
+ *    1. Drop <section class="view" id="view-foo">…</section>
+ *    2. Add <button class="nav-item" data-view="foo">Foo</button>
+ *    3. Register a renderer in the VIEW_RENDERERS map at the bottom
  * ══════════════════════════════════════════════════════════════════════ */
 
 *{box-sizing:border-box;margin:0;padding:0}
-/* Class-based visibility — never fight the [hidden] attribute again. */
-.screen{display:none}
-.screen.active{display:block}
-.view{display:none}
-.view.active{display:block}
+/* Universal visibility system — one rule, no specificity traps. */
+[data-visible="false"]{display:none!important}
 
 :root{
   --navy:#070d18;
@@ -41,7 +40,9 @@
   --border-hi:#2a3a52;
   --danger:#dc2626;
   --success:#22c55e;
+  --warn:#f59e0b;
   --sidebar-w:240px;
+  --radius:14px;
 }
 
 html,body{background:var(--navy);color:#fff;font-family:system-ui,-apple-system,'DM Sans','Segoe UI',sans-serif;line-height:1.5;min-height:100vh}
@@ -57,15 +58,20 @@ input,select{font:inherit;color:inherit}
 .btn-outline:hover{border-color:var(--pink);color:#fff;background:rgba(244,114,182,.08)}
 .btn-ghost{color:var(--muted)}
 .btn-ghost:hover{color:#fff}
+.btn-sm{padding:.4rem .7rem;font-size:.78rem;border-radius:8px}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Icon buttons (used for copy-email etc.) — svg-free, single glyph */
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:6px;font-size:.9rem;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--border);transition:all .15s}
+.icon-btn:hover{color:#fff;background:rgba(244,114,182,.12);border-color:rgba(244,114,182,.35)}
 
 /* ══════════════════════════════════════════════════════════════════════
  *  AUTH SCREEN
  * ══════════════════════════════════════════════════════════════════════ */
-#screen-auth.active{display:grid;place-items:center;min-height:100vh;padding:1.5rem;background:radial-gradient(ellipse at top,rgba(244,114,182,.08),transparent 55%),var(--navy)}
+#screen-auth{display:grid;place-items:center;min-height:100vh;padding:1.5rem;background:radial-gradient(ellipse at top,rgba(244,114,182,.08),transparent 55%),var(--navy)}
 .auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;max-width:400px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.4)}
 .auth-brand{display:flex;align-items:center;gap:.65rem;margin-bottom:1.5rem}
-.brand-mark{width:38px;height:38px;border-radius:9px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900}
+.brand-mark{width:38px;height:38px;border-radius:9px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;color:#fff}
 .brand-word{font-family:'Playfair Display',Georgia,serif;font-weight:800;font-size:1.05rem;letter-spacing:-.01em}
 .brand-word small{display:block;font-family:system-ui,sans-serif;font-weight:700;color:var(--muted);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;margin-top:.15rem}
 .auth-card h1{font-family:'Playfair Display',Georgia,serif;font-size:1.65rem;margin-bottom:.4rem;font-weight:800}
@@ -74,12 +80,14 @@ input,select{font:inherit;color:inherit}
 .field label{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .field input{padding:.85rem 1rem;border-radius:12px;border:1.5px solid var(--border);background:#0a121f;color:#fff;font-size:1rem;width:100%}
 .field input:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 4px rgba(244,114,182,.15)}
-.alert{background:rgba(220,38,38,.10);border:1px solid rgba(220,38,38,.35);color:#fca5a5;padding:.75rem .95rem;border-radius:10px;font-size:.85rem;margin-bottom:1rem}
+.alert{background:rgba(220,38,38,.10);border:1px solid rgba(220,38,38,.35);color:#fca5a5;padding:.75rem .95rem;border-radius:10px;font-size:.85rem}
+.alert-warn{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.35);color:#fcd34d}
+.alert-warn strong{color:#fef3c7}
 
 /* ══════════════════════════════════════════════════════════════════════
- *  APP SHELL — sidebar + content
+ *  APP SHELL
  * ══════════════════════════════════════════════════════════════════════ */
-#screen-app.active{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
+#screen-app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh}
 
 /* Sidebar */
 .sidebar{background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
@@ -96,17 +104,16 @@ input,select{font:inherit;color:inherit}
 .sidebar-foot{padding:1rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:.4rem;font-size:.8rem;color:var(--muted)}
 .sidebar-foot .who{color:var(--muted-hi);font-weight:600}
 
-/* Mobile: sidebar becomes a drawer */
+/* Mobile drawer */
 .mobile-topbar{display:none}
 @media (max-width:820px){
-  #screen-app.active{grid-template-columns:1fr}
+  #screen-app{grid-template-columns:1fr}
   .sidebar{position:fixed;top:0;left:0;bottom:0;width:270px;transform:translateX(-100%);transition:transform .25s;z-index:60;box-shadow:0 0 40px rgba(0,0,0,.5)}
   .sidebar.open{transform:translateX(0)}
   .mobile-topbar{display:flex;align-items:center;gap:.75rem;padding:.9rem 1rem;background:var(--navy2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:40}
   .mobile-topbar .hamburger{width:38px;height:38px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid var(--border);display:inline-flex;flex-direction:column;justify-content:center;gap:4px;align-items:center;padding:0 10px}
   .mobile-topbar .hamburger span{display:block;width:16px;height:2px;background:#fff;border-radius:1px}
-  .backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50}
-  .backdrop.on{display:block}
+  .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50}
 }
 
 /* Content area */
@@ -131,29 +138,26 @@ input,select{font:inherit;color:inherit}
 .stat .lbl{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.4rem}
 .stat .sub{font-size:.78rem;color:var(--muted-hi);margin-top:.4rem}
 
-.loader{padding:2.5rem 1rem;text-align:center;color:var(--muted)}
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(244,114,182,.25);border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite;vertical-align:-.4em;margin-right:.5rem}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── Category grid ──────────────────────────────────────────────────── */
+/* Category grid + bars */
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.7rem}
-.cat-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.6rem;text-align:left;transition:border-color .2s,background .2s}
+.cat-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.6rem;text-align:left;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
 .cat-row:hover{border-color:rgba(244,114,182,.3);background:var(--card-hi)}
 .cat-row.zero{opacity:.55}
 .cat-row .name{font-size:.87rem;font-weight:600;color:#cdd8e8}
 .cat-row .count{font-weight:800;color:var(--pink);font-variant-numeric:tabular-nums}
+.cat-row .bar{position:absolute;left:0;bottom:0;height:3px;background:var(--grad);border-radius:0 3px 3px 0;transition:width .4s ease}
 .cat-row.selected{border-color:var(--pink);box-shadow:0 0 0 3px rgba(244,114,182,.14)}
 .cat-row.selected .name{color:#fff}
-.cat-row .bar{position:absolute;left:0;bottom:0;height:2px;background:var(--grad);border-radius:0 0 12px 12px}
 
-/* ── Filters ─────────────────────────────────────────────────────────── */
+/* Filters */
 .controls{display:flex;flex-wrap:wrap;gap:.65rem;align-items:center;margin-bottom:1rem}
 .controls input,.controls select{padding:.6rem .85rem;border-radius:10px;border:1px solid var(--border);background:#0a121f;color:#fff;font-size:.9rem;min-width:200px}
 .controls input:focus,.controls select:focus{outline:none;border-color:var(--pink)}
 .controls .spacer{flex:1;min-width:0}
-.controls .result-count{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.controls .result-count{color:var(--muted);font-size:.85rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+.kbd-hint{display:inline-flex;align-items:center;gap:.35rem;color:var(--muted);font-size:.7rem;background:rgba(255,255,255,.04);border:1px solid var(--border);padding:.15rem .45rem;border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 
-/* ── Table ──────────────────────────────────────────────────────────── */
+/* Table */
 .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
 .table-scroll{overflow-x:auto}
 .table{width:100%;border-collapse:collapse;font-size:.87rem;min-width:640px}
@@ -162,14 +166,30 @@ input,select{font:inherit;color:inherit}
 .table th .arrow{color:var(--pink);margin-left:.2rem;opacity:0}
 .table th.sort .arrow{opacity:1}
 .table td{padding:.85rem 1rem;border-bottom:1px solid var(--border);vertical-align:top}
+.table tbody tr{cursor:pointer;transition:background .1s}
 .table tr:last-child td{border-bottom:none}
 .table tr:hover td{background:rgba(244,114,182,.04)}
-.table .email{color:#cdd8e8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;word-break:break-all}
+.table .email{color:#cdd8e8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;word-break:break-all;display:flex;align-items:center;gap:.4rem}
 .table .cat-pill{display:inline-block;padding:.2rem .55rem;background:rgba(244,114,182,.14);border:1px solid rgba(244,114,182,.35);color:var(--pink);border-radius:14px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.table .cat-pill.empty{background:transparent;border:1px dashed var(--border);color:var(--muted)}
 .table .date{color:var(--muted);font-size:.8rem;white-space:nowrap;font-variant-numeric:tabular-nums}
 .empty{padding:2.5rem 1rem;text-align:center;color:var(--muted)}
+.empty h4{color:#cdd8e8;font-weight:700;margin-bottom:.35rem;font-size:.95rem}
 
-/* ── Recent activity list ──────────────────────────────────────────── */
+/* Skeleton loaders — mimic real layout during first fetch */
+.skeleton{display:inline-block;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.08),rgba(255,255,255,.04));background-size:200% 100%;border-radius:6px;animation:skeleton 1.4s ease-in-out infinite;color:transparent}
+@keyframes skeleton{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Pagination */
+.pager{display:flex;align-items:center;gap:.4rem;padding:.9rem 1rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted);flex-wrap:wrap}
+.pager .spacer{flex:1;min-width:0}
+.pager .page-btn{width:32px;height:32px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);color:var(--muted-hi);background:transparent;font-variant-numeric:tabular-nums;font-weight:700}
+.pager .page-btn:hover{border-color:var(--pink);color:#fff}
+.pager .page-btn.current{background:var(--pink);border-color:var(--pink);color:#fff}
+.pager .page-btn:disabled{opacity:.4;cursor:not-allowed}
+.pager select{padding:.35rem .5rem;border-radius:6px;border:1px solid var(--border);background:#0a121f;color:#fff;font-size:.78rem}
+
+/* Recent activity */
 .recent{display:flex;flex-direction:column;gap:.55rem}
 .recent-item{display:flex;align-items:center;gap:.85rem;padding:.7rem .95rem;background:var(--card);border:1px solid var(--border);border-radius:10px}
 .recent-item .who{flex:1;min-width:0}
@@ -177,7 +197,35 @@ input,select{font:inherit;color:inherit}
 .recent-item .who-mail{font-size:.75rem;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .recent-item .when{color:var(--muted);font-size:.76rem;white-space:nowrap;font-variant-numeric:tabular-nums}
 
-/* ── Toast ──────────────────────────────────────────────────────────── */
+/* Detail slide-over drawer */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,90vw);background:var(--card);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .25s;z-index:80;overflow-y:auto;box-shadow:-8px 0 40px rgba(0,0,0,.4)}
+.drawer.open{transform:translateX(0)}
+.drawer-head{padding:1.2rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.drawer-head h3{font-family:'Playfair Display',Georgia,serif;font-size:1.15rem;font-weight:800}
+.drawer-head .close{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted-hi);font-size:1rem;flex-shrink:0}
+.drawer-head .close:hover{background:rgba(244,114,182,.12);color:#fff;border-color:rgba(244,114,182,.35)}
+.drawer-body{padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:1rem}
+.detail-row{display:flex;flex-direction:column;gap:.25rem}
+.detail-row .k{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.detail-row .v{font-size:.92rem;color:#fff;word-break:break-word}
+.detail-row .v.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:#cdd8e8}
+.detail-row .v.muted{color:var(--muted-hi)}
+
+/* Mobile: cards instead of table under 640px */
+.card-list{display:none}
+@media (max-width:640px){
+  .table-wrap.mobile-cards .table-scroll{display:none}
+  .table-wrap.mobile-cards .card-list{display:flex;flex-direction:column;gap:.5rem;padding:.7rem}
+  .card-list .nom-card{background:#0a121f;border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;cursor:pointer;transition:border-color .15s}
+  .card-list .nom-card:hover{border-color:rgba(244,114,182,.35)}
+  .card-list .nc-top{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;margin-bottom:.35rem}
+  .card-list .nc-name{font-weight:700;font-size:.95rem}
+  .card-list .nc-when{color:var(--muted);font-size:.75rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .card-list .nc-mail{color:var(--muted-hi);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;word-break:break-all}
+  .card-list .nc-tail{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-top:.5rem}
+}
+
+/* Toast */
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.85rem 1.15rem;font-size:.85rem;box-shadow:0 12px 40px rgba(0,0,0,.5);transform:translateY(120%);transition:transform .3s;z-index:200;max-width:340px}
 .toast.on{transform:translateY(0)}
 .toast.err{border-color:rgba(220,38,38,.4);color:#fca5a5}
@@ -189,7 +237,7 @@ input,select{font:inherit;color:inherit}
 <!-- ══════════════════════════════════════════════════════════════════ -->
 <!--   AUTH SCREEN                                                       -->
 <!-- ══════════════════════════════════════════════════════════════════ -->
-<section class="screen" id="screen-auth">
+<section id="screen-auth" data-visible="true">
   <div class="auth-card">
     <div class="auth-brand">
       <span class="brand-mark">HSH</span>
@@ -197,7 +245,7 @@ input,select{font:inherit;color:inherit}
     </div>
     <h1>Sign in</h1>
     <p class="sub">Enter the admin password to open the dashboard.</p>
-    <div class="alert" id="loginErr" style="display:none"></div>
+    <div class="alert" id="loginErr" data-visible="false"></div>
     <form id="loginForm" novalidate>
       <div class="field">
         <label for="pw">Password</label>
@@ -209,11 +257,10 @@ input,select{font:inherit;color:inherit}
 </section>
 
 <!-- ══════════════════════════════════════════════════════════════════ -->
-<!--   APP SHELL (post-login)                                            -->
+<!--   APP SHELL                                                         -->
 <!-- ══════════════════════════════════════════════════════════════════ -->
-<section class="screen" id="screen-app">
+<section id="screen-app" data-visible="false">
 
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-head">
       <span class="brand-mark">HSH</span>
@@ -223,7 +270,7 @@ input,select{font:inherit;color:inherit}
       <div class="nav-section">Insights</div>
       <button class="nav-item" data-view="overview"><span class="dot"></span>Overview</button>
       <div class="nav-section">Data</div>
-      <button class="nav-item" data-view="nominations"><span class="dot"></span>Nominations<span class="badge" id="badgeNominations">0</span></button>
+      <button class="nav-item" data-view="nominations"><span class="dot"></span>Nominations<span class="badge" id="badgeNominations">—</span></button>
       <button class="nav-item" data-view="categories"><span class="dot"></span>Categories<span class="badge">10</span></button>
     </nav>
     <div class="sidebar-foot">
@@ -231,167 +278,149 @@ input,select{font:inherit;color:inherit}
       <button class="btn btn-ghost" id="logoutBtn" style="padding:.4rem 0;justify-content:flex-start">Log out</button>
     </div>
   </aside>
-  <div class="backdrop" id="backdrop"></div>
+  <div class="backdrop" id="backdrop" data-visible="false"></div>
 
-  <!-- Main content -->
   <main class="content">
     <div class="mobile-topbar">
       <button class="hamburger" id="menuBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
       <span class="brand-word" style="font-size:.9rem">Admin</span>
     </div>
 
-    <div id="loader" class="loader"><span class="spinner"></span>Loading nominations…</div>
+    <!-- Persistent error banner (shown on load failure) -->
+    <div class="alert" id="loadError" data-visible="false" style="margin-bottom:1rem"></div>
 
-    <div id="viewsRoot" style="display:none">
-
-      <!-- ── VIEW: Overview ─────────────────────────────────────────── -->
-      <section class="view" id="view-overview">
-        <div class="topbar">
-          <div>
-            <h1>Overview</h1>
-            <div class="subtitle">A snapshot of nominations captured to date.</div>
-          </div>
-          <div class="topbar-actions">
-            <button class="btn btn-outline" data-action="reload">Refresh</button>
-            <button class="btn btn-primary" data-action="export">Download CSV</button>
-          </div>
-        </div>
-
-        <div class="stats" id="overviewStats"></div>
-
-        <div class="section-title">Nominations by category<span class="caption">Click a category to jump to its nominations</span></div>
-        <div class="cat-grid" id="overviewCats"></div>
-
-        <div class="section-title">Recent activity<span class="caption">Latest 8 submissions</span></div>
-        <div class="recent" id="overviewRecent"></div>
-      </section>
-
-      <!-- ── VIEW: Nominations ──────────────────────────────────────── -->
-      <section class="view" id="view-nominations">
-        <div class="topbar">
-          <div>
-            <h1>Nominations</h1>
-            <div class="subtitle" id="nomSubtitle">All submissions captured via the nomination form.</div>
-          </div>
-          <div class="topbar-actions">
-            <button class="btn btn-outline" data-action="reload">Refresh</button>
-            <button class="btn btn-primary" data-action="export">Download CSV</button>
-          </div>
-        </div>
-
-        <div class="controls">
-          <input id="search" type="search" placeholder="Search nominator, nominee, email…"/>
-          <select id="catFilter">
-            <option value="">All categories</option>
-          </select>
-          <div class="spacer"></div>
-          <div class="result-count" id="resultCount"></div>
-        </div>
-
-        <div class="table-wrap">
-          <div class="table-scroll">
-            <table class="table" id="nomTable">
-              <thead>
-                <tr>
-                  <th data-sort="createdAt">Submitted<span class="arrow">↓</span></th>
-                  <th data-sort="firstName">Nominator<span class="arrow">↓</span></th>
-                  <th data-sort="email">Email<span class="arrow">↓</span></th>
-                  <th data-sort="nominee">Nominee<span class="arrow">↓</span></th>
-                  <th data-sort="category">Category<span class="arrow">↓</span></th>
-                </tr>
-              </thead>
-              <tbody id="tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── VIEW: Categories ───────────────────────────────────────── -->
-      <section class="view" id="view-categories">
-        <div class="topbar">
-          <div>
-            <h1>Categories</h1>
-            <div class="subtitle">All ten award categories and how many nominations each has received.</div>
-          </div>
-          <div class="topbar-actions">
-            <button class="btn btn-outline" data-action="reload">Refresh</button>
-          </div>
-        </div>
-        <div class="cat-grid" id="categoriesGrid"></div>
-      </section>
-
+    <!-- Data-quality warning (shown when Brevo custom attributes are missing) -->
+    <div class="alert alert-warn" id="dataWarn" data-visible="false" style="margin-bottom:1rem">
+      <strong>Heads-up:</strong> the Nominee and Category fields are empty on every record because those custom attributes aren't defined in the Brevo account yet. Set them up in <strong>Brevo → Contacts → Settings → Contact Attributes</strong> (name: <code>NOMINEE</code>, <code>CATEGORY</code>, <code>ENQUIRY_TYPE</code>, <code>SOURCE</code> — all text). Future submissions will then carry the values through. Historical data can't be back-filled from Brevo alone.
     </div>
+
+    <!-- ── VIEW: Overview ───────────────────────────────────────────── -->
+    <section class="view" id="view-overview" data-visible="false">
+      <div class="topbar">
+        <div>
+          <h1>Overview</h1>
+          <div class="subtitle">A snapshot of nominations captured to date.</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-outline" data-action="reload">Refresh</button>
+          <button class="btn btn-primary" data-action="export">Download CSV</button>
+        </div>
+      </div>
+
+      <div class="stats" id="overviewStats"></div>
+
+      <div class="section-title">Nominations by category<span class="caption">Click a category to filter the nominations list</span></div>
+      <div class="cat-grid" id="overviewCats"></div>
+
+      <div class="section-title">Recent activity<span class="caption">8 most-recent submissions</span></div>
+      <div class="recent" id="overviewRecent"></div>
+    </section>
+
+    <!-- ── VIEW: Nominations ────────────────────────────────────────── -->
+    <section class="view" id="view-nominations" data-visible="false">
+      <div class="topbar">
+        <div>
+          <h1>Nominations</h1>
+          <div class="subtitle" id="nomSubtitle">Loading…</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-outline" data-action="reload">Refresh</button>
+          <button class="btn btn-primary" data-action="export">Download CSV</button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <input id="search" type="search" placeholder="Search nominator, email…"/>
+        <select id="catFilter">
+          <option value="">All categories</option>
+        </select>
+        <span class="kbd-hint" title="Focus search"><span>⌘</span>K</span>
+        <div class="spacer"></div>
+        <div class="result-count" id="resultCount">—</div>
+      </div>
+
+      <div class="table-wrap mobile-cards">
+        <div class="table-scroll">
+          <table class="table" id="nomTable">
+            <thead>
+              <tr>
+                <th data-sort="createdAt">Submitted<span class="arrow">↓</span></th>
+                <th data-sort="firstName">Nominator<span class="arrow">↓</span></th>
+                <th data-sort="email">Email<span class="arrow">↓</span></th>
+                <th data-sort="nominee">Nominee<span class="arrow">↓</span></th>
+                <th data-sort="category">Category<span class="arrow">↓</span></th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div class="card-list" id="cardList"></div>
+        <div class="pager" id="pager"></div>
+      </div>
+    </section>
+
+    <!-- ── VIEW: Categories ─────────────────────────────────────────── -->
+    <section class="view" id="view-categories" data-visible="false">
+      <div class="topbar">
+        <div>
+          <h1>Categories</h1>
+          <div class="subtitle">All ten award categories with per-category nomination counts.</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-outline" data-action="reload">Refresh</button>
+        </div>
+      </div>
+      <div class="cat-grid" id="categoriesGrid"></div>
+    </section>
+
   </main>
 </section>
+
+<!-- Nomination detail drawer -->
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div>
+      <h3 id="drawerName">—</h3>
+      <div style="color:var(--muted);font-size:.78rem;margin-top:.2rem" id="drawerWhen"></div>
+    </div>
+    <button class="close" id="drawerClose" aria-label="Close">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
 
 <div class="toast" id="toast"></div>
 
 <script>
 /* ══════════════════════════════════════════════════════════════════════
- *  Admin dashboard front-end
- *  ────────────────────────────────────────────────────────────────────
- *  Zero build step. Vanilla JS. State-driven render.
- *
- *  Adding a new view later:
- *    1. Drop a <section class="view" id="view-foo"> in the app shell.
- *    2. Add a <button class="nav-item" data-view="foo">Foo</button>.
- *    3. Extend the switch in renderView() with a case for 'foo'.
+ *  Admin dashboard front-end (v2)
+ *  Zero build step. Vanilla JS. State-driven, class-based visibility only.
  * ══════════════════════════════════════════════════════════════════════ */
 
 const $ = id => document.getElementById(id);
 const TOKEN_KEY = 'hsh_admin_token';
+const CACHE_KEY = 'hsh_admin_data_cache';
+const CACHE_TTL_MS = 30_000;
 const DEFAULT_VIEW = 'overview';
 const VIEWS = ['overview', 'nominations', 'categories'];
+
+/* ── Utility: visibility toggle ────────────────────────────────────── */
+const show = (id, on) => { const el = typeof id === 'string' ? $(id) : id; if (el) el.dataset.visible = on ? 'true' : 'false'; };
 
 const state = {
   token: sessionStorage.getItem(TOKEN_KEY) || null,
   loaded: false,
   nominations: [],
   categoryCounts: {},
-  currentView: DEFAULT_VIEW,
+  currentView: null,
   search: '',
   category: '',
   sortKey: 'createdAt',
   sortDir: 'desc',
+  page: 1,
+  perPage: 25,
 };
 
-/* ── DOM refs ────────────────────────────────────────────────────────── */
-const screenAuth   = $('screen-auth');
-const screenApp    = $('screen-app');
-const loginForm    = $('loginForm');
-const loginBtn     = $('loginBtn');
-const loginErr     = $('loginErr');
-const pwInput      = $('pw');
-const sidebar      = $('sidebar');
-const backdrop     = $('backdrop');
-const menuBtn      = $('menuBtn');
-const logoutBtn    = $('logoutBtn');
-const loader       = $('loader');
-const viewsRoot    = $('viewsRoot');
-const searchInput  = $('search');
-const catFilter    = $('catFilter');
-const resultCount  = $('resultCount');
-const tbodyEl      = $('tbody');
-const overviewStats= $('overviewStats');
-const overviewCats = $('overviewCats');
-const overviewRecent = $('overviewRecent');
-const categoriesGrid = $('categoriesGrid');
-const nomSubtitle  = $('nomSubtitle');
-const badgeNoms    = $('badgeNominations');
-const toast        = $('toast');
-const tableHead    = document.querySelectorAll('#nomTable th');
-const navItems     = document.querySelectorAll('.nav-item');
-
-/* ── Toast ───────────────────────────────────────────────────────────── */
-let toastTimer;
-function showToast(msg, kind = 'ok') {
-  toast.textContent = msg;
-  toast.className = `toast on ${kind}`;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { toast.className = 'toast'; }, 3500);
-}
-
-/* ── Formatting helpers ─────────────────────────────────────────────── */
+/* ── Formatters ────────────────────────────────────────────────────── */
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g,
     c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -417,14 +446,21 @@ function fmtRelative(iso) {
   if (s < 604800) return `${Math.floor(s/86400)}d ago`;
   return fmtDate(iso, { dateOnly: true });
 }
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 
-/* ── Screen switching ───────────────────────────────────────────────── */
-function showScreen(id) {
-  screenAuth.classList.toggle('active', id === 'auth');
-  screenApp.classList.toggle('active',  id === 'app');
+/* ── Toast ─────────────────────────────────────────────────────────── */
+let toastTimer;
+function showToast(msg, kind = 'ok') {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = `toast on ${kind}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = 'toast'; }, 3500);
 }
 
-/* ── Auth flow ───────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════
+ *  Auth
+ * ══════════════════════════════════════════════════════════════════════ */
 async function login(password) {
   const res = await fetch('/.netlify/functions/admin-login', {
     method: 'POST',
@@ -435,47 +471,48 @@ async function login(password) {
   if (!res.ok) throw new Error(body.error || `Login failed (${res.status})`);
   return body.token;
 }
-
 function setLoggedIn(token) {
   state.token = token;
   sessionStorage.setItem(TOKEN_KEY, token);
-  showScreen('app');
-  bootDashboard();
+  show('screen-auth', false);
+  show('screen-app', true);
+  goToView(currentViewFromHash());   // draws the correct view immediately
+  loadData({ useCache: false });
 }
-
 function logout(silent) {
   state.token = null;
   state.loaded = false;
+  state.nominations = [];
+  state.categoryCounts = {};
   sessionStorage.removeItem(TOKEN_KEY);
-  showScreen('auth');
-  pwInput.value = '';
-  loginErr.style.display = 'none';
+  sessionStorage.removeItem(CACHE_KEY);
+  show('screen-app', false);
+  show('screen-auth', true);
+  $('pw').value = '';
+  show('loginErr', false);
   if (!silent) showToast('Signed out');
 }
 
-loginForm.addEventListener('submit', async e => {
+$('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const pw = pwInput.value;
+  const pw = $('pw').value;
   if (!pw) return;
-  loginBtn.disabled = true;
-  loginBtn.textContent = 'Signing in…';
-  loginErr.style.display = 'none';
+  const btn = $('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  show('loginErr', false);
   try {
     const token = await login(pw);
     setLoggedIn(token);
   } catch (err) {
-    loginErr.textContent = err.message;
-    loginErr.style.display = 'block';
-    pwInput.select();
+    const box = $('loginErr'); box.textContent = err.message; show(box, true);
+    $('pw').select();
   } finally {
-    loginBtn.disabled = false;
-    loginBtn.textContent = 'Sign in';
+    btn.disabled = false; btn.textContent = 'Sign in';
   }
 });
+$('logoutBtn').addEventListener('click', () => logout());
 
-logoutBtn.addEventListener('click', () => logout());
-
-/* ── Authenticated fetch (401 → auto-logout) ────────────────────────── */
+/* Authenticated fetch — auto-logout on 401 */
 async function authFetch(url, init = {}) {
   const opts = { ...init, headers: { ...(init.headers || {}), Authorization: `Bearer ${state.token}` } };
   const res = await fetch(url, opts);
@@ -487,29 +524,70 @@ async function authFetch(url, init = {}) {
   return res;
 }
 
-/* ── Data load ───────────────────────────────────────────────────────── */
-async function loadData() {
-  loader.style.display = 'block';
-  viewsRoot.style.display = 'none';
+/* ══════════════════════════════════════════════════════════════════════
+ *  Data load (with 30s in-tab cache)
+ * ══════════════════════════════════════════════════════════════════════ */
+function readCache() {
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { at, data } = JSON.parse(raw);
+    if (typeof at !== 'number' || Date.now() - at > CACHE_TTL_MS) return null;
+    return data;
+  } catch { return null; }
+}
+function writeCache(data) {
+  try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), data })); } catch {}
+}
+
+async function loadData({ useCache = true } = {}) {
+  show('loadError', false);
+
+  if (useCache) {
+    const cached = readCache();
+    if (cached) {
+      applyData(cached);
+      return;
+    }
+  }
+
+  // Draw skeleton content for whichever view is currently active.
+  drawSkeleton();
+
   try {
     const res  = await authFetch('/.netlify/functions/admin-data');
     const body = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(body.error || `Load failed (${res.status})`);
-    state.nominations    = body.nominations || [];
-    state.categoryCounts = body.categoryCounts || {};
-    state.loaded = true;
-    populateCategoryFilter();
-    renderAll();
-    loader.style.display = 'none';
-    viewsRoot.style.display = 'block';
+    writeCache(body);
+    applyData(body);
   } catch (err) {
     if (err.message === 'unauthorised') return;
-    loader.innerHTML = `<div class="alert" style="max-width:520px;margin:0 auto;display:inline-block;text-align:left">${esc(err.message)}</div>`;
-    showToast(err.message, 'err');
+    const box = $('loadError');
+    box.innerHTML = `<strong>Couldn't load nominations.</strong> ${esc(err.message)}. <button class="btn btn-sm btn-outline" style="margin-left:.5rem" data-action="reload">Try again</button>`;
+    show(box, true);
   }
 }
 
-/* ── Route between views via URL hash ───────────────────────────────── */
+function applyData(body) {
+  state.nominations    = body.nominations || [];
+  state.categoryCounts = body.categoryCounts || {};
+  state.loaded = true;
+  $('badgeNominations').textContent = state.nominations.length;
+
+  // Populate the category filter (idempotent).
+  populateCategoryFilter();
+
+  // Check whether Brevo custom attributes are absent — surface a banner if so.
+  const anyHaveCategory = state.nominations.some(n => n.category);
+  const anyHaveNominee  = state.nominations.some(n => n.nominee);
+  show('dataWarn', state.nominations.length > 0 && !anyHaveCategory && !anyHaveNominee);
+
+  renderCurrentView();
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ *  View routing
+ * ══════════════════════════════════════════════════════════════════════ */
 function currentViewFromHash() {
   const raw = (location.hash || '').replace(/^#\/?/, '');
   return VIEWS.includes(raw) ? raw : DEFAULT_VIEW;
@@ -518,44 +596,329 @@ function goToView(view) {
   if (!VIEWS.includes(view)) view = DEFAULT_VIEW;
   if (location.hash !== '#/' + view) history.replaceState(null, '', '#/' + view);
   state.currentView = view;
-  renderView();
-  // On mobile, close the sidebar after navigation.
+  // Toggle visibility on view sections and nav highlights.
+  VIEWS.forEach(v => show('view-' + v, v === view));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('current', n.dataset.view === view));
+  renderCurrentView();
   if (window.innerWidth <= 820) closeSidebar();
 }
-navItems.forEach(el => el.addEventListener('click', () => goToView(el.dataset.view)));
-window.addEventListener('hashchange', () => { state.currentView = currentViewFromHash(); renderView(); });
+window.addEventListener('hashchange', () => goToView(currentViewFromHash()));
+document.querySelectorAll('.nav-item').forEach(el => el.addEventListener('click', () => goToView(el.dataset.view)));
 
-/* ── Mobile sidebar drawer ───────────────────────────────────────────── */
-function openSidebar()  { sidebar.classList.add('open');  backdrop.classList.add('on'); }
-function closeSidebar() { sidebar.classList.remove('open'); backdrop.classList.remove('on'); }
-menuBtn.addEventListener('click', openSidebar);
-backdrop.addEventListener('click', closeSidebar);
+/* Skeleton state — drawn while loading so the layout doesn't jump. */
+function drawSkeleton() {
+  const sk = n => '<span class="skeleton" style="width:'+n+'px;height:1em;display:inline-block">·</span>';
+  $('overviewStats').innerHTML = Array.from({length:4}).map(() =>
+    `<div class="stat"><div class="num">${sk(80)}</div><div class="lbl">${sk(120)}</div><div class="sub">${sk(180)}</div></div>`
+  ).join('');
+  $('overviewCats').innerHTML = Array.from({length:6}).map(() =>
+    `<div class="cat-row"><span class="name">${sk(160)}</span><span class="count">${sk(24)}</span></div>`
+  ).join('');
+  $('overviewRecent').innerHTML = Array.from({length:5}).map(() =>
+    `<div class="recent-item"><div class="who"><div class="who-name">${sk(120)}</div><div class="who-mail">${sk(180)}</div></div><div class="when">${sk(60)}</div></div>`
+  ).join('');
+  $('tbody').innerHTML = Array.from({length:8}).map(() =>
+    `<tr><td>${sk(90)}</td><td>${sk(110)}</td><td>${sk(160)}</td><td>${sk(80)}</td><td>${sk(90)}</td></tr>`
+  ).join('');
+  $('categoriesGrid').innerHTML = $('overviewCats').innerHTML;
+}
 
-/* ── Filter + sort listeners ────────────────────────────────────────── */
-searchInput.addEventListener('input', e => { state.search = e.target.value.trim().toLowerCase(); renderNominationsTable(); });
-catFilter.addEventListener('change', e => { state.category = e.target.value; renderNominationsTable(); });
-tableHead.forEach(th => {
+/* ══════════════════════════════════════════════════════════════════════
+ *  Rendering
+ * ══════════════════════════════════════════════════════════════════════ */
+function renderCurrentView() {
+  if (!state.loaded) return;
+  const view = state.currentView;
+  if      (view === 'overview')    renderOverview();
+  else if (view === 'nominations') renderNominations();
+  else if (view === 'categories')  renderCategories();
+}
+
+/* ── Overview ──────────────────────────────────────────────────────── */
+function renderOverview() {
+  const total = state.nominations.length;
+  const uniqueEmails = new Set(state.nominations.map(n => (n.email || '').toLowerCase())).size;
+  const withCategory = state.nominations.filter(n => n.category).length;
+  const catsWithEntries = Object.entries(state.categoryCounts).filter(([, c]) => c > 0).length;
+  const newest = state.nominations.reduce((acc, n) => {
+    const t = new Date(n.createdAt).getTime();
+    return isNaN(t) ? acc : (!acc || t > acc ? t : acc);
+  }, 0);
+
+  $('overviewStats').innerHTML = `
+    <div class="stat"><div class="num">${total}</div><div class="lbl">Total Nominations</div><div class="sub">Across all award categories</div></div>
+    <div class="stat"><div class="num">${uniqueEmails}</div><div class="lbl">Unique Nominators</div><div class="sub">Distinct email addresses</div></div>
+    <div class="stat"><div class="num">${catsWithEntries}<span style="font-size:1rem;color:var(--muted-hi);font-weight:600"> / 10</span></div><div class="lbl">Categories With Entries</div><div class="sub">${withCategory} nominations name a category</div></div>
+    <div class="stat"><div class="num" style="font-size:1.25rem;line-height:1.3">${newest ? esc(fmtRelative(new Date(newest).toISOString())) : '—'}</div><div class="lbl">Latest Submission</div><div class="sub">${newest ? esc(fmtDate(new Date(newest).toISOString())) : 'No submissions yet'}</div></div>
+  `;
+
+  $('overviewCats').innerHTML = catGridMarkup();
+  bindCatGrid($('overviewCats'));
+
+  const recent = [...state.nominations]
+    .filter(n => n.createdAt)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 8);
+  $('overviewRecent').innerHTML = recent.length
+    ? recent.map(n => `
+        <div class="recent-item">
+          <div class="who">
+            <div class="who-name">${esc(displayName(n))}</div>
+            <div class="who-mail">${esc(n.email || '—')}</div>
+          </div>
+          <div class="when" title="${esc(fmtDate(n.createdAt))}">${esc(fmtRelative(n.createdAt))}</div>
+        </div>`).join('')
+    : `<div class="empty"><h4>No submissions yet</h4>Nominations will appear here as soon as visitors submit the form.</div>`;
+}
+
+function displayName(n) {
+  return `${n.firstName || ''} ${n.lastName || ''}`.trim() || '—';
+}
+
+/* ── Nominations table ────────────────────────────────────────────── */
+function populateCategoryFilter() {
+  const wanted = ['', ...Object.keys(state.categoryCounts).sort()];
+  const sel = $('catFilter');
+  const current = [...sel.options].map(o => o.value);
+  if (wanted.length === current.length && wanted.every((v, i) => v === current[i])) return;
+  const prev = sel.value;
+  sel.innerHTML = wanted
+    .map(v => `<option value="${esc(v)}">${v ? esc(v) : 'All categories'}</option>`)
+    .join('');
+  sel.value = prev;
+}
+
+function filteredNominations() {
+  const q   = state.search;
+  const cat = state.category;
+  let rows = state.nominations.filter(n => {
+    if (cat && n.category !== cat) return false;
+    if (!q) return true;
+    return `${n.firstName} ${n.lastName} ${n.email} ${n.nominee} ${n.category}`.toLowerCase().includes(q);
+  });
+  const dir = state.sortDir === 'asc' ? 1 : -1;
+  rows.sort((a, b) => {
+    const av = (a[state.sortKey] || '').toString().toLowerCase();
+    const bv = (b[state.sortKey] || '').toString().toLowerCase();
+    if (av < bv) return -1 * dir;
+    if (av > bv) return  1 * dir;
+    return 0;
+  });
+  return rows;
+}
+
+function renderNominations() {
+  const rows = filteredNominations();
+  const total = state.nominations.length;
+  $('nomSubtitle').textContent = `${total} total submissions captured via the nomination form.`;
+  $('resultCount').textContent = `${rows.length} of ${total} shown`;
+
+  // Sort indicators
+  document.querySelectorAll('#nomTable th').forEach(th => {
+    const isCurrent = th.dataset.sort === state.sortKey;
+    th.classList.toggle('sort', isCurrent);
+    const a = th.querySelector('.arrow');
+    if (a) a.textContent = state.sortDir === 'asc' ? '↑' : '↓';
+  });
+
+  // Pagination
+  const perPage = state.perPage;
+  const pageCount = Math.max(1, Math.ceil(rows.length / perPage));
+  if (state.page > pageCount) state.page = pageCount;
+  const start = (state.page - 1) * perPage;
+  const pageRows = rows.slice(start, start + perPage);
+
+  // Desktop table
+  const tbody = $('tbody');
+  tbody.innerHTML = pageRows.length
+    ? pageRows.map(n => `
+        <tr data-email="${esc(n.email)}">
+          <td class="date">${esc(fmtDate(n.createdAt))}</td>
+          <td>${esc(displayName(n))}</td>
+          <td class="email"><span>${esc(n.email || '—')}</span>${n.email ? `<button class="icon-btn" data-copy="${esc(n.email)}" title="Copy email">⧉</button>` : ''}</td>
+          <td>${esc(n.nominee || '—')}</td>
+          <td>${n.category ? `<span class="cat-pill">${esc(n.category)}</span>` : '<span class="cat-pill empty">not set</span>'}</td>
+        </tr>`).join('')
+    : `<tr><td colspan="5"><div class="empty"><h4>No matches</h4>Try clearing the search box or the category filter.</div></td></tr>`;
+
+  // Mobile cards
+  const cardList = $('cardList');
+  cardList.innerHTML = pageRows.length
+    ? pageRows.map(n => `
+        <div class="nom-card" data-email="${esc(n.email)}">
+          <div class="nc-top"><div class="nc-name">${esc(displayName(n))}</div><div class="nc-when">${esc(fmtRelative(n.createdAt))}</div></div>
+          <div class="nc-mail">${esc(n.email || '—')}</div>
+          <div class="nc-tail">${n.category ? `<span class="cat-pill">${esc(n.category)}</span>` : '<span class="cat-pill empty">not set</span>'}${n.email ? `<button class="icon-btn" data-copy="${esc(n.email)}" title="Copy email">⧉</button>` : ''}</div>
+        </div>`).join('')
+    : `<div class="empty"><h4>No matches</h4>Try clearing the search box or the category filter.</div>`;
+
+  // Pagination controls
+  renderPager(rows.length, pageCount);
+}
+
+function renderPager(total, pageCount) {
+  const p = $('pager');
+  if (total === 0) { p.innerHTML = ''; return; }
+  const cur = state.page;
+  const pages = pageWindow(cur, pageCount);
+  const start = (cur - 1) * state.perPage + 1;
+  const end   = Math.min(total, start + state.perPage - 1);
+  p.innerHTML = `
+    <div>Showing <strong>${start}</strong>–<strong>${end}</strong> of <strong>${total}</strong></div>
+    <div class="spacer"></div>
+    <label style="display:inline-flex;align-items:center;gap:.4rem">Per page
+      <select id="perPage">${[25,50,100].map(n => `<option value="${n}" ${n===state.perPage?'selected':''}>${n}</option>`).join('')}</select>
+    </label>
+    <button class="page-btn" data-page="prev" ${cur<=1?'disabled':''}>‹</button>
+    ${pages.map(w => w === '…'
+      ? `<span style="padding:0 .3rem">…</span>`
+      : `<button class="page-btn ${w===cur?'current':''}" data-page="${w}">${w}</button>`).join('')}
+    <button class="page-btn" data-page="next" ${cur>=pageCount?'disabled':''}>›</button>
+  `;
+  $('perPage').addEventListener('change', e => { state.perPage = +e.target.value; state.page = 1; renderNominations(); });
+  p.querySelectorAll('[data-page]').forEach(btn => btn.addEventListener('click', () => {
+    const v = btn.dataset.page;
+    if (v === 'prev') state.page = Math.max(1, state.page - 1);
+    else if (v === 'next') state.page = Math.min(pageCount, state.page + 1);
+    else state.page = +v;
+    renderNominations();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }));
+}
+function pageWindow(cur, total) {
+  const out = new Set([1, total, cur - 1, cur, cur + 1]);
+  const arr = [...out].filter(n => n >= 1 && n <= total).sort((a,b) => a - b);
+  const withGaps = [];
+  arr.forEach((n, i) => {
+    if (i > 0 && n - arr[i-1] > 1) withGaps.push('…');
+    withGaps.push(n);
+  });
+  return withGaps;
+}
+
+/* ── Categories view ──────────────────────────────────────────────── */
+function renderCategories() {
+  $('categoriesGrid').innerHTML = catGridMarkup();
+  bindCatGrid($('categoriesGrid'));
+}
+function catGridMarkup() {
+  const entries = Object.entries(state.categoryCounts);
+  const max = entries.reduce((m, [, n]) => Math.max(m, n), 0);
+  return entries.map(([name, count]) => {
+    const pct = max > 0 ? Math.round((count / max) * 100) : 0;
+    return `
+      <button class="cat-row ${count === 0 ? 'zero' : ''} ${state.category === name ? 'selected' : ''}" data-cat="${esc(name)}">
+        <span class="name">${esc(name)}</span>
+        <span class="count">${count}</span>
+        <span class="bar" style="width:${pct}%"></span>
+      </button>`;
+  }).join('');
+}
+function bindCatGrid(root) {
+  root.querySelectorAll('.cat-row').forEach(el => {
+    el.addEventListener('click', () => {
+      const cat = el.dataset.cat;
+      state.category = state.category === cat ? '' : cat;
+      state.page = 1;
+      $('catFilter').value = state.category;
+      goToView('nominations');
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+ *  Row detail drawer
+ * ══════════════════════════════════════════════════════════════════════ */
+function openDetail(email) {
+  const n = state.nominations.find(x => (x.email || '').toLowerCase() === (email || '').toLowerCase());
+  if (!n) return;
+  $('drawerName').textContent = displayName(n);
+  $('drawerWhen').textContent = n.createdAt ? `Submitted ${fmtRelative(n.createdAt)} · ${fmtDate(n.createdAt)}` : '';
+  const body = $('drawerBody');
+  body.innerHTML = [
+    row('Email', n.email, 'mono'),
+    row('First name', n.firstName),
+    row('Last name',  n.lastName),
+    row('Nominee',    n.nominee || 'not captured', n.nominee ? '' : 'muted'),
+    row('Category',   n.category || 'not captured', n.category ? '' : 'muted'),
+    row('Enquiry type', n.enquiryType || '—', n.enquiryType ? '' : 'muted'),
+    row('Source',       n.source || '—', n.source ? '' : 'muted'),
+    row('Submitted',    fmtDate(n.createdAt)),
+    row('Last modified in Brevo', fmtDate(n.modifiedAt)),
+  ].join('');
+  const drawer = $('drawer');
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+}
+function row(k, v, klass = '') {
+  return `<div class="detail-row"><div class="k">${esc(k)}</div><div class="v ${klass}">${esc(v || '')}</div></div>`;
+}
+function closeDetail() {
+  const drawer = $('drawer');
+  drawer.classList.remove('open');
+  drawer.setAttribute('aria-hidden', 'true');
+}
+$('drawerClose').addEventListener('click', closeDetail);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+
+/* Row click / copy button — event delegation on the whole content area */
+$('screen-app').addEventListener('click', e => {
+  const copy = e.target.closest('[data-copy]');
+  if (copy) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(copy.dataset.copy).then(
+      () => showToast('Copied to clipboard'),
+      () => showToast('Copy failed', 'err')
+    );
+    return;
+  }
+  const row = e.target.closest('tr[data-email], .nom-card[data-email]');
+  if (row) openDetail(row.dataset.email);
+});
+
+/* ══════════════════════════════════════════════════════════════════════
+ *  Search / filter / sort listeners
+ * ══════════════════════════════════════════════════════════════════════ */
+const debouncedSearch = debounce(val => {
+  state.search = val.trim().toLowerCase();
+  state.page = 1;
+  if (state.currentView === 'nominations') renderNominations();
+}, 200);
+$('search').addEventListener('input', e => debouncedSearch(e.target.value));
+$('catFilter').addEventListener('change', e => {
+  state.category = e.target.value;
+  state.page = 1;
+  if (state.currentView === 'nominations') renderNominations();
+});
+document.querySelectorAll('#nomTable th').forEach(th => {
   const key = th.dataset.sort; if (!key) return;
   th.addEventListener('click', () => {
     if (state.sortKey === key) state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
     else { state.sortKey = key; state.sortDir = key === 'createdAt' ? 'desc' : 'asc'; }
-    renderNominationsTable();
+    renderNominations();
   });
 });
 
-/* ── Action buttons (Refresh, Export) — event delegation ────────────── */
+/* Keyboard shortcut ⌘K / Ctrl+K → focus search */
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+    e.preventDefault();
+    goToView('nominations');
+    setTimeout(() => $('search').focus(), 50);
+  }
+});
+
+/* Top-bar action buttons (Refresh, Export) via event delegation */
 document.addEventListener('click', e => {
   const act = e.target.closest('[data-action]');
   if (!act) return;
-  const action = act.dataset.action;
-  if (action === 'reload') { showToast('Refreshing…'); loadData(); }
-  if (action === 'export') downloadCsv(act);
+  if (act.dataset.action === 'reload') { showToast('Refreshing…'); loadData({ useCache: false }); }
+  if (act.dataset.action === 'export') downloadCsv(act);
 });
 
 async function downloadCsv(btnEl) {
   const restore = btnEl.textContent;
-  btnEl.disabled = true;
-  btnEl.textContent = 'Preparing…';
+  btnEl.disabled = true; btnEl.textContent = 'Preparing…';
   try {
     const res = await authFetch('/.netlify/functions/admin-export');
     if (!res.ok) {
@@ -574,176 +937,27 @@ async function downloadCsv(btnEl) {
   } catch (err) {
     if (err.message !== 'unauthorised') showToast(err.message, 'err');
   } finally {
-    btnEl.disabled = false;
-    btnEl.textContent = restore;
+    btnEl.disabled = false; btnEl.textContent = restore;
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════════
- *  RENDER PIPELINE
- * ══════════════════════════════════════════════════════════════════════ */
-
-function renderAll() {
-  badgeNoms.textContent = state.nominations.length;
-  renderView();  // draws whichever view is currently active
-}
-
-function renderView() {
-  // Toggle .active on views and nav items.
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  const el = $('view-' + state.currentView);
-  if (el) el.classList.add('active');
-  navItems.forEach(n => n.classList.toggle('current', n.dataset.view === state.currentView));
-
-  // Draw the view content (each function is idempotent).
-  switch (state.currentView) {
-    case 'overview':    renderOverview();          break;
-    case 'nominations': renderNominationsTable();  break;
-    case 'categories':  renderCategoriesGrid();    break;
-  }
-}
-
-/* ── Overview view ──────────────────────────────────────────────────── */
-function renderOverview() {
-  const total = state.nominations.length;
-  const uniqueEmails = new Set(state.nominations.map(n => (n.email || '').toLowerCase())).size;
-  const withCategory = state.nominations.filter(n => n.category).length;
-  const catsWithEntries = Object.entries(state.categoryCounts).filter(([, c]) => c > 0).length;
-
-  // Newest submission's timestamp (nominations are already sort=desc from Brevo,
-  // but we defensively re-scan).
-  const newest = state.nominations.reduce((acc, n) => {
-    const t = new Date(n.createdAt).getTime();
-    if (isNaN(t)) return acc;
-    return (!acc || t > acc) ? t : acc;
-  }, 0);
-
-  overviewStats.innerHTML = `
-    <div class="stat"><div class="num">${total}</div><div class="lbl">Total Nominations</div><div class="sub">Across all award categories</div></div>
-    <div class="stat"><div class="num">${uniqueEmails}</div><div class="lbl">Unique Nominators</div><div class="sub">Distinct email addresses</div></div>
-    <div class="stat"><div class="num">${catsWithEntries}<span style="font-size:1rem;color:var(--muted-hi);font-weight:600"> / 10</span></div><div class="lbl">Categories With Entries</div><div class="sub">${withCategory} nominations name a category</div></div>
-    <div class="stat"><div class="num" style="font-size:1.25rem;line-height:1.3">${newest ? fmtRelative(new Date(newest).toISOString()) : '—'}</div><div class="lbl">Latest Submission</div><div class="sub">${newest ? fmtDate(new Date(newest).toISOString()) : 'No submissions yet'}</div></div>
-  `;
-
-  overviewCats.innerHTML = catGridMarkup();
-  bindCatGrid(overviewCats);
-
-  // Recent activity (8 newest)
-  const recent = [...state.nominations]
-    .filter(n => n.createdAt)
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 8);
-  overviewRecent.innerHTML = recent.length
-    ? recent.map(n => `
-        <div class="recent-item">
-          <div class="who">
-            <div class="who-name">${esc(`${n.firstName} ${n.lastName}`.trim() || '—')}</div>
-            <div class="who-mail">${esc(n.email || '—')}</div>
-          </div>
-          <div class="when" title="${esc(fmtDate(n.createdAt))}">${esc(fmtRelative(n.createdAt))}</div>
-        </div>`).join('')
-    : `<div class="empty">No submissions yet.</div>`;
-}
-
-/* ── Nominations view (table) ───────────────────────────────────────── */
-function populateCategoryFilter() {
-  const wanted = ['', ...Object.keys(state.categoryCounts).sort()];
-  const current = [...catFilter.options].map(o => o.value);
-  if (wanted.length === current.length && wanted.every((v, i) => v === current[i])) return;
-  const prev = catFilter.value;
-  catFilter.innerHTML = wanted
-    .map(v => `<option value="${esc(v)}">${v ? esc(v) : 'All categories'}</option>`)
-    .join('');
-  catFilter.value = prev;
-}
-
-function renderNominationsTable() {
-  if (!state.loaded) return;
-  const q   = state.search;
-  const cat = state.category;
-  let rows = state.nominations.filter(n => {
-    if (cat && n.category !== cat) return false;
-    if (!q) return true;
-    return `${n.firstName} ${n.lastName} ${n.email} ${n.nominee} ${n.category}`.toLowerCase().includes(q);
-  });
-  const dir = state.sortDir === 'asc' ? 1 : -1;
-  rows.sort((a, b) => {
-    const av = (a[state.sortKey] || '').toString().toLowerCase();
-    const bv = (b[state.sortKey] || '').toString().toLowerCase();
-    if (av < bv) return -1 * dir;
-    if (av > bv) return  1 * dir;
-    return 0;
-  });
-
-  resultCount.textContent = `${rows.length} of ${state.nominations.length} shown`;
-  nomSubtitle.textContent = `${state.nominations.length} total submissions captured via the nomination form.`;
-
-  tableHead.forEach(th => {
-    th.classList.toggle('sort', th.dataset.sort === state.sortKey);
-    const a = th.querySelector('.arrow'); if (a) a.textContent = state.sortDir === 'asc' ? '↑' : '↓';
-  });
-
-  tbodyEl.innerHTML = rows.length
-    ? rows.map(n => `
-        <tr>
-          <td class="date">${esc(fmtDate(n.createdAt))}</td>
-          <td>${esc(`${n.firstName} ${n.lastName}`.trim() || '—')}</td>
-          <td class="email">${esc(n.email || '—')}</td>
-          <td>${esc(n.nominee || '—')}</td>
-          <td>${n.category ? `<span class="cat-pill">${esc(n.category)}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
-        </tr>`).join('')
-    : `<tr><td colspan="5"><div class="empty">No nominations match your filters.</div></td></tr>`;
-}
-
-/* ── Categories view ────────────────────────────────────────────────── */
-function renderCategoriesGrid() {
-  categoriesGrid.innerHTML = catGridMarkup(/* enlarged */ true);
-  bindCatGrid(categoriesGrid);
-}
-
-/* Reusable category-grid markup — used by both Overview and Categories. */
-function catGridMarkup() {
-  const entries = Object.entries(state.categoryCounts);
-  const max = entries.reduce((m, [, n]) => Math.max(m, n), 0);
-  return entries.map(([name, count]) => {
-    const pct = max > 0 ? Math.round((count / max) * 100) : 0;
-    return `
-      <button class="cat-row ${count === 0 ? 'zero' : ''} ${state.category === name ? 'selected' : ''}" data-cat="${esc(name)}" style="position:relative">
-        <span class="name">${esc(name)}</span>
-        <span class="count">${count}</span>
-        <span class="bar" style="width:${pct}%"></span>
-      </button>`;
-  }).join('');
-}
-
-/* Clicking a category row filters the nominations table and navigates
-   to that view. */
-function bindCatGrid(root) {
-  root.querySelectorAll('.cat-row').forEach(el => {
-    el.addEventListener('click', () => {
-      state.category = el.dataset.cat;
-      catFilter.value = state.category;
-      goToView('nominations');
-    });
-  });
-}
+/* Mobile sidebar drawer */
+function openSidebar()  { $('sidebar').classList.add('open');  show('backdrop', true);  }
+function closeSidebar() { $('sidebar').classList.remove('open'); show('backdrop', false); }
+$('menuBtn').addEventListener('click', openSidebar);
+$('backdrop').addEventListener('click', closeSidebar);
 
 /* ══════════════════════════════════════════════════════════════════════
  *  Boot
  * ══════════════════════════════════════════════════════════════════════ */
-function bootDashboard() {
-  state.currentView = currentViewFromHash();
-  loadData();
-}
-
-// If sessionStorage still has a token, jump straight to the shell.
-// Otherwise start on the auth screen. Class-based visibility means the
-// screens never fight the [hidden] attribute.
 if (state.token) {
-  showScreen('app');
-  bootDashboard();
+  show('screen-auth', false);
+  show('screen-app', true);
+  goToView(currentViewFromHash());  // draws skeleton immediately
+  loadData();                       // uses cache if fresh, otherwise fetches
 } else {
-  showScreen('auth');
+  show('screen-auth', true);
+  show('screen-app', false);
 }
 </script>
 </body>
