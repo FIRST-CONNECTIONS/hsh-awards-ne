@@ -10,6 +10,13 @@
 //   • console.error's the details so they surface in Netlify function logs
 //   • returns a non-2xx response so the client shows the error banner
 //     rather than a false success
+//
+// Since PR "nomination-full-storage", each submission is ALSO persisted to
+// Netlify Blobs (see netlify/lib/nomination-store.js) so the admin dashboard
+// can view the full form contents. Blob storage failure is non-fatal — email
+// delivery is what the visitor was promised, storage is best-effort.
+
+const { saveSubmission } = require('../lib/nomination-store');
 
 const AWARDS_INBOX = 'awards@first-connections.co.uk';
 const BREVO_LIST_ID = 9;
@@ -72,7 +79,7 @@ exports.handler = async function (event) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const { type, email, firstName, lastName, extraAttrs, emailSubject, emailHtml } = body;
+  const { type, email, firstName, lastName, extraAttrs, emailSubject, emailHtml, submission } = body;
 
   const BREVO_KEY = process.env.BREVO_API_KEY;
   if (!BREVO_KEY) {
@@ -171,6 +178,32 @@ exports.handler = async function (event) {
       }
     } catch (err) {
       console.error('send-form: network error calling Brevo contacts API (non-fatal):', err);
+    }
+  }
+
+  // ── 3. Best-effort: persist the full submission to Netlify Blobs ──────
+  // Powers the admin dashboard's per-nomination detail view. Failure here
+  // never blocks the response — the visitor has already been served and the
+  // email has already been sent by this point.
+  if (submission && typeof submission === 'object') {
+    const stored = await saveSubmission({
+      type: submission.type || 'other',
+      nominator: {
+        firstName: submission.nominator?.firstName || firstName || '',
+        lastName:  submission.nominator?.lastName  || lastName  || '',
+        email:     submission.nominator?.email     || email     || '',
+      },
+      nominee:     submission.nominee     || '',
+      category:    submission.category    || '',
+      enquiryType: submission.enquiryType || '',
+      reason:      submission.reason      || '',
+      fields:      submission.fields      || {},
+      source:      submission.source      || 'HSH Awards Website',
+      userAgent:   (event.headers && (event.headers['user-agent'] || event.headers['User-Agent'])) || '',
+      clientIp:    (event.headers && (event.headers['x-nf-client-connection-ip'] || event.headers['x-forwarded-for'] || '')).split(',')[0].trim(),
+    });
+    if (stored) {
+      console.log('send-form: submission persisted to blobs', { id: stored.id, type: stored.type });
     }
   }
 

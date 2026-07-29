@@ -1334,23 +1334,37 @@ async function submitMailto(e, formId, successId) {
 
   // Gather field values. User-supplied strings are HTML-escaped before being
   // interpolated into the email body so a nominee's name that happens to look
-  // like markup can't inject anything into our inbox rendering.
+  // like markup can't inject anything into our inbox rendering. The same raw
+  // values are also collected into a structured `submission` payload that the
+  // server persists to Netlify Blobs — see admin dashboard for viewing.
   const escapeHtml = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fields = form.querySelectorAll('input:not([type=hidden]):not([type=submit]), select, textarea');
   let htmlBody = '<table style="font-family:sans-serif;font-size:15px;border-collapse:collapse;width:100%">';
-  let email = '', fullName = '', nominee = '', category = '', enquiryType = '';
+  const rawFields = {};                // { label: value, … } for blob storage
+  let email = '', fullName = '', nominee = '', category = '', enquiryType = '', reason = '';
   fields.forEach(field => {
     const label = field.closest('.form-group')?.querySelector('label')?.textContent?.trim() || field.id;
     const val = field.value || '—';
     htmlBody += `<tr><td style="padding:8px 12px;font-weight:700;background:#f5f5f5;border:1px solid #ddd;width:35%">${escapeHtml(label)}</td><td style="padding:8px 12px;border:1px solid #ddd;white-space:pre-wrap">${escapeHtml(val)}</td></tr>`;
+    rawFields[label] = field.value || '';
     const id = field.id;
     if(id==='v-email'||id==='c-email'||id==='n-email'||id==='s-email') email = field.value.trim();
     if(id==='v-name'||id==='c-name'||id==='n-name'||id==='s-name') fullName = field.value.trim();
     if(id==='v-nominee'||id==='n-nominee') nominee = field.value.trim();
     if(id==='v-category'||id==='n-category'||id==='s-category') category = field.value.trim();
     if(id==='c-type') enquiryType = field.value.trim();
+    if(id==='v-reason'||id==='n-reason'||id==='c-msg'||id==='s-msg') reason = field.value.trim();
   });
   htmlBody += '</table>';
+
+  // Map the form ID to a semantic submission type — this is what the admin
+  // dashboard uses to filter Nominations vs Votes vs Contact enquiries.
+  const submissionType = ({
+    nominateForm: 'nomination',
+    voteForm:     'vote',
+    contactForm:  'contact',
+    sponsorForm:  'sponsor',
+  })[formId] || 'other';
 
   const subject = form.querySelector('[name="_subject"]')?.value || 'NE High Street Heroes 2026 Enquiry';
   const nameParts = fullName.split(' ');
@@ -1380,7 +1394,14 @@ async function submitMailto(e, formId, successId) {
         lastName,
         extraAttrs: extra,
         emailSubject: subject,
-        emailHtml: `<h2 style="font-family:sans-serif;color:#333">New submission — NE High Street Heroes 2026</h2>${htmlBody}<p style="font-family:sans-serif;font-size:13px;color:#999;margin-top:16px">Submitted via ne-hsh-awards.co.uk</p>`
+        emailHtml: `<h2 style="font-family:sans-serif;color:#333">New submission — NE High Street Heroes 2026</h2>${htmlBody}<p style="font-family:sans-serif;font-size:13px;color:#999;margin-top:16px">Submitted via ne-hsh-awards.co.uk</p>`,
+        submission: {
+          type: submissionType,
+          nominator: { firstName, lastName, email },
+          nominee, category, enquiryType, reason,
+          fields: rawFields,
+          source: 'HSH Awards Website',
+        }
       })
     });
 

@@ -1,0 +1,11 @@
+{
+  "name": "hsh-awards-ne",
+  "private": true,
+  "description": "NE High Street Heroes Awards site — static + Netlify Functions.",
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^7.4.0"
+  }
+}

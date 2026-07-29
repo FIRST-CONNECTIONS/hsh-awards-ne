@@ -1,19 +1,12 @@
 // netlify/functions/admin-data.js
-// GET /.netlify/functions/admin-data
-// Authorization: Bearer <ADMIN_JWT>
+// GET /.netlify/functions/admin-data   (Bearer admin JWT)
 //
-// Returns:
-//   {
-//     total,
-//     nominations: [{ email, firstName, lastName, nominee, category, ... }],
-//     categoryCounts: { "Retailer of the Year": 12, ... } // every category, zero-filled
-//   }
-//
-// Requires a valid admin JWT (see admin-login.js). Pulls the Brevo CRM list
-// via the shared fetcher and normalises the shape for the dashboard UI.
+// Returns the merged nomination list — Blob storage (new, complete records)
+// deduplicated against Brevo (historical, nominator-only) — plus per-category
+// counts and a source breakdown so the dashboard can show data-quality info.
 
 const { requireAuth } = require('../lib/admin-auth');
-const { fetchAllContacts, contactToNomination, ALL_CATEGORIES } = require('../lib/admin-nominations');
+const { fetchAllNominations, ALL_CATEGORIES } = require('../lib/admin-nominations');
 
 exports.handler = async function (event) {
   const headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' };
@@ -23,24 +16,22 @@ exports.handler = async function (event) {
     return { statusCode: auth.status, headers, body: JSON.stringify({ error: auth.error }) };
   }
 
-  const result = await fetchAllContacts(process.env.BREVO_API_KEY);
+  const result = await fetchAllNominations(process.env.BREVO_API_KEY);
   if (!result.ok) {
     return { statusCode: result.status, headers, body: JSON.stringify({ error: result.error }) };
   }
 
-  const nominations = result.contacts.map(contactToNomination);
+  const nominations = result.rows;
 
-  // Zero-fill so every category appears in the summary, even the ones nobody
-  // has nominated for yet — the dashboard shows category coverage at a glance.
+  // Zero-fill so every award category appears in the summary, even the ones
+  // nobody has nominated for yet. Unknown categories (typos / drift) fall
+  // through to their own bucket so ops sees the deviation.
   const categoryCounts = {};
   for (const cat of ALL_CATEGORIES) categoryCounts[cat] = 0;
   for (const n of nominations) {
-    if (n.category && Object.prototype.hasOwnProperty.call(categoryCounts, n.category)) {
-      categoryCounts[n.category] += 1;
-    } else if (n.category) {
-      // Unrecognised category value — count it separately so ops sees the drift.
-      categoryCounts[n.category] = (categoryCounts[n.category] || 0) + 1;
-    }
+    if (!n.category) continue;
+    if (Object.prototype.hasOwnProperty.call(categoryCounts, n.category)) categoryCounts[n.category] += 1;
+    else categoryCounts[n.category] = (categoryCounts[n.category] || 0) + 1;
   }
 
   return {
@@ -50,6 +41,7 @@ exports.handler = async function (event) {
       total: nominations.length,
       nominations,
       categoryCounts,
+      sources: result.counts,   // { blob, brevo, merged } — surfaced in UI banner
     }),
   };
 };
