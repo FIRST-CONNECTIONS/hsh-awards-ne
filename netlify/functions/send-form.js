@@ -14,6 +14,17 @@
 const AWARDS_INBOX = 'awards@first-connections.co.uk';
 const BREVO_LIST_ID = 9;
 
+// Sender identity used in the `From:` header. Configurable so ops can point
+// at whichever address is verified in Brevo (and whose domain is DKIM/SPF
+// authenticated) without redeploying. When absent, we fall back to the
+// awards inbox — but note that From=To often triggers anti-spoofing filters
+// at Google/Microsoft, so setting SENDER_EMAIL to a distinct address on an
+// authenticated domain (e.g. no-reply@ne-hsh-awards.co.uk) is strongly
+// preferred. The visitor's email always lands in Reply-To regardless, so
+// awards@ can still reply directly to the nominator.
+const SENDER_EMAIL = process.env.SENDER_EMAIL || AWARDS_INBOX;
+const SENDER_NAME  = process.env.SENDER_NAME  || 'HSH Awards Website';
+
 // Strip HTML from a string so user-supplied values can be safely inlined into
 // the plaintext email fallback.
 function stripTags(s) {
@@ -81,7 +92,7 @@ exports.handler = async function (event) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'api-key': BREVO_KEY },
         body: JSON.stringify({
-          sender: { name: 'HSH Awards Website', email: AWARDS_INBOX },
+          sender: { name: SENDER_NAME, email: SENDER_EMAIL },
           to: [{ email: AWARDS_INBOX, name: 'HSH Awards Team' }],
           replyTo: { email: replyToEmail, name: senderName },
           subject: emailSubject || 'New Submission — NE High Street Heroes 2026',
@@ -102,7 +113,7 @@ exports.handler = async function (event) {
         status: emailRes.status,
         brevo: errBody,
         subject: emailSubject,
-        senderEmail: AWARDS_INBOX,
+        senderEmail: SENDER_EMAIL,
         replyToEmail,
       });
       // Prefer Brevo's own message when it's short enough to show a human.
@@ -117,6 +128,16 @@ exports.handler = async function (event) {
         }),
       };
     }
+
+    // Log the messageId so ops can look up per-send status in
+    // Brevo → Logs → Transactional log. Brevo returns 201 { messageId: "…" }.
+    const okBody = await readBrevoBody(emailRes);
+    console.log('send-form: Brevo accepted the send', {
+      messageId: (okBody && okBody.messageId) || null,
+      subject: emailSubject,
+      senderEmail: SENDER_EMAIL,
+      replyToEmail,
+    });
   }
 
   // ── 2. Best-effort: add / update the sender in the Brevo CRM ───────────
