@@ -121,3 +121,23 @@
   from = "/sponsor"
   to = "/sponsor.html"
   status = 200
+
+# Admin dashboard — token-gated. Kept off the nav, sitemap and search
+# indexes via the X-Robots-Tag header below.
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200
+
+# Admin page: never cache, never index.
+[[headers]]
+  for = "/admin"
+  [headers.values]
+    Cache-Control = "no-store, private, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    Cache-Control = "no-store, private, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow, noarchive"

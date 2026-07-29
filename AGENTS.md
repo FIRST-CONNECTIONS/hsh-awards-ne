@@ -8,6 +8,9 @@ No framework, no package.json, no test suite.
 - `index.html` — the whole single-page app: markup, inline `<style>`, inline
   `<script>`. This is the only page you edit by hand.
 - `privacy-policy.html` — standalone page, separate from the SPA.
+- `admin.html` — standalone admin dashboard, served at `/admin` (rewrite in
+  `netlify.toml`). Not prerendered, not indexed. Requires `ADMIN_PASSWORD`,
+  `ADMIN_JWT_SECRET`, and `BREVO_API_KEY` env vars to be set (Functions scope).
 - `prerender.js` — build step. Clones `index.html` once per route with that
   route's title, description, canonical and og tags swapped in. Run by Netlify
   via `command = "node prerender.js"`.
@@ -59,6 +62,22 @@ No framework, no package.json, no test suite.
 - **Colour contrast**: the brand pink only reaches 2.3:1 on the cream and white
   panels, so those sections use `--pink-ink`. Keep the bright `--pink` for dark
   sections only.
+- **Admin dashboard** (`/admin`) is a standalone page with its own auth flow:
+  password → `POST /.netlify/functions/admin-login` → HS256 JWT →
+  `Authorization: Bearer …` on every subsequent admin-* request. Token lives
+  in `sessionStorage` (auto-clears on tab close). Auth utilities live in
+  `netlify/lib/admin-auth.js`; Brevo list-fetch + normalisation lives in
+  `netlify/lib/admin-nominations.js`. Env vars required (all Functions scope):
+    - `ADMIN_PASSWORD`   — the shared admin password
+    - `ADMIN_JWT_SECRET` — long random string (`openssl rand -hex 32`) used
+      to sign session tokens; rotating this instantly invalidates every
+      logged-in session, which is the panic button for a leaked password
+    - `BREVO_API_KEY`    — reused from the form/diag flow
+- **Nomination history has one row per unique nominator email** — the send-form
+  function writes contacts with `updateEnabled:true`, so a repeat nominator
+  overwrites their earlier entry. If we ever need full submission history in
+  the admin panel, add Netlify Blobs storage in `send-form.js` and read from
+  both sources in `admin-nominations.js` (see the note at the top of that file).
 
 ## Local development
 

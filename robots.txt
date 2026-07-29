@@ -48,6 +48,7 @@ Allow: /
 User-agent: *
 Allow: /
 Disallow: /sponsor
+Disallow: /admin
 Crawl-delay: 2
 
 # ── Sitemap ──────────────────────────────────────────────────────────

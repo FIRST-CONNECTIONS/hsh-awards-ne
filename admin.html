@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex, nofollow"/>
+<link rel="icon" type="image/png" href="images/hsh-awards-fav-icon.png"/>
+<title>Admin · NE High Street Heroes Awards</title>
+<style>
+:root{
+  --navy:#070d18;
+  --navy2:#0d1524;
+  --card:#111b2e;
+  --pink:#f472b6;
+  --pink-ink:#c73a86;
+  --orange:#f5a623;
+  --grad:linear-gradient(90deg,#f472b6,#f5a623);
+  --cream:#f5f0e8;
+  --muted:#7a8fa0;
+  --border:#1a2535;
+  --danger:#dc2626;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--navy);color:#fff;font-family:system-ui,-apple-system,'DM Sans','Segoe UI',sans-serif;line-height:1.55}
+a{color:var(--pink)}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font:inherit;color:inherit}
+
+/* App shell */
+.wrap{max-width:1400px;margin:0 auto;padding:2rem 1.5rem}
+header.bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);background:rgba(7,13,24,.95);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:.75rem;font-weight:800;letter-spacing:.02em}
+.brand-mark{width:36px;height:36px;border-radius:8px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900}
+.brand small{font-weight:600;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;font-size:.65rem;display:block;margin-top:.15rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.1rem;border-radius:10px;font-size:.85rem;font-weight:700;transition:all .2s;border:1px solid transparent}
+.btn-primary{background:var(--grad);color:#fff}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-outline{border-color:rgba(255,255,255,.18);color:#cdd8e8}
+.btn-outline:hover{border-color:var(--pink);color:#fff;background:rgba(244,114,182,.08)}
+.btn-ghost{color:var(--muted)}
+.btn-ghost:hover{color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Login card */
+.login{min-height:100vh;display:grid;place-items:center;padding:1.5rem;background:radial-gradient(ellipse at top,rgba(244,114,182,.10),transparent 55%),var(--navy)}
+.login-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;max-width:400px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.login-card h1{font-family:'Playfair Display',Georgia,serif;font-size:1.75rem;margin:0 0 .35rem;font-weight:800}
+.login-card .sub{color:var(--muted);font-size:.9rem;margin:0 0 1.75rem}
+.field{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.1rem}
+.field label{font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.field input{padding:.85rem 1rem;border-radius:12px;border:1.5px solid var(--border);background:#0a121f;color:#fff;font-size:1rem}
+.field input:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 4px rgba(244,114,182,.15)}
+.err{background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.35);color:#fca5a5;padding:.7rem .9rem;border-radius:10px;font-size:.85rem;margin-bottom:1rem;display:none}
+.err.on{display:block}
+
+/* Dashboard */
+main{padding:1.5rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.3rem}
+.stat .num{font-family:'Playfair Display',Georgia,serif;font-size:2rem;font-weight:800;line-height:1;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat .lbl{font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.4rem}
+
+/* Category breakdown */
+.section-title{font-family:'Playfair Display',Georgia,serif;font-weight:800;font-size:1.35rem;margin:1.5rem 0 .75rem}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.7rem;margin-bottom:2rem}
+.cat-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.6rem;transition:border-color .2s}
+.cat-row:hover{border-color:rgba(244,114,182,.3)}
+.cat-row.zero{opacity:.55}
+.cat-row .name{font-size:.87rem;font-weight:600;color:#cdd8e8}
+.cat-row .count{font-weight:800;color:var(--pink);font-variant-numeric:tabular-nums}
+.cat-row.selected{border-color:var(--pink);box-shadow:0 0 0 3px rgba(244,114,182,.14)}
+.cat-row.selected .name{color:#fff}
+
+/* Controls */
+.controls{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin-bottom:1rem}
+.controls input,.controls select{padding:.65rem .85rem;border-radius:10px;border:1px solid var(--border);background:#0a121f;color:#fff;font-size:.9rem;min-width:200px}
+.controls input:focus,.controls select:focus{outline:none;border-color:var(--pink)}
+.controls .spacer{flex:1}
+
+/* Table */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.table{width:100%;border-collapse:collapse;font-size:.87rem}
+.table th{background:#0a121f;color:var(--muted);font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:.85rem 1rem;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;position:sticky;top:0}
+.table th:hover{color:#fff}
+.table th .arrow{color:var(--pink);margin-left:.2rem;opacity:0}
+.table th.sort .arrow{opacity:1}
+.table td{padding:.9rem 1rem;border-bottom:1px solid var(--border);vertical-align:top}
+.table tr:last-child td{border-bottom:none}
+.table tr:hover td{background:rgba(244,114,182,.04)}
+.table .reason{max-width:340px;color:#a5b6c9;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.table .email{color:#cdd8e8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem}
+.table .cat-pill{display:inline-block;padding:.2rem .55rem;background:rgba(244,114,182,.14);border:1px solid rgba(244,114,182,.35);color:var(--pink);border-radius:14px;font-size:.72rem;font-weight:700;white-space:nowrap}
+.table .date{color:var(--muted);font-size:.8rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+.empty{padding:2.5rem 1rem;text-align:center;color:var(--muted)}
+.loader{padding:2rem;text-align:center;color:var(--muted)}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(244,114,182,.25);border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:.5rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.85rem 1.15rem;font-size:.85rem;box-shadow:0 12px 40px rgba(0,0,0,.5);transform:translateY(120%);transition:transform .3s;z-index:100}
+.toast.on{transform:translateY(0)}
+.toast.err{border-color:rgba(220,38,38,.4);color:#fca5a5}
+.toast.ok{border-color:rgba(34,197,94,.4);color:#86efac}
+
+@media (max-width:768px){
+  .wrap{padding:1rem}
+  main{padding:.75rem}
+  .table th,.table td{padding:.7rem .55rem}
+  .table .reason{max-width:200px}
+  .brand small{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Login screen ────────────────────────────────────────────────────── -->
+<section class="login" id="login">
+  <div class="login-card">
+    <h1>Admin Access</h1>
+    <p class="sub">Enter the admin password to view nominations and export data.</p>
+    <div class="err" id="loginErr"></div>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="pw">Password</label>
+        <input id="pw" type="password" autocomplete="current-password" required autofocus/>
+      </div>
+      <button class="btn btn-primary" type="submit" id="loginBtn" style="width:100%;justify-content:center">Sign in</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── Dashboard ───────────────────────────────────────────────────────── -->
+<div id="app" hidden>
+  <header class="bar">
+    <div class="brand">
+      <span class="brand-mark">HSH</span>
+      <div>
+        NE HSH Awards
+        <small>Admin</small>
+      </div>
+    </div>
+    <div style="display:flex;gap:.5rem">
+      <button class="btn btn-outline" id="reloadBtn" title="Refresh data">Refresh</button>
+      <button class="btn btn-primary" id="exportBtn">Download CSV</button>
+      <button class="btn btn-ghost" id="logoutBtn">Log out</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="loader" class="loader"><span class="spinner"></span>Loading nominations…</div>
+
+    <div id="content" hidden>
+      <!-- summary tiles -->
+      <div class="stats" id="stats"></div>
+
+      <!-- category breakdown -->
+      <h2 class="section-title">Nominations by category</h2>
+      <div class="cat-grid" id="catGrid"></div>
+
+      <!-- filters -->
+      <h2 class="section-title">All nominations</h2>
+      <div class="controls">
+        <input id="search" type="search" placeholder="Search nominator, nominee, email…"/>
+        <select id="catFilter">
+          <option value="">All categories</option>
+        </select>
+        <div class="spacer"></div>
+        <div style="color:var(--muted);font-size:.85rem" id="resultCount"></div>
+      </div>
+
+      <!-- table -->
+      <div class="table-wrap">
+        <table class="table" id="table">
+          <thead>
+            <tr>
+              <th data-sort="createdAt">Submitted<span class="arrow">↓</span></th>
+              <th data-sort="firstName">Nominator<span class="arrow">↓</span></th>
+              <th data-sort="email">Email<span class="arrow">↓</span></th>
+              <th data-sort="nominee">Nominee<span class="arrow">↓</span></th>
+              <th data-sort="category">Category<span class="arrow">↓</span></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==================================================================== */
+/*  Admin app                                                            */
+/* ==================================================================== */
+const STORAGE_KEY = 'hsh_admin_token';
+const state = {
+  token: sessionStorage.getItem(STORAGE_KEY) || null,
+  nominations: [],
+  categoryCounts: {},
+  search: '',
+  category: '',
+  sortKey: 'createdAt',
+  sortDir: 'desc',
+};
+
+/* ── DOM refs ────────────────────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+const loginSection = $('login');
+const appSection   = $('app');
+const loginForm    = $('loginForm');
+const loginBtn     = $('loginBtn');
+const loginErr     = $('loginErr');
+const pwInput      = $('pw');
+const logoutBtn    = $('logoutBtn');
+const reloadBtn    = $('reloadBtn');
+const exportBtn    = $('exportBtn');
+const searchInput  = $('search');
+const catFilter    = $('catFilter');
+const loader       = $('loader');
+const contentEl    = $('content');
+const statsEl      = $('stats');
+const catGridEl    = $('catGrid');
+const tbodyEl      = $('tbody');
+const resultCount  = $('resultCount');
+const toast        = $('toast');
+const tableHead    = document.querySelectorAll('#table th');
+
+/* ── Toast helper ────────────────────────────────────────────────────── */
+let toastTimer;
+function showToast(msg, kind = 'ok') {
+  toast.textContent = msg;
+  toast.className = `toast on ${kind}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.className = 'toast'; }, 3500);
+}
+
+/* ── Safe HTML rendering (nominator/nominee/reason are visitor input) ── */
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ── UK-format date for the table ────────────────────────────────────── */
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return esc(iso);
+  const pad = n => String(n).padStart(2, '0');
+  return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/* ── Auth flow ───────────────────────────────────────────────────────── */
+async function login(password) {
+  const res = await fetch('/.netlify/functions/admin-login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(body.error || `Login failed (${res.status})`);
+  return body.token;
+}
+
+function setLoggedIn(token) {
+  state.token = token;
+  sessionStorage.setItem(STORAGE_KEY, token);
+  loginSection.hidden = true;
+  appSection.hidden   = false;
+  loadData();
+}
+
+function logout(silent) {
+  state.token = null;
+  sessionStorage.removeItem(STORAGE_KEY);
+  loginSection.hidden = false;
+  appSection.hidden   = true;
+  pwInput.value = '';
+  loginErr.classList.remove('on');
+  if (!silent) showToast('Signed out', 'ok');
+}
+
+loginForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const pw = pwInput.value;
+  if (!pw) return;
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Signing in…';
+  loginErr.classList.remove('on');
+  try {
+    const token = await login(pw);
+    setLoggedIn(token);
+  } catch (err) {
+    loginErr.textContent = err.message;
+    loginErr.classList.add('on');
+    pwInput.select();
+  } finally {
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Sign in';
+  }
+});
+
+logoutBtn.addEventListener('click', () => logout());
+
+/* ── Authenticated fetch (auto-logs-out on 401) ──────────────────────── */
+async function authFetch(url, init = {}) {
+  const opts = { ...init, headers: { ...(init.headers || {}), Authorization: `Bearer ${state.token}` } };
+  const res = await fetch(url, opts);
+  if (res.status === 401) {
+    logout(true);
+    showToast('Session expired — please log in again', 'err');
+    throw new Error('unauthorised');
+  }
+  return res;
+}
+
+/* ── Data load ───────────────────────────────────────────────────────── */
+async function loadData() {
+  loader.hidden   = false;
+  contentEl.hidden = true;
+  try {
+    const res  = await authFetch('/.netlify/functions/admin-data');
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body.error || `Load failed (${res.status})`);
+    state.nominations    = body.nominations || [];
+    state.categoryCounts = body.categoryCounts || {};
+    render();
+    loader.hidden   = true;
+    contentEl.hidden = false;
+  } catch (err) {
+    if (err.message === 'unauthorised') return;
+    loader.textContent = err.message;
+    showToast(err.message, 'err');
+  }
+}
+
+reloadBtn.addEventListener('click', () => { showToast('Refreshing…'); loadData(); });
+
+/* ── CSV export (fetch with auth, then blob-download) ────────────────── */
+exportBtn.addEventListener('click', async () => {
+  exportBtn.disabled = true;
+  const originalText = exportBtn.textContent;
+  exportBtn.textContent = 'Preparing…';
+  try {
+    const res = await authFetch('/.netlify/functions/admin-export');
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || `Export failed (${res.status})`);
+    }
+    const blob = await res.blob();
+    // Prefer the server's Content-Disposition filename if present.
+    let filename = 'hsh-nominations.csv';
+    const cd = res.headers.get('content-disposition') || '';
+    const m = cd.match(/filename="?([^"]+)"?/i);
+    if (m) filename = m[1];
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(`Downloaded ${filename}`);
+  } catch (err) {
+    if (err.message !== 'unauthorised') showToast(err.message, 'err');
+  } finally {
+    exportBtn.disabled = false;
+    exportBtn.textContent = originalText;
+  }
+});
+
+/* ── Filters + sorting ───────────────────────────────────────────────── */
+searchInput.addEventListener('input', e => { state.search = e.target.value.trim().toLowerCase(); render(); });
+catFilter.addEventListener('change', e => { state.category = e.target.value; render(); });
+
+tableHead.forEach(th => {
+  const key = th.dataset.sort;
+  if (!key) return;
+  th.addEventListener('click', () => {
+    if (state.sortKey === key) state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+    else { state.sortKey = key; state.sortDir = key === 'createdAt' ? 'desc' : 'asc'; }
+    render();
+  });
+});
+
+/* ── Render pipeline ─────────────────────────────────────────────────── */
+function render() {
+  renderStats();
+  renderCategoryGrid();
+  renderCategoryFilterOptions();
+  renderTable();
+}
+
+function renderStats() {
+  const total = state.nominations.length;
+  const cats  = Object.entries(state.categoryCounts).filter(([,n]) => n > 0).length;
+  const uniqueEmails = new Set(state.nominations.map(n => (n.email||'').toLowerCase())).size;
+  statsEl.innerHTML = `
+    <div class="stat"><div class="num">${total}</div><div class="lbl">Total Nominations</div></div>
+    <div class="stat"><div class="num">${uniqueEmails}</div><div class="lbl">Unique Nominators</div></div>
+    <div class="stat"><div class="num">${cats}</div><div class="lbl">Categories With Entries</div></div>
+  `;
+}
+
+function renderCategoryGrid() {
+  const entries = Object.entries(state.categoryCounts);
+  catGridEl.innerHTML = entries.map(([name, count]) => `
+    <button class="cat-row ${count === 0 ? 'zero' : ''} ${state.category === name ? 'selected' : ''}" data-cat="${esc(name)}">
+      <span class="name">${esc(name)}</span>
+      <span class="count">${count}</span>
+    </button>
+  `).join('');
+  // Clicking a category row filters the table to that category (or clears if clicked again)
+  catGridEl.querySelectorAll('.cat-row').forEach(el => {
+    el.addEventListener('click', () => {
+      const cat = el.dataset.cat;
+      state.category = (state.category === cat) ? '' : cat;
+      catFilter.value = state.category;
+      render();
+    });
+  });
+}
+
+function renderCategoryFilterOptions() {
+  // Only rebuild if the underlying options changed.
+  const wanted = ['', ...Object.keys(state.categoryCounts).sort()];
+  const current = [...catFilter.options].map(o => o.value);
+  if (wanted.length === current.length && wanted.every((v,i) => v === current[i])) return;
+  const prev = catFilter.value;
+  catFilter.innerHTML = wanted.map(v => `<option value="${esc(v)}">${v ? esc(v) : 'All categories'}</option>`).join('');
+  catFilter.value = prev;
+}
+
+function renderTable() {
+  const q = state.search;
+  const cat = state.category;
+  let rows = state.nominations.filter(n => {
+    if (cat && n.category !== cat) return false;
+    if (!q) return true;
+    const blob = `${n.firstName} ${n.lastName} ${n.email} ${n.nominee} ${n.category}`.toLowerCase();
+    return blob.includes(q);
+  });
+
+  const dir = state.sortDir === 'asc' ? 1 : -1;
+  rows.sort((a, b) => {
+    const av = (a[state.sortKey] || '').toLowerCase();
+    const bv = (b[state.sortKey] || '').toLowerCase();
+    if (av < bv) return -1 * dir;
+    if (av > bv) return  1 * dir;
+    return 0;
+  });
+
+  resultCount.textContent = `${rows.length} of ${state.nominations.length} shown`;
+
+  tableHead.forEach(th => th.classList.toggle('sort', th.dataset.sort === state.sortKey));
+  tableHead.forEach(th => {
+    const a = th.querySelector('.arrow');
+    if (a) a.textContent = state.sortDir === 'asc' ? '↑' : '↓';
+  });
+
+  if (!rows.length) {
+    tbodyEl.innerHTML = `<tr><td colspan="5"><div class="empty">No nominations match your filters.</div></td></tr>`;
+    return;
+  }
+
+  tbodyEl.innerHTML = rows.map(n => `
+    <tr>
+      <td class="date">${esc(fmtDate(n.createdAt))}</td>
+      <td>${esc(`${n.firstName} ${n.lastName}`.trim() || '—')}</td>
+      <td class="email">${esc(n.email || '—')}</td>
+      <td>${esc(n.nominee || '—')}</td>
+      <td>${n.category ? `<span class="cat-pill">${esc(n.category)}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+    </tr>
+  `).join('');
+}
+
+/* ── Bootstrap ───────────────────────────────────────────────────────── */
+if (state.token) {
+  loginSection.hidden = true;
+  appSection.hidden   = false;
+  loadData();
+}
+</script>
+</body>
+</html>
