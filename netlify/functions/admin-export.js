@@ -1,17 +1,15 @@
 // netlify/functions/admin-export.js
-// GET /.netlify/functions/admin-export
-// Authorization: Bearer <ADMIN_JWT>
+// GET /.netlify/functions/admin-export   (Bearer admin JWT)
 //
-// Streams a CSV of every nomination in the Brevo list. Because the admin UI
-// passes the auth token in a Bearer header, the browser can't just navigate
-// to this URL — the frontend fetches the CSV, converts to a Blob, and
-// triggers a download via a temporary object URL. See admin.html.
+// Streams a CSV of every nomination — Blob records first (with full form
+// contents), then historical Brevo records (nominator only). Columns cover
+// every useful field so the CSV is self-contained for offline analysis.
 
 const { requireAuth } = require('../lib/admin-auth');
-const { fetchAllContacts } = require('../lib/admin-nominations');
+const { fetchAllNominations } = require('../lib/admin-nominations');
 
-// RFC 4180-ish CSV escape: wrap the value in quotes if it contains a comma,
-// quote, or newline; double any embedded quotes. Excel and Google Sheets
+// RFC 4180-ish CSV escape: wrap in quotes if the value contains comma,
+// quote or newline; double any embedded quotes. Excel and Google Sheets
 // both round-trip this correctly.
 function csvEscape(value) {
   if (value == null) return '';
@@ -28,33 +26,45 @@ exports.handler = async function (event) {
     return { statusCode: auth.status, headers: jsonHeaders, body: JSON.stringify({ error: auth.error }) };
   }
 
-  const result = await fetchAllContacts(process.env.BREVO_API_KEY);
+  const result = await fetchAllNominations(process.env.BREVO_API_KEY);
   if (!result.ok) {
     return { statusCode: result.status, headers: jsonHeaders, body: JSON.stringify({ error: result.error }) };
   }
 
   const header = [
-    'Submitted', 'Nominator Email', 'Nominator First Name', 'Nominator Last Name',
-    'Nominee', 'Category', 'Enquiry Type', 'Source',
+    'Submitted',
+    'Source',
+    'Type',
+    'Nominator First Name',
+    'Nominator Last Name',
+    'Nominator Email',
+    'Nominee',
+    'Category',
+    'Enquiry Type',
+    'Reason / Message',
+    'Record complete?',
+    'Record ID',
   ];
 
   const rows = [header.map(csvEscape).join(',')];
-  for (const c of result.contacts) {
-    const a = c.attributes || {};
+  for (const n of result.rows) {
     rows.push([
-      c.createdAt,
-      c.email,
-      a.FIRSTNAME,
-      a.LASTNAME,
-      a.NOMINEE,
-      a.CATEGORY,
-      a.ENQUIRY_TYPE,
-      a.SOURCE,
+      n.createdAt,
+      n.source,
+      n.type,
+      n.firstName,
+      n.lastName,
+      n.email,
+      n.nominee,
+      n.category,
+      n.enquiryType,
+      n.reason,
+      n.complete ? 'yes' : 'no',
+      n.id,
     ].map(csvEscape).join(','));
   }
 
-  // ISO date in the filename so repeated exports don't clobber each other in
-  // the downloads folder.
+  // ISO date in the filename so repeated exports don't clobber each other.
   const stamp = new Date().toISOString().slice(0, 10);
   const filename = `hsh-nominations-${stamp}.csv`;
 

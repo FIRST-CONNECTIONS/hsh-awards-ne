@@ -73,11 +73,21 @@ No framework, no package.json, no test suite.
       to sign session tokens; rotating this instantly invalidates every
       logged-in session, which is the panic button for a leaked password
     - `BREVO_API_KEY`    — reused from the form/diag flow
-- **Nomination history has one row per unique nominator email** — the send-form
-  function writes contacts with `updateEnabled:true`, so a repeat nominator
-  overwrites their earlier entry. If we ever need full submission history in
-  the admin panel, add Netlify Blobs storage in `send-form.js` and read from
-  both sources in `admin-nominations.js` (see the note at the top of that file).
+- **Full submissions are stored in Netlify Blobs** as of the
+  nomination-full-storage PR. Each submission is a JSON record under key
+  `${type}/${ISO}-${8-char-random}` in the `hsh-submissions` store, with the
+  full form fields (nominator, nominee, category, reason, raw label→value
+  map, metadata). `netlify/lib/nomination-store.js` owns the persistence;
+  `admin-nominations.js` merges Blobs (rich, new) with Brevo (historical,
+  nominator-only) and de-duplicates by email + minute-precision timestamp so
+  the same submission doesn't show up twice.
+- **Historical (pre-Blob) records** still exist in Brevo CRM list 9 and show
+  up in the admin dashboard with an amber "Nominator only" badge — nominee /
+  category / reason are unrecoverable because Brevo never had them. New
+  submissions get a green "Full record" badge with all fields available in
+  the row-detail drawer.
+- **`@netlify/blobs`** is the only npm dependency in `package.json`. The
+  Netlify runtime auto-authenticates the store; no keys needed.
 
 ## Local development
 

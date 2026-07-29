@@ -289,9 +289,9 @@ input,select{font:inherit;color:inherit}
     <!-- Persistent error banner (shown on load failure) -->
     <div class="alert" id="loadError" data-visible="false" style="margin-bottom:1rem"></div>
 
-    <!-- Data-quality warning (shown when Brevo custom attributes are missing) -->
+    <!-- Data-quality banner — hidden once we're capturing full form data. -->
     <div class="alert alert-warn" id="dataWarn" data-visible="false" style="margin-bottom:1rem">
-      <strong>Heads-up:</strong> the Nominee and Category fields are empty on every record because those custom attributes aren't defined in the Brevo account yet. Set them up in <strong>Brevo → Contacts → Settings → Contact Attributes</strong> (name: <code>NOMINEE</code>, <code>CATEGORY</code>, <code>ENQUIRY_TYPE</code>, <code>SOURCE</code> — all text). Future submissions will then carry the values through. Historical data can't be back-filled from Brevo alone.
+      <strong>Historical records only.</strong> Every nomination in the list below came from the old Brevo CRM pipeline, which captured just the nominator's name and email. The new Netlify Blobs pipeline (which persists the full submission — nominee, category, reason, everything) is deployed but hasn't received any submissions yet. As soon as a new nomination comes through the site, it'll show up here as a green-dot "Full record" and the Nominee / Category / Reason fields will populate.
     </div>
 
     <!-- ── VIEW: Overview ───────────────────────────────────────────── -->
@@ -577,10 +577,11 @@ function applyData(body) {
   // Populate the category filter (idempotent).
   populateCategoryFilter();
 
-  // Check whether Brevo custom attributes are absent — surface a banner if so.
-  const anyHaveCategory = state.nominations.some(n => n.category);
-  const anyHaveNominee  = state.nominations.some(n => n.nominee);
-  show('dataWarn', state.nominations.length > 0 && !anyHaveCategory && !anyHaveNominee);
+  // Data-quality banner: only show when we have records but zero of them
+  // are from the new Blob-backed pipeline. Once the first Blob record lands,
+  // the banner hides itself automatically on next refresh.
+  const anyBlob = state.nominations.some(n => n.source === 'blob');
+  show('dataWarn', state.nominations.length > 0 && !anyBlob);
 
   renderCurrentView();
 }
@@ -728,12 +729,19 @@ function renderNominations() {
   const start = (state.page - 1) * perPage;
   const pageRows = rows.slice(start, start + perPage);
 
+  // Small green dot for records with the full form captured (blob source),
+  // amber dot for historical Brevo-only rows. Title lets the operator hover
+  // to see why some rows have less data than others.
+  const dot = n => n.source === 'blob'
+    ? '<span title="Full form captured" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--success);margin-right:.4rem;vertical-align:.05em"></span>'
+    : '<span title="Historical record — nominator only" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warn);margin-right:.4rem;vertical-align:.05em"></span>';
+
   // Desktop table
   const tbody = $('tbody');
   tbody.innerHTML = pageRows.length
     ? pageRows.map(n => `
-        <tr data-email="${esc(n.email)}">
-          <td class="date">${esc(fmtDate(n.createdAt))}</td>
+        <tr data-id="${esc(n.id)}">
+          <td class="date">${dot(n)}${esc(fmtDate(n.createdAt))}</td>
           <td>${esc(displayName(n))}</td>
           <td class="email"><span>${esc(n.email || '—')}</span>${n.email ? `<button class="icon-btn" data-copy="${esc(n.email)}" title="Copy email">⧉</button>` : ''}</td>
           <td>${esc(n.nominee || '—')}</td>
@@ -745,8 +753,8 @@ function renderNominations() {
   const cardList = $('cardList');
   cardList.innerHTML = pageRows.length
     ? pageRows.map(n => `
-        <div class="nom-card" data-email="${esc(n.email)}">
-          <div class="nc-top"><div class="nc-name">${esc(displayName(n))}</div><div class="nc-when">${esc(fmtRelative(n.createdAt))}</div></div>
+        <div class="nom-card" data-id="${esc(n.id)}">
+          <div class="nc-top"><div class="nc-name">${dot(n)}${esc(displayName(n))}</div><div class="nc-when">${esc(fmtRelative(n.createdAt))}</div></div>
           <div class="nc-mail">${esc(n.email || '—')}</div>
           <div class="nc-tail">${n.category ? `<span class="cat-pill">${esc(n.category)}</span>` : '<span class="cat-pill empty">not set</span>'}${n.email ? `<button class="icon-btn" data-copy="${esc(n.email)}" title="Copy email">⧉</button>` : ''}</div>
         </div>`).join('')
@@ -829,23 +837,46 @@ function bindCatGrid(root) {
 /* ══════════════════════════════════════════════════════════════════════
  *  Row detail drawer
  * ══════════════════════════════════════════════════════════════════════ */
-function openDetail(email) {
-  const n = state.nominations.find(x => (x.email || '').toLowerCase() === (email || '').toLowerCase());
+function openDetailById(id) {
+  const n = state.nominations.find(x => x.id === id);
   if (!n) return;
   $('drawerName').textContent = displayName(n);
-  $('drawerWhen').textContent = n.createdAt ? `Submitted ${fmtRelative(n.createdAt)} · ${fmtDate(n.createdAt)}` : '';
+  const sourceBadge = n.source === 'blob'
+    ? '<span style="display:inline-block;margin-left:.5rem;padding:.1rem .5rem;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);border-radius:10px;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#86efac">Full record</span>'
+    : '<span style="display:inline-block;margin-left:.5rem;padding:.1rem .5rem;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);border-radius:10px;font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fcd34d">Nominator only</span>';
+  $('drawerWhen').innerHTML = (n.createdAt ? `Submitted ${esc(fmtRelative(n.createdAt))} · ${esc(fmtDate(n.createdAt))}` : '') + sourceBadge;
+
   const body = $('drawerBody');
-  body.innerHTML = [
-    row('Email', n.email, 'mono'),
-    row('First name', n.firstName),
-    row('Last name',  n.lastName),
-    row('Nominee',    n.nominee || 'not captured', n.nominee ? '' : 'muted'),
-    row('Category',   n.category || 'not captured', n.category ? '' : 'muted'),
-    row('Enquiry type', n.enquiryType || '—', n.enquiryType ? '' : 'muted'),
-    row('Source',       n.source || '—', n.source ? '' : 'muted'),
-    row('Submitted',    fmtDate(n.createdAt)),
-    row('Last modified in Brevo', fmtDate(n.modifiedAt)),
-  ].join('');
+  const parts = [];
+
+  // Structured summary first — the fields that always matter.
+  parts.push(row('Email',     n.email, 'mono'));
+  parts.push(row('Nominator', displayName(n)));
+  if (n.nominee || n.source === 'blob') parts.push(row('Nominee',  n.nominee || 'not captured', n.nominee ? '' : 'muted'));
+  if (n.category || n.source === 'blob') parts.push(row('Category', n.category || 'not captured', n.category ? '' : 'muted'));
+  if (n.enquiryType) parts.push(row('Enquiry type', n.enquiryType));
+  if (n.reason) parts.push(row('Reason for nomination', n.reason));
+
+  // Raw form fields (Blob records only) — every question the visitor filled
+  // in, in the order the form asked them. Skips fields we've already shown
+  // above so nothing appears twice.
+  if (n.fields && Object.keys(n.fields).length) {
+    const shown = new Set(['Your Name','Full name','Your Email','Email Address','Nominee Name / Business','Award Category','Enquiry Type','Why do they deserve to win?','Message','Business / Organisation','Contact Name','Organisation / Business (optional)']);
+    const rest = Object.entries(n.fields).filter(([k]) => !shown.has(k) && !!n.fields[k]);
+    if (rest.length) {
+      parts.push('<div style="margin-top:.5rem;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Full form</div>');
+      for (const [k, v] of Object.entries(n.fields)) parts.push(row(k, v || '—', v ? '' : 'muted'));
+    }
+  }
+
+  // Metadata
+  parts.push('<div style="margin-top:.5rem;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Metadata</div>');
+  parts.push(row('Submitted', fmtDate(n.createdAt)));
+  if (n.modifiedAt && n.modifiedAt !== n.createdAt) parts.push(row('Last modified', fmtDate(n.modifiedAt)));
+  parts.push(row('Source', n.source === 'blob' ? 'Netlify Blobs (full form)' : 'Brevo CRM (nominator only, historical)'));
+  parts.push(row('Record ID', n.id, 'mono muted'));
+
+  body.innerHTML = parts.join('');
   const drawer = $('drawer');
   drawer.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
@@ -872,8 +903,8 @@ $('screen-app').addEventListener('click', e => {
     );
     return;
   }
-  const row = e.target.closest('tr[data-email], .nom-card[data-email]');
-  if (row) openDetail(row.dataset.email);
+  const row = e.target.closest('tr[data-id], .nom-card[data-id]');
+  if (row) openDetailById(row.dataset.id);
 });
 
 /* ══════════════════════════════════════════════════════════════════════
