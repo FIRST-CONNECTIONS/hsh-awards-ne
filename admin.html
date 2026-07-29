@@ -71,7 +71,8 @@ input,select{font:inherit;color:inherit}
 #screen-auth{display:grid;place-items:center;min-height:100vh;padding:1.5rem;background:radial-gradient(ellipse at top,rgba(244,114,182,.08),transparent 55%),var(--navy)}
 .auth-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:2.5rem 2rem;max-width:400px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.4)}
 .auth-brand{display:flex;align-items:center;gap:.65rem;margin-bottom:1.5rem}
-.brand-mark{width:38px;height:38px;border-radius:9px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:900;color:#fff}
+.brand-mark{width:38px;height:38px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.brand-mark img{width:100%;height:100%;object-fit:contain;display:block}
 .brand-word{font-family:'Playfair Display',Georgia,serif;font-weight:800;font-size:1.05rem;letter-spacing:-.01em}
 .brand-word small{display:block;font-family:system-ui,sans-serif;font-weight:700;color:var(--muted);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;margin-top:.15rem}
 .auth-card h1{font-family:'Playfair Display',Georgia,serif;font-size:1.65rem;margin-bottom:.4rem;font-weight:800}
@@ -240,7 +241,7 @@ input,select{font:inherit;color:inherit}
 <section id="screen-auth" data-visible="true">
   <div class="auth-card">
     <div class="auth-brand">
-      <span class="brand-mark">HSH</span>
+      <span class="brand-mark"><img src="images/img-hsh-logo-sq.png" alt="NE HSH Awards"/></span>
       <div class="brand-word">NE HSH Awards<small>Admin</small></div>
     </div>
     <h1>Sign in</h1>
@@ -263,7 +264,7 @@ input,select{font:inherit;color:inherit}
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-head">
-      <span class="brand-mark">HSH</span>
+      <span class="brand-mark"><img src="images/img-hsh-logo-sq.png" alt="NE HSH Awards"/></span>
       <div class="brand-word">NE HSH Awards<small>Admin</small></div>
     </div>
     <nav class="nav" id="nav">
