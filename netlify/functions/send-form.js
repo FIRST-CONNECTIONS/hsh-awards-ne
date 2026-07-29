@@ -19,11 +19,19 @@ const BREVO_LIST_ID = 9;
 // authenticated) without redeploying. When absent, we fall back to the
 // awards inbox — but note that From=To often triggers anti-spoofing filters
 // at Google/Microsoft, so setting SENDER_EMAIL to a distinct address on an
-// authenticated domain (e.g. no-reply@ne-hsh-awards.co.uk) is strongly
+// authenticated domain (e.g. awards@ne-hsh-awards.co.uk) is strongly
 // preferred. The visitor's email always lands in Reply-To regardless, so
 // awards@ can still reply directly to the nominator.
-const SENDER_EMAIL = process.env.SENDER_EMAIL || AWARDS_INBOX;
-const SENDER_NAME  = process.env.SENDER_NAME  || 'HSH Awards Website';
+//
+// Read PER REQUEST rather than at module load so a warm container picks up
+// env var changes the moment Netlify propagates them (module-load reads
+// bake stale values into a long-lived container).
+function effectiveSender() {
+  const email = process.env.SENDER_EMAIL || AWARDS_INBOX;
+  const name  = process.env.SENDER_NAME  || 'HSH Awards Website';
+  const usingFallback = !process.env.SENDER_EMAIL;
+  return { email, name, usingFallback };
+}
 
 // Strip HTML from a string so user-supplied values can be safely inlined into
 // the plaintext email fallback.
@@ -83,6 +91,21 @@ exports.handler = async function (event) {
   // ── 1. Send transactional email — this is the primary path ─────────────
   // If this fails we bail with a non-2xx so the visitor sees the error banner.
   if (type === 'email' || type === 'both') {
+    const sender = effectiveSender();
+    // Print the effective sender on EVERY request so the Netlify function log
+    // makes it trivial to see whether env-var changes have propagated. When
+    // it says "usingFallback: true" the SENDER_EMAIL env var either isn't set
+    // or isn't scoped to Functions — no more guessing.
+    console.log('send-form: incoming submission', {
+      senderEmail: sender.email,
+      senderName: sender.name,
+      usingFallback: sender.usingFallback,
+      subject: emailSubject,
+    });
+    if (sender.usingFallback) {
+      console.warn('send-form: SENDER_EMAIL env var is NOT set — using fallback', AWARDS_INBOX, '(which sends From = To and is likely to be blocked by the receiving Google Workspace tenant). Add SENDER_EMAIL to Netlify env vars with the "Functions" scope selected, then redeploy.');
+    }
+
     const senderName = `${firstName || ''} ${lastName || ''}`.trim() || 'Website Visitor';
     const replyToEmail = (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ? email : AWARDS_INBOX;
 
@@ -92,7 +115,7 @@ exports.handler = async function (event) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'api-key': BREVO_KEY },
         body: JSON.stringify({
-          sender: { name: SENDER_NAME, email: SENDER_EMAIL },
+          sender: { name: sender.name, email: sender.email },
           to: [{ email: AWARDS_INBOX, name: 'HSH Awards Team' }],
           replyTo: { email: replyToEmail, name: senderName },
           subject: emailSubject || 'New Submission — NE High Street Heroes 2026',
@@ -113,7 +136,7 @@ exports.handler = async function (event) {
         status: emailRes.status,
         brevo: errBody,
         subject: emailSubject,
-        senderEmail: SENDER_EMAIL,
+        senderEmail: sender.email,
         replyToEmail,
       });
       // Prefer Brevo's own message when it's short enough to show a human.
@@ -135,7 +158,7 @@ exports.handler = async function (event) {
     console.log('send-form: Brevo accepted the send', {
       messageId: (okBody && okBody.messageId) || null,
       subject: emailSubject,
-      senderEmail: SENDER_EMAIL,
+      senderEmail: sender.email,
       replyToEmail,
     });
   }
