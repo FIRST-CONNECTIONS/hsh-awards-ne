@@ -75,7 +75,7 @@ async function sendSponsorEmails(session, brevoKey) {
           ${business ? `<tr><td style="padding:8px 12px;font-weight:700;background:#f5f5f5;border:1px solid #ddd">Business</td><td style="padding:8px 12px;border:1px solid #ddd">${business}</td></tr>` : ''}
           <tr><td style="padding:8px 12px;font-weight:700;background:#f5f5f5;border:1px solid #ddd">Amount Paid</td><td style="padding:8px 12px;border:1px solid #ddd">${amount} (inclusive of VAT)</td></tr>
         </table>
-        <p><strong>What happens next?</strong> A member of our team will be in touch within 48 hours to collect your logo and branding details and walk you through everything included in your sponsorship — from category naming rights to your place at the Gala on 1st September 2026 at The Hippodrome, Darlington.</p>
+        <p><strong>What happens next?</strong> A member of our team will be in touch within 48 hours to collect your logo and branding details and walk you through everything included in your sponsorship — from category naming rights to your place at the Gala. The date and venue for the 2027 Gala are being finalised and we'll confirm them with you directly as soon as they're locked in.</p>
         <p>Your card receipt is sent separately by our payment provider, Stripe.</p>
         <p>If you have any questions in the meantime, just reply to this email or contact us at <a href="mailto:${TEAM_EMAIL}">${TEAM_EMAIL}</a>.</p>
         <p style="margin-top:24px">With thanks,<br><strong>The NE High Street Heroes Team</strong><br><span style="color:#888;font-size:13px">A First Connections Initiative</span></p>
