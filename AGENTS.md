@@ -50,8 +50,17 @@ No framework, no package.json, no test suite.
   send time. Hit `/.netlify/functions/brevo-diag?token=<BREVO_DIAG_TOKEN>`
   from a browser — it asks Brevo directly which senders are verified, which
   domains have DKIM/SPF, and what happened to recent sends
-  (`delivered`/`bounced`/`spam`/`blocked`). The endpoint refuses to respond
-  unless `BREVO_DIAG_TOKEN` is set in Netlify env vars.
+  (`delivered`/`bounced`/`spam`/`blocked`). It also returns
+  `envSeenByFunction` (booleans) so you can immediately tell whether
+  `SENDER_EMAIL` / `SENDER_NAME` env vars are actually reaching the function
+  process — if `hasSenderEmail` is `false` after you set the variable, the
+  scope in the Netlify UI doesn't include "Functions". The endpoint refuses
+  to respond unless `BREVO_DIAG_TOKEN` is set in Netlify env vars.
+- To send a real test email through Brevo with the CURRENT sender config
+  (bypassing the frontend form entirely):
+  `curl -X POST 'https://ne-hsh-awards.co.uk/.netlify/functions/brevo-diag?token=<TOKEN>&sendTest=1'`.
+  Response includes the Brevo messageId; look it up in Brevo → Transactional
+  → Logs to see whether it actually delivered or was blocked/spam/bounced.
 - **Sender identity** for outbound mail is `SENDER_EMAIL` + `SENDER_NAME`
   env vars, falling back to `awards@first-connections.co.uk` /
   `HSH Awards Website`. Point `SENDER_EMAIL` at whichever address is

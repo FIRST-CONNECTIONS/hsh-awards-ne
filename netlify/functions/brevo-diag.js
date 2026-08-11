@@ -49,6 +49,32 @@ async function recentEvents(key) {
   };
 }
 
+// Trigger a real Brevo transactional send using the current SENDER_EMAIL and
+// SENDER_NAME env vars, addressed to the awards inbox. Bypasses the frontend
+// form entirely — proves whether the CURRENT config actually delivers.
+async function sendTestEmail(key) {
+  const sender = {
+    email: process.env.SENDER_EMAIL || AWARDS_INBOX,
+    name: process.env.SENDER_NAME || 'HSH Awards Website',
+  };
+  const now = new Date().toISOString();
+  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'api-key': key },
+    body: JSON.stringify({
+      sender,
+      to: [{ email: AWARDS_INBOX, name: 'HSH Awards Team' }],
+      subject: `[brevo-diag] Test send at ${now}`,
+      htmlContent: `<p>This is a diagnostic test send from <code>brevo-diag</code>.</p><p>Sender: <b>${sender.email}</b><br>Recipient: <b>${AWARDS_INBOX}</b><br>Timestamp: ${now}</p><p>If you can see this message in your inbox, delivery from the current Brevo configuration is working. If you can't see it, check Brevo &rarr; Transactional &rarr; Logs for the delivery status of this message.</p>`,
+      textContent: `Diagnostic test send from brevo-diag.\n\nSender: ${sender.email}\nRecipient: ${AWARDS_INBOX}\nTimestamp: ${now}\n\nIf this arrives, current Brevo configuration is delivering correctly.`,
+    }),
+  });
+  const text = await res.text().catch(() => '');
+  let body = null;
+  try { body = text ? JSON.parse(text) : null; } catch { body = text; }
+  return { sender, response: { ok: res.ok, status: res.status, body } };
+}
+
 exports.handler = async function (event) {
   const headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' };
 
@@ -62,6 +88,23 @@ exports.handler = async function (event) {
   const providedToken = (event.queryStringParameters && event.queryStringParameters.token) || '';
   if (providedToken !== configuredToken) {
     return { statusCode: 403, headers, body: JSON.stringify({ error: 'Forbidden' }) };
+  }
+
+  // POST ?token=X&sendTest=1 triggers a real Brevo send using the current
+  // effective sender. Use this to prove out an env-var change without waiting
+  // on a real visitor to fill in the form.
+  if (event.httpMethod === 'POST' && event.queryStringParameters && event.queryStringParameters.sendTest) {
+    const key = process.env.BREVO_API_KEY;
+    if (!key) return { statusCode: 200, headers, body: JSON.stringify({ ok: false, problem: 'BREVO_API_KEY not set' }, null, 2) };
+    const r = await sendTestEmail(key);
+    return { statusCode: 200, headers, body: JSON.stringify({
+      ok: r.response.ok,
+      sentAs: r.sender,
+      brevo: r.response,
+      note: r.response.ok
+        ? 'Brevo accepted the test send. Now watch the Brevo → Transactional → Logs for the messageId above and see whether it lands as Delivered, Blocked, spam, or hard-bounce. That final status tells you the truth about deliverability with THIS sender.'
+        : 'Brevo rejected the test send. See brevo.body.message for the reason.',
+    }, null, 2) };
   }
 
   const key = process.env.BREVO_API_KEY;
@@ -143,9 +186,21 @@ exports.handler = async function (event) {
     body: JSON.stringify({
       ok: account.ok,
       diagnosis: diagnosis.length ? diagnosis : ['No obvious misconfiguration detected. If mail still isn\'t arriving, check the recipient mailbox\'s Spam folder and Brevo dashboard → Logs → Transactional log for the exact per-message status.'],
+      // Booleans, not values — proves whether the env vars are actually being
+      // seen by this function process. If `hasSenderEmail` is false but you
+      // set SENDER_EMAIL in Netlify, the scope on that variable doesn't
+      // include "Functions" — edit the variable in Netlify and tick the
+      // Functions box, then trigger a redeploy.
+      envSeenByFunction: {
+        hasBrevoKey:      !!process.env.BREVO_API_KEY,
+        hasBrevoDiagToken:!!process.env.BREVO_DIAG_TOKEN,
+        hasSenderEmail:   !!process.env.SENDER_EMAIL,
+        hasSenderName:    !!process.env.SENDER_NAME,
+      },
       currentConfig: {
         senderEmail: currentSender,
         senderName: currentSenderName,
+        senderIsFromEnvVar: !!process.env.SENDER_EMAIL,
         recipientInbox: AWARDS_INBOX,
         senderIsRecipient: awardsSelfSend,
         senderIsBrevoVerified: !!senderMatch,
